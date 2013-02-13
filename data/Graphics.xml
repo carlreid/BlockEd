@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<!DOCTYPE doc [
+  <!ENTITY pickup "1">
+  <!ENTITY change "2">
+  <!ENTITY power "3">
+  <!ENTITY gener "4">
+  <!ENTITY replace "5">
+]>-->
+<GraphicsList name="Gauntlet">
+  <transparentcolour red="0" green="0" blue="0" />
+  <FileList>
+    List of Files
+    <file id="1">T_G1.bmp</file>
+    <file id="2">PlayerB.bmp</file>
+    <!--<file id="3">MANG2.bmp</file>-->
+    <file id="6">Objects.bmp</file>
+    <file id="7">OBJ2.bmp</file>
+    <file id="8">MOBs.bmp</file>
+    <file id="10">TILES.bmp</file>
+  </FileList>
+  <SpriteList>
+    List of Sprites
+    <sprite id="1" file="1" x="0" y="0" w="32" h="32">test</sprite>
+    <sprite id="2" file="2" name="manga1" x="0" y="0" w="100" h="100"></sprite>
+    <!--<sprite id="3" file="3" name="manga2" x="0" y="0" w="100" h="100"></sprite>-->
+
+    <sprite id="50" file="6" type="1" data1="1" data2="100" x="0" y="0" w="32" h="32"></sprite>
+    <!--<sprite id="50" file="6" type="&pickup" data1="1" data2="100" x="0" y="0" w="32" h="32"></sprite>-->
+
+    <!--<sprite id="45" file="6" type="6" data1="2" x="96" y="0" w="32" h="32"></sprite>-->
+    <sprite id="45" file="6" type="6" data1="50" data2="50"  x="96" y="0" w="32" h="32"></sprite>
+
+    <!--up to down, l 2 r-->
+    <sprite id="60" file="7" type="4" data1="503" data2="61" block="true" x="0" y="0" w="32" h="32"></sprite>
+    <sprite id="61" file="7" type="4" data1="502" data2="62" block="true" x="0" y="32" w="32" h="32"></sprite>
+    <sprite id="62" file="7" type="4" data1="501" data2="0"  block="true" x="0" y="64" w="32" h="32"></sprite>
+    <sprite id="63" file="7" type="4" data1="505" data2="3"  block="true" x="0" y="96" w="32" h="32"></sprite>
+
+    <sprite id="53" file="8" type="4" data1="503" data2="52" block="true" x="0"  y="0" w="41" h="44"></sprite>
+    <sprite id="52" file="8" type="4" data1="502" data2="51" block="true" x="41" y="0" w="41" h="44"></sprite>
+    <sprite id="51" file="8" type="4" data1="501" data2="0"  block="true" x="82" y="0" w="41" h="44"></sprite>
+ 
+    <sprite id="54" file="8" type="4" data1="513" data2="0"  block="true" x="0"  y="0" w="42" h="44"></sprite>
+    <sprite id="55" file="8" type="4" data1="512" data2="55" block="true" x="45" y="0" w="42" h="44"></sprite>
+    <sprite id="56" file="8" type="4" data1="511" data2="54" block="true" x="84" y="0" w="42" h="44"></sprite>
+
+    <sprite id="503" file="8" type="4" data1="3" data2="500" block="true" x="0"   y="88" w="37" h="36"></sprite>
+    <sprite id="502" file="8" type="4" data1="2" data2="300" block="true" x="37"  y="88" w="37" h="36"></sprite>
+    <sprite id="501" file="8" type="4" data1="1" data2="100" block="true" x="74"  y="88" w="37" h="36"></sprite>
+    <sprite id="506" file="8" type="4" data1="5" data2="600" block="true" x="111" y="88" w="38" h="36"></sprite>
+    <sprite id="505" file="8" type="4" data1="3" data2="400" block="true" x="149" y="88" w="38" h="36"></sprite>
+    <sprite id="504" file="8" type="4" data1="1" data2="150" block="true" x="187" y="88" w="38" h="36"></sprite>
+
+
+    <sprite id="67" file="7" type="1" data1="1" data2="500" x="32" y="0" w="32" h="32"></sprite>
+    <sprite id="64" file="7" type="1" data1="2" data2="100" x="32" y="32" w="32" h="32"></sprite>
+    <sprite id="65" file="7" type="1" data1="3" data2="100" x="32" y="64" w="32" h="32"></sprite>
+      <!--NOTE multiple definitions can allow different scores of results-->
+      <sprite id="66" file="7" type="5" data1="64"  x="32" y="96" w="32" h="32"></sprite>
+      <sprite id="66" file="7" type="5" data1="65"  x="32" y="96" w="32" h="32"></sprite>
+
+    <sprite id="68" file="7" type="6" data1="" data2="" x="64" y="0" w="32" h="32"></sprite>
+    <sprite id="69" file="7" type="1" data1="1" data2="1" x="64" y="32" w="32" h="32"></sprite>
+    <sprite id="70" file="7" type="1" data1="2" data2="1" x="64" y="64" w="32" h="32"></sprite>
+    <sprite id="71" file="7" type="1" data1="3" data2="100" x="64" y="96" w="32" h="32"></sprite>
+    <sprite id="72" file="7" type="3" data1="1" data2="1" x="96" y="0" w="32" h="32"></sprite>
+    <sprite id="73" file="7" type="3" data1="2" data2="1" x="96" y="32" w="32" h="32"></sprite>
+    <sprite id="74" file="7" type="3" data1="2" data2="-1" x="96" y="32" w="32" h="32"></sprite>
+    <sprite id="75" file="7" type="3" data1="3" data2="1" x="96" y="64" w="32" h="32"></sprite>
+    <sprite id="76" file="7" type="3" data1="3" data2="-1" x="96" y="64" w="32" h="32"></sprite>
+    <sprite id="77" file="7" type="3" data1="4" data2="1" x="96" y="96" w="32" h="32"></sprite>
+    <sprite id="78" file="7" type="3" data1="4" data2="-1" x="96" y="96" w="32" h="32"></sprite>
+    <sprite id="79" file="7" type="3" data1="4" data2="1" x="96" y="96" w="32" h="32"></sprite>
+
+    <!--perhaps sprite sets for directions sprites-->
+    <sprite id="101" file="2" set="warrior" name="ul1" block="true"   x="0" y="0" w="32" h="32"></sprite>
+    <sprite id="102" file="2" set="warrior" name="ul2" block="true"  x="32" y="0" w="32" h="32"></sprite>
+    <sprite id="103" file="2" set="warrior" name="up1" block="true"  x="64" y="0" w="32" h="32"></sprite>
+    <sprite id="104" file="2" set="warrior" name="up2" block="true"  x="96" y="0" w="32" h="32"></sprite>
+    <sprite id="105" file="2" set="warrior" name="ur1" block="true" x="128" y="0" w="32" h="32"></sprite>
+    <sprite id="106" file="2" set="warrior" name="ur2" block="true" x="160" y="0" w="32" h="32"></sprite>
+    <sprite id="107" file="2" set="warrior" name="lt1" block="true" x="192" y="0" w="32" h="32"></sprite>
+    <sprite id="108" file="2" set="warrior" name="lt2" block="true" x="224" y="0" w="32" h="32"></sprite>
+    <sprite id="109" file="2" set="warrior" name="rt1" block="true" x="256" y="0" w="32" h="32"></sprite>
+    <sprite id="110" file="2" set="warrior" name="rt2" block="true" x="288" y="0" w="32" h="32"></sprite>
+    <sprite id="111" file="2" set="warrior" name="dl1" block="true" x="320" y="0" w="32" h="32"></sprite>
+    <sprite id="112" file="2" set="warrior" name="dl2" block="true" x="352" y="0" w="32" h="32"></sprite>
+    <sprite id="113" file="2" set="warrior" name="dn1" block="true" x="384" y="0" w="32" h="32"></sprite>
+    <sprite id="114" file="2" set="warrior" name="dn2" block="true" x="416" y="0" w="32" h="32"></sprite>
+    <sprite id="115" file="2" set="warrior" name="dr1" block="true" x="448" y="0" w="32" h="32"></sprite>
+    <sprite id="116" file="2" set="warrior" name="dr2" block="true" x="480" y="0" w="32" h="32"></sprite>
+
+    <sprite id="117" file="2" set="warrior_axe" name="ul" x="0" y="32" w="32" h="32"></sprite>
+    <sprite id="118" file="2" set="warrior_axe" name="ur" x="32" y="32" w="32" h="32"></sprite>
+    <sprite id="119" file="2" set="warrior_axe" name="dl" x="64" y="32" w="32" h="32"></sprite>
+    <sprite id="120" file="2" set="warrior_axe" name="dr" x="96" y="32" w="32" h="32"></sprite>
+
+    <sprite id="10" file="10" set="NewG" name="oc_nw" block="true" x="00" y="00" w="32" h="32"></sprite>
+    <sprite id="11" file="10" set="NewG" name="oc_ne" block="true"  x="32" y="00" w="32" h="32"></sprite>
+    <sprite id="12" file="10" set="NewG" name="oc_sw" block="true"  x="00" y="32" w="32" h="32"></sprite>
+    <sprite id="13" file="10" set="NewG" name="oc_se" block="true"  x="32" y="32" w="32" h="32"></sprite>
+
+    <sprite id="14" file="10" set="NewG" name="ic_nw" block="true"  x="128" y="00" w="32" h="32"></sprite>
+    <sprite id="15" file="10" set="NewG" name="ic_ne" block="true"  x="160" y="00" w="32" h="32"></sprite>
+    <sprite id="16" file="10" set="NewG" name="ic_sw" block="true"  x="128" y="32" w="32" h="32"></sprite>
+    <sprite id="17" file="10" set="NewG" name="ic_se" block="true"  x="160" y="32" w="32" h="32"></sprite>
+
+    <sprite id="18" file="10" set="NewG" name="vt_lt" block="true"  x="64" y="0" w="32" h="32"></sprite>
+    <sprite id="19" file="10" set="NewG" name="vt_rt" block="true"  x="96" y="0" w="32" h="32"></sprite>
+    <sprite id="20" file="10" set="NewG" name="hz_up" block="true"  x="192" y="0" w="32" h="32"></sprite>
+    <sprite id="21" file="10" set="NewG" name="hz_dn" block="true"  x="192" y="32" w="32" h="32"></sprite>
+
+    <sprite id="22" file="10" set="NewG" name="bg1" block="false"  x="0" y="64" w="64" h="64"></sprite>
+    <sprite id="23" file="10" set="NewG" name="bg2" block="false"  x="64" y="64" w="64" h="64"></sprite>
+    <sprite id="24" file="10" set="NewG" name="bg3" block="false"  x="0" y="128" w="64" h="64"></sprite>
+    <sprite id="25" file="10" set="NewG" name="bg4" block="false"  x="64" y="128" w="64" h="64"></sprite>
+
+    <!--<sprite id="2" file="2">
+      <x>0</x><y>0</y><w>100</w><h>100</h></sprite>
+    <sprite id="3" file="3">
+      <x>0</x><y>0</y><w>100</w><h>100</h></sprite>-->
+    
+  </SpriteList>
+  <AnimationList>
+    List of Animations
+    <animation id="1"> </animation>
+    <animation id="2"> </animation>
+    <animation id="3"> </animation>
+
+  </AnimationList>
+</GraphicsList>
