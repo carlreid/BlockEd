@@ -57,6 +57,8 @@
     </Compile>
     <Compile Include="GameData.cs" />
     <Compile Include="GameLevel.cs" />
+    <Compile Include="DataFuncs.cs" />
+    <Compile Include="GLFuncs.cs" />
     <Compile Include="MapData.cs" />
     <Compile Include="MapDataTile.cs" />
     <Compile Include="MapTile.cs" />

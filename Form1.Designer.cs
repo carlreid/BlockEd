@@ -38,14 +38,15 @@
             this.button2 = new System.Windows.Forms.Button();
             this.tilePicker = new System.Windows.Forms.TabControl();
             this.terrainTab = new System.Windows.Forms.TabPage();
+            this.glMiniMapControl = new OpenTK.GLControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.objectsTab = new System.Windows.Forms.TabPage();
             this.mobTab = new System.Windows.Forms.TabPage();
             this.pickupTabs = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.glMiniMapControl = new OpenTK.GLControl();
             this.button5 = new System.Windows.Forms.Button();
+            this.glLoadSpeedLabel = new System.Windows.Forms.Label();
             this.topMenu.SuspendLayout();
             this.tilePicker.SuspendLayout();
             this.terrainTab.SuspendLayout();
@@ -141,6 +142,15 @@
             this.terrainTab.Text = "Terrain";
             this.terrainTab.UseVisualStyleBackColor = true;
             // 
+            // glMiniMapControl
+            // 
+            this.glMiniMapControl.BackColor = System.Drawing.Color.Black;
+            this.glMiniMapControl.Location = new System.Drawing.Point(34, 321);
+            this.glMiniMapControl.Name = "glMiniMapControl";
+            this.glMiniMapControl.Size = new System.Drawing.Size(234, 220);
+            this.glMiniMapControl.TabIndex = 8;
+            this.glMiniMapControl.VSync = false;
+            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.DarkRed;
@@ -199,15 +209,6 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // glMiniMapControl
-            // 
-            this.glMiniMapControl.BackColor = System.Drawing.Color.Black;
-            this.glMiniMapControl.Location = new System.Drawing.Point(34, 321);
-            this.glMiniMapControl.Name = "glMiniMapControl";
-            this.glMiniMapControl.Size = new System.Drawing.Size(234, 220);
-            this.glMiniMapControl.TabIndex = 8;
-            this.glMiniMapControl.VSync = false;
-            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(813, 27);
@@ -218,11 +219,21 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // glLoadSpeedLabel
+            // 
+            this.glLoadSpeedLabel.AutoSize = true;
+            this.glLoadSpeedLabel.Location = new System.Drawing.Point(442, 644);
+            this.glLoadSpeedLabel.Name = "glLoadSpeedLabel";
+            this.glLoadSpeedLabel.Size = new System.Drawing.Size(80, 13);
+            this.glLoadSpeedLabel.TabIndex = 9;
+            this.glLoadSpeedLabel.Text = "Loaded in: N/A";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.glLoadSpeedLabel);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -263,6 +274,7 @@
         private System.Windows.Forms.Button button4;
         private OpenTK.GLControl glMiniMapControl;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label glLoadSpeedLabel;
     }
 }
 
