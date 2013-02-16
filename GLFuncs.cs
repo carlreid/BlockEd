@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using OpenTK;
-using OpenTK.Graphics;
+//using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
@@ -21,7 +21,9 @@ namespace BlockEd
             if (loadedMap.getLevelList() == null)
                 return;
 
-            glControl.MakeCurrent();
+            
+
+            //glControl.MakeCurrent();
 
             GL.ClearColor(Color.Black);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -124,6 +126,8 @@ namespace BlockEd
             GL.Disable(EnableCap.Texture2D);
 
             glControl.SwapBuffers();
+            GL.Finish();
+            
             //Form1.Controls.glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
 
         }
