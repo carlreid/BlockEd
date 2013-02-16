@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Diagnostics;
+
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
@@ -25,7 +27,7 @@ namespace BlockEd
     public partial class MainWindow : Window
     {
 
-        bool DEVMODE = false;
+        //bool mapLoaded = false;
 
         //bool opentkLoaded = false;
 
@@ -47,9 +49,10 @@ namespace BlockEd
 
         protected override void OnKeyDown(KeyEventArgs keyData)
         {
-            keyboardPanGLControl(keyData);
-            //OnKeyDown(keyData);
-            base.OnKeyDown(keyData);
+            if (!keyboardPanGLControl(keyData))
+            {
+                base.OnKeyDown(keyData);
+            }           
         }
 
         public MainWindow()
@@ -167,6 +170,7 @@ namespace BlockEd
 
             stopWatch.Stop();
             var executionTime = stopWatch.Elapsed;
+            //mapLoaded = true;
             //glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
         }
 
