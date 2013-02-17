@@ -16,11 +16,27 @@ namespace BlockEd
 {
     class GLFuncs
     {
+<<<<<<< HEAD
+=======
+        private Form1 callerForm;
+
+        public GLFuncs(Form1 callerForm)
+        {
+            this.callerForm = callerForm;
+        }
+
+>>>>>>> Added loading of maps + Dev Panel
         public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles)
         {
             if (loadedMap.getLevelList() == null)
                 return;
 
+<<<<<<< HEAD
+=======
+            var stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();
+
+>>>>>>> Added loading of maps + Dev Panel
             glControl.MakeCurrent();
 
             GL.ClearColor(Color.Black);
@@ -124,6 +140,15 @@ namespace BlockEd
             GL.Disable(EnableCap.Texture2D);
 
             glControl.SwapBuffers();
+<<<<<<< HEAD
+=======
+
+            stopWatch.Stop();
+            var executionTime = stopWatch.Elapsed;
+            callerForm.updateGlLoadSpeedLabel(executionTime.ToString());
+            //glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
+
+>>>>>>> Added loading of maps + Dev Panel
             //Form1.Controls.glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
 
         }

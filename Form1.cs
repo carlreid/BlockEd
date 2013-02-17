@@ -17,6 +17,7 @@ using System.Drawing.Imaging;
 
 using System.Xml;
 using System.Xml.Schema;
+using System.Diagnostics;
 //using System.Xml.Linq;
 
 
@@ -30,7 +31,13 @@ namespace BlockEd
     {
 
         bool DEVMODE = false;
+        bool mapLoaded = false;
 
+<<<<<<< HEAD
+=======
+        string mapFilePath = null;
+
+>>>>>>> Added loading of maps + Dev Panel
         //bool opentkLoaded = false;
 
         Color alphaColorKey;
@@ -40,17 +47,21 @@ namespace BlockEd
         List<MapTile> mapTiles = new List<MapTile>();
         GameData loadedMap = null;
 
+<<<<<<< HEAD
         GLFuncs glFuncs = new GLFuncs();
+=======
+        GLFuncs glFuncs;
+>>>>>>> Added loading of maps + Dev Panel
         DataFuncs data = new DataFuncs();
 
         float tileOffsetX = 0;
         float tileOffsetY = 0;
 
-        
 
         public Form1()
         {
             InitializeComponent();
+            glFuncs = new GLFuncs(this);
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
@@ -67,6 +78,7 @@ namespace BlockEd
             }
         }
 
+<<<<<<< HEAD
         //private void updateGL(ref GLControl glControl)
         //{
         //    if (!opentkLoaded)
@@ -179,6 +191,21 @@ namespace BlockEd
 
         //    glControl.SwapBuffers();
         //}
+=======
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            updateGL(glMapMain);
+            base.OnPaint(e);
+        }
+
+        private void updateGL(GLControl glControl)
+        {
+            if (mapLoaded)
+            {
+                glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
+            }
+        }
+>>>>>>> Added loading of maps + Dev Panel
 
         private void glControl1_Load(object sender, EventArgs e)
         {
@@ -227,20 +254,35 @@ namespace BlockEd
             e.Graphics.DrawImage(Properties.Resources.smiley, -250, -100);
         }
 
+        public void updateGlLoadSpeedLabel(string loadTime)
+        {
+<<<<<<< HEAD
+=======
+            glLoadSpeedLabel.Text = "Rendered in: " + loadTime;
+        }
 
         private void button4_Click(object sender, EventArgs e)
         {
+>>>>>>> Added loading of maps + Dev Panel
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             glFuncs.updateGL(glMapMain, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
+=======
+            updateGL(glMapMain);
+>>>>>>> Added loading of maps + Dev Panel
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             data.loadGraphics(graphicTiles, graphicFiles);
+=======
+            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+>>>>>>> Added loading of maps + Dev Panel
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -250,7 +292,7 @@ namespace BlockEd
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DEVMODE = !DEVMODE;
+            devPanel.Visible = !devPanel.Visible;
         }
 
         private void mousePanGL(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -284,7 +326,11 @@ namespace BlockEd
             }
             if (handled)
             {
+<<<<<<< HEAD
                 glFuncs.updateGL(glMapMain, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
+=======
+                updateGL(glMapMain);
+>>>>>>> Added loading of maps + Dev Panel
             }
 
             return handled;
@@ -294,6 +340,7 @@ namespace BlockEd
         {
             var stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
+<<<<<<< HEAD
 
             data.loadGraphics(graphicTiles, graphicFiles);
             loadedMap = data.loadMap(loadedMap);
@@ -311,6 +358,50 @@ namespace BlockEd
             set { glLoadSpeedLabel.Text = value; }
         }
 
+=======
+
+            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+            loadedMap = data.loadMap(loadedMap);
+            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+            updateGL(glMapMain);
+            
+            stopWatch.Stop();
+            var executionTime = stopWatch.Elapsed;
+            glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
+        }
+
+        public string glLoadSpeed
+        {
+            get { return glLoadSpeedLabel.Text; }
+            set { glLoadSpeedLabel.Text = value; }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DEVMODE = !DEVMODE;
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileBrowser = new OpenFileDialog();
+            fileBrowser.Multiselect = false;
+            fileBrowser.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
+            fileBrowser.Filter = "XML Files (*.xml)|*.xml";
+            if (fileBrowser.ShowDialog(this) == DialogResult.OK)
+            {
+                mapFilePath = fileBrowser.FileName;
+            }
+            else
+            {
+                return;
+            }
+            loadedMap = data.loadMap(loadedMap, mapFilePath);
+            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+            updateGL(glMapMain);
+        }
+
+>>>>>>> Added loading of maps + Dev Panel
 
     }
 }

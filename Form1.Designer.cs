@@ -47,14 +47,20 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.glLoadSpeedLabel = new System.Windows.Forms.Label();
+<<<<<<< HEAD
+=======
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.devPanel = new System.Windows.Forms.Panel();
+            this.button6 = new System.Windows.Forms.Button();
+>>>>>>> Added loading of maps + Dev Panel
             this.topMenu.SuspendLayout();
             this.tilePicker.SuspendLayout();
             this.terrainTab.SuspendLayout();
+            this.devPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // topMenu
             // 
-            this.topMenu.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
@@ -65,6 +71,8 @@
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -89,7 +97,7 @@
             // 
             this.updateButton.AccessibleDescription = "";
             this.updateButton.AccessibleName = "";
-            this.updateButton.Location = new System.Drawing.Point(479, 27);
+            this.updateButton.Location = new System.Drawing.Point(282, 27);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(75, 23);
             this.updateButton.TabIndex = 2;
@@ -100,7 +108,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 27);
+            this.button1.Location = new System.Drawing.Point(29, 27);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -110,7 +118,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(93, 27);
+            this.button2.Location = new System.Drawing.Point(110, 27);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
@@ -191,7 +199,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(174, 27);
+            this.button3.Location = new System.Drawing.Point(858, 28);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 6;
@@ -201,7 +209,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(388, 27);
+            this.button4.Location = new System.Drawing.Point(191, 27);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(85, 23);
             this.button4.TabIndex = 7;
@@ -211,9 +219,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(813, 27);
+            this.button5.Location = new System.Drawing.Point(29, 56);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(121, 23);
+            this.button5.Size = new System.Drawing.Size(328, 23);
             this.button5.TabIndex = 8;
             this.button5.Text = "Load Data and Draw";
             this.button5.UseVisualStyleBackColor = true;
@@ -224,23 +232,62 @@
             this.glLoadSpeedLabel.AutoSize = true;
             this.glLoadSpeedLabel.Location = new System.Drawing.Point(442, 644);
             this.glLoadSpeedLabel.Name = "glLoadSpeedLabel";
+<<<<<<< HEAD
             this.glLoadSpeedLabel.Size = new System.Drawing.Size(80, 13);
             this.glLoadSpeedLabel.TabIndex = 9;
             this.glLoadSpeedLabel.Text = "Loaded in: N/A";
+=======
+            this.glLoadSpeedLabel.Size = new System.Drawing.Size(91, 13);
+            this.glLoadSpeedLabel.TabIndex = 9;
+            this.glLoadSpeedLabel.Text = "Rendered in: N/A";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // devPanel
+            // 
+            this.devPanel.Controls.Add(this.button6);
+            this.devPanel.Controls.Add(this.button1);
+            this.devPanel.Controls.Add(this.button2);
+            this.devPanel.Controls.Add(this.button5);
+            this.devPanel.Controls.Add(this.button4);
+            this.devPanel.Controls.Add(this.updateButton);
+            this.devPanel.Location = new System.Drawing.Point(301, 225);
+            this.devPanel.Name = "devPanel";
+            this.devPanel.Size = new System.Drawing.Size(402, 250);
+            this.devPanel.TabIndex = 10;
+            this.devPanel.Visible = false;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(29, 85);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(328, 23);
+            this.button6.TabIndex = 9;
+            this.button6.Text = "Toggle XML Output";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+>>>>>>> Added loading of maps + Dev Panel
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+<<<<<<< HEAD
             this.Controls.Add(this.glLoadSpeedLabel);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
+=======
+            this.Controls.Add(this.devPanel);
+            this.Controls.Add(this.glLoadSpeedLabel);
+>>>>>>> Added loading of maps + Dev Panel
             this.Controls.Add(this.button3);
             this.Controls.Add(this.tilePicker);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.updateButton);
             this.Controls.Add(this.glMapMain);
             this.Controls.Add(this.topMenu);
             this.MainMenuStrip = this.topMenu;
@@ -250,6 +297,7 @@
             this.topMenu.PerformLayout();
             this.tilePicker.ResumeLayout(false);
             this.terrainTab.ResumeLayout(false);
+            this.devPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -275,6 +323,12 @@
         private OpenTK.GLControl glMiniMapControl;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label glLoadSpeedLabel;
+<<<<<<< HEAD
+=======
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.Panel devPanel;
+        private System.Windows.Forms.Button button6;
+>>>>>>> Added loading of maps + Dev Panel
     }
 }
 

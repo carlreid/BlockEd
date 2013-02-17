@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{68728187-DB94-4091-AC5C-9F52876FA4B0}</ProjectGuid>
+    <ProjectGuid>{F03584CF-8B0B-452A-B332-375417DC30AC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BlockEd</RootNamespace>
