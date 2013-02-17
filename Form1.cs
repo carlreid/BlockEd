@@ -32,12 +32,7 @@ namespace BlockEd
 
         bool DEVMODE = false;
         bool mapLoaded = false;
-
-<<<<<<< HEAD
-=======
         string mapFilePath = null;
-
->>>>>>> Added loading of maps + Dev Panel
         //bool opentkLoaded = false;
 
         Color alphaColorKey;
@@ -46,12 +41,8 @@ namespace BlockEd
         List<SpriteSheet> graphicFiles = new List<SpriteSheet>();
         List<MapTile> mapTiles = new List<MapTile>();
         GameData loadedMap = null;
-
-<<<<<<< HEAD
-        GLFuncs glFuncs = new GLFuncs();
-=======
         GLFuncs glFuncs;
->>>>>>> Added loading of maps + Dev Panel
+
         DataFuncs data = new DataFuncs();
 
         float tileOffsetX = 0;
@@ -78,120 +69,6 @@ namespace BlockEd
             }
         }
 
-<<<<<<< HEAD
-        //private void updateGL(ref GLControl glControl)
-        //{
-        //    if (!opentkLoaded)
-        //        return;
-
-        //    if (loadedMap.getLevelList() == null)
-        //        return;
-
-        //    //glControl.MakeCurrent();
-
-        //    GL.ClearColor(Color.Black);
-        //    GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-        //    GL.MatrixMode(MatrixMode.Modelview);
-        //    GL.LoadIdentity();
-
-        //    //GL.Color3(Color.Black);
-
-        //    //Set alpha blend function -- Will probably need to toggle due to "drawtype"
-        //    GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
-
-        //    GL.Enable(EnableCap.Texture2D);
-        //    GL.Enable(EnableCap.Blend);
-
-        //    //Draw all the tiles
-        //    foreach (GameLevel level in loadedMap.getLevelList())
-        //    {
-        //        foreach (MapData layer in level.getLayerList())
-        //        {
-        //            foreach (MapDataTile tile in layer.getTileList())
-        //            {
-        //                //Locate the graphic for this tile
-        //                GraphicTile tileData = graphicTiles.Find(delegate(GraphicTile data)
-        //                {
-        //                    return data.getTileID() == tile._spriteID;
-        //                }
-        //                );
-
-        //                if (tileData == null)
-        //                {
-        //                    continue;
-        //                }
-
-        //                //Now find the graphic sheet to do with the tile
-        //                SpriteSheet tileSheet = graphicFiles.Find(delegate(SpriteSheet data)
-        //                {
-        //                    //Console.WriteLine("Check ID: " + data.getFileId() + " - Needed: " + tileData.getFileID());
-        //                    return data.getFileId() == tileData.getFileID();
-        //                }
-        //                );
-        //                //Bind the sheet to GL
-        //                GL.BindTexture(TextureTarget.Texture2D, tileSheet.getGLTexId());
-
-        //                //SpriteSheet currentTexture = null;
-
-        //                //Setup to use the correct texture.
-        //                //foreach (SpriteSheet sheet in graphicFiles)
-        //                //{
-        //                //    if (sheet.getFileId() == graphicTiles[curTile].getFileID())
-        //                //    {
-        //                //        currentTexture = sheet;
-        //                //        GL.BindTexture(TextureTarget.Texture2D, sheet.getGLTexId());
-        //                //        break;
-        //                //    }
-        //                //}
-
-        //                int textureWidth = tileSheet.getWidth();
-        //                int textureHeight = tileSheet.getHeight();
-
-        //                float u0 = (float)tileData.getPosition().X / textureWidth;
-        //                float v0 = (float)tileData.getPosition().Y / textureHeight;
-
-        //                int width = tileData.getWidth();
-        //                int height = tileData.getHeight();
-
-        //                float u1 = u0 + (float)tileData.getWidth() / textureWidth;
-        //                float v1 = v0 + (float)tileData.getHeight() / textureHeight;
-
-        //                float tilePositionX = tileOffsetX + tile._xPos * tileData.getWidth();
-        //                float tilePositionY = tileOffsetY + tile._yPos * tileData.getHeight();
-
-
-
-        //                GL.Begin(BeginMode.Quads);
-
-        //                GL.TexCoord2(u0, v0);
-        //                GL.Vertex2(tilePositionX, tilePositionY);
-
-        //                GL.TexCoord2(u1, v0);
-        //                GL.Vertex2(tilePositionX + tileData.getWidth(), tilePositionY);
-
-        //                GL.TexCoord2(u1, v1);
-        //                GL.Vertex2(tilePositionX + tileData.getWidth(), tilePositionY + tileData.getHeight());
-
-        //                GL.TexCoord2(u0, v1);
-        //                GL.Vertex2(tilePositionX, tilePositionY + tileData.getHeight());
-
-        //                GL.End();
-
-        //                if (tile._spriteID == 51)
-        //                {
-        //                    //break;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    GL.Disable(EnableCap.Blend);
-        //    GL.Disable(EnableCap.Texture2D);
-
-        //    glControl.SwapBuffers();
-        //}
-=======
         protected override void OnPaint(PaintEventArgs e)
         {
             updateGL(glMapMain);
@@ -205,7 +82,6 @@ namespace BlockEd
                 glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
             }
         }
->>>>>>> Added loading of maps + Dev Panel
 
         private void glControl1_Load(object sender, EventArgs e)
         {
@@ -256,33 +132,22 @@ namespace BlockEd
 
         public void updateGlLoadSpeedLabel(string loadTime)
         {
-<<<<<<< HEAD
-=======
             glLoadSpeedLabel.Text = "Rendered in: " + loadTime;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
->>>>>>> Added loading of maps + Dev Panel
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            glFuncs.updateGL(glMapMain, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
-=======
             updateGL(glMapMain);
->>>>>>> Added loading of maps + Dev Panel
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            data.loadGraphics(graphicTiles, graphicFiles);
-=======
             data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
->>>>>>> Added loading of maps + Dev Panel
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -326,11 +191,7 @@ namespace BlockEd
             }
             if (handled)
             {
-<<<<<<< HEAD
-                glFuncs.updateGL(glMapMain, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
-=======
                 updateGL(glMapMain);
->>>>>>> Added loading of maps + Dev Panel
             }
 
             return handled;
@@ -340,25 +201,6 @@ namespace BlockEd
         {
             var stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
-<<<<<<< HEAD
-
-            data.loadGraphics(graphicTiles, graphicFiles);
-            loadedMap = data.loadMap(loadedMap);
-            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
-            glFuncs.updateGL(glMapMain, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
-            
-            stopWatch.Stop();
-            var executionTime = stopWatch.Elapsed;
-            glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
-        }
-
-        public string glLoadSpeed
-        {
-            get { return glLoadSpeedLabel.Text; }
-            set { glLoadSpeedLabel.Text = value; }
-        }
-
-=======
 
             data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
             loadedMap = data.loadMap(loadedMap);
@@ -400,8 +242,6 @@ namespace BlockEd
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
             updateGL(glMapMain);
         }
-
->>>>>>> Added loading of maps + Dev Panel
 
     }
 }

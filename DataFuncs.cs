@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
-=======
 using System.Diagnostics;
->>>>>>> Added loading of maps + Dev Panel
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,11 +15,7 @@ namespace BlockEd
     {
         bool DEVMODE = false;
 
-<<<<<<< HEAD
-        public void loadGraphics(List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles)
-=======
         public void loadGraphics(List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, ref bool mapLoaded)
->>>>>>> Added loading of maps + Dev Panel
         {
 
             if (graphicTiles.Count > 0)
@@ -185,16 +178,10 @@ namespace BlockEd
                     }
                 }
             }
-<<<<<<< HEAD
-        }
-
-        public GameData loadMap(GameData loadedMap)
-=======
             mapLoaded = true;
         }
 
         public GameData loadMap(GameData loadedMap, string mapFilePath = null)
->>>>>>> Added loading of maps + Dev Panel
         {
             XmlSchema mapSchema = new XmlSchema();
 
@@ -205,13 +192,6 @@ namespace BlockEd
             settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
 
             //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
-
-<<<<<<< HEAD
-            XmlReader mapReader = XmlReader.Create("map/TestMap.xml", settings);
-
-            //XmlValidatingReader myReader = new XmlValidatingReader(mapReader);
-
-=======
             XmlReader mapReader = null;
             if (mapFilePath == null)
             {
@@ -228,8 +208,6 @@ namespace BlockEd
             {
                 Debug.WriteLine("Failed to load map");
             }
-
->>>>>>> Added loading of maps + Dev Panel
             mapReader.Read();
 
             while (mapReader.Read())

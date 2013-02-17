@@ -47,12 +47,9 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.glLoadSpeedLabel = new System.Windows.Forms.Label();
-<<<<<<< HEAD
-=======
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devPanel = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
->>>>>>> Added loading of maps + Dev Panel
             this.topMenu.SuspendLayout();
             this.tilePicker.SuspendLayout();
             this.terrainTab.SuspendLayout();
@@ -232,11 +229,6 @@
             this.glLoadSpeedLabel.AutoSize = true;
             this.glLoadSpeedLabel.Location = new System.Drawing.Point(442, 644);
             this.glLoadSpeedLabel.Name = "glLoadSpeedLabel";
-<<<<<<< HEAD
-            this.glLoadSpeedLabel.Size = new System.Drawing.Size(80, 13);
-            this.glLoadSpeedLabel.TabIndex = 9;
-            this.glLoadSpeedLabel.Text = "Loaded in: N/A";
-=======
             this.glLoadSpeedLabel.Size = new System.Drawing.Size(91, 13);
             this.glLoadSpeedLabel.TabIndex = 9;
             this.glLoadSpeedLabel.Text = "Rendered in: N/A";
@@ -271,21 +263,14 @@
             this.button6.Text = "Toggle XML Output";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
->>>>>>> Added loading of maps + Dev Panel
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
-<<<<<<< HEAD
-            this.Controls.Add(this.glLoadSpeedLabel);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-=======
             this.Controls.Add(this.devPanel);
             this.Controls.Add(this.glLoadSpeedLabel);
->>>>>>> Added loading of maps + Dev Panel
             this.Controls.Add(this.button3);
             this.Controls.Add(this.tilePicker);
             this.Controls.Add(this.glMapMain);
@@ -323,12 +308,9 @@
         private OpenTK.GLControl glMiniMapControl;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label glLoadSpeedLabel;
-<<<<<<< HEAD
-=======
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.Panel devPanel;
         private System.Windows.Forms.Button button6;
->>>>>>> Added loading of maps + Dev Panel
     }
 }
 
