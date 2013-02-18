@@ -336,7 +336,7 @@ namespace BlockEd
                         if (DEVMODE) Console.WriteLine("Draw Type: " + drawType.ToString());
                     }
 
-                    loadedMap.getLastLoadedLevel().addLayer(width, height, drawType, layerName, maxTileWidth, maxTileHeight);
+                    loadedMap.getLastLoadedLevel().addLayer(width, height, drawType, zDepth, layerName, maxTileWidth, maxTileHeight);
 
                 }
 

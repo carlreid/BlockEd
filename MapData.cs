@@ -9,11 +9,12 @@ namespace BlockEd
     class MapData
     {
 
-        public MapData(int width, int height, int drawType, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
+        public MapData(int width, int height, int drawType, int zDepth, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
         {
             _width = width;
             _height = height;
             _drawType = drawType;
+            _zDepth = zDepth;
 
             _mapName = mapName;
             _maxTileWidth = maxTileWidth;
@@ -42,6 +43,21 @@ namespace BlockEd
         public List<MapDataTile> getTileList()
         {
             return _tiles;
+        }
+
+        public int getMaxTileWidth()
+        {
+            return _maxTileWidth;
+        }
+
+        public int getMaxTileHeight()
+        {
+            return _maxTileHeight;
+        }
+
+        public string getMapName()
+        {
+            return _mapName;
         }
 
         private string _mapName;

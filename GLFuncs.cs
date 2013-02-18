@@ -11,20 +11,61 @@ using OpenTK.Input;
 
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace BlockEd
 {
     class GLFuncs
     {
+        //Useful source on loading in shaders/setting them up: http://www.opentk.com/node/92
+
+
         private Form1 callerForm;
 
         public GLFuncs(Form1 callerForm)
         {
             this.callerForm = callerForm;
+
         }
 
-        public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles)
+        public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, string layerSelected = null)
         {
+
+           
+
+            //Create a program and fragment shader.
+            int _fragShader = GL.CreateShader(ShaderType.FragmentShader);
+            int _program = GL.CreateProgram();
+            string _fragString = @"
+                            #version 330
+
+                            uniform sampler2D texture_id;
+                            uniform int apply_red;
+                            
+                            out vec4 fragment_colour;
+                            void main(void)
+                            {
+                                //vec3 color = vec3(0, 1, 0);
+                                vec3 color = texture(texture_id, vec2(0,0)).rgb;
+                                if(apply_red == 1){
+                                    color = vec3(1, 0, 0);
+                                }
+                                fragment_colour = vec4(color, 1.0);
+                            }";
+            GL.ShaderSource(_fragShader, @_fragString);
+            GL.CompileShader(_fragShader);
+            GL.AttachShader(_program, _fragShader);
+            GL.LinkProgram(_program);
+            GL.UseProgram(_program);
+
+            string info;
+            GL.GetProgramInfoLog(_program, out info);
+
+            if(info != "")
+                Debug.WriteLine(info);
+
+            bool applyTint = false;
+
             if (loadedMap.getLevelList() == null)
                 return;
 
@@ -39,10 +80,9 @@ namespace BlockEd
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            //GL.Color3(Color.Black);
-
             //Set alpha blend function -- Will probably need to toggle due to "drawtype"
-            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+            ////GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
@@ -52,6 +92,23 @@ namespace BlockEd
             {
                 foreach (MapData layer in level.getLayerList())
                 {
+
+                    //Debug.WriteLine(glControl.Name + " is drawing Z Depth: " + layer.getZDepth());
+
+                    //Check to see if we want to render a specific layer.
+                    //If we do, check if this is that layer, else continue.
+                    if (layerSelected != null)
+                    {
+                        if (layer.getMapName() != layerSelected)
+                        {
+                            //GL.Color3(Color.Red);
+                            GL.Uniform1(GL.GetUniformLocation(_program, "apply_red"), 1);
+                        }
+                        else
+                        {
+                            GL.Uniform1(GL.GetUniformLocation(_program, "apply_red"), 0);
+                        }
+                    }
                     foreach (MapDataTile tile in layer.getTileList())
                     {
                         //Locate the graphic for this tile
@@ -73,8 +130,12 @@ namespace BlockEd
                             return data.getFileId() == tileData.getFileID();
                         }
                         );
-                        //Bind the sheet to GL
+
+                        //Bind the sheet to GL                       
                         GL.BindTexture(TextureTarget.Texture2D, tileSheet.getGLTexId());
+                        GL.Uniform1(GL.GetUniformLocation(_program, "texture_id"), tileSheet.getGLTexId());
+
+
 
                         //SpriteSheet currentTexture = null;
 
@@ -101,8 +162,8 @@ namespace BlockEd
                         float u1 = u0 + (float)tileData.getWidth() / textureWidth;
                         float v1 = v0 + (float)tileData.getHeight() / textureHeight;
 
-                        float tilePositionX = tileOffsetX + tile._xPos * tileData.getWidth();
-                        float tilePositionY = tileOffsetY + tile._yPos * tileData.getHeight();
+                        float tilePositionX = tileOffsetX + tile._xPos * layer.getMaxTileWidth();
+                        float tilePositionY = tileOffsetY + tile._yPos * layer.getMaxTileHeight();
 
 
 

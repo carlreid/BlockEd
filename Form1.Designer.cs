@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.topMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.glMapMain = new OpenTK.GLControl();
             this.updateButton = new System.Windows.Forms.Button();
@@ -47,9 +48,9 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.glLoadSpeedLabel = new System.Windows.Forms.Label();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devPanel = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
+            this.layerSelectionBox = new System.Windows.Forms.ComboBox();
             this.topMenu.SuspendLayout();
             this.tilePicker.SuspendLayout();
             this.terrainTab.SuspendLayout();
@@ -73,6 +74,13 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
@@ -132,17 +140,16 @@
             this.tilePicker.Location = new System.Drawing.Point(945, 34);
             this.tilePicker.Name = "tilePicker";
             this.tilePicker.SelectedIndex = 0;
-            this.tilePicker.Size = new System.Drawing.Size(312, 605);
+            this.tilePicker.Size = new System.Drawing.Size(312, 399);
             this.tilePicker.TabIndex = 5;
             // 
             // terrainTab
             // 
-            this.terrainTab.Controls.Add(this.glMiniMapControl);
             this.terrainTab.Controls.Add(this.panel1);
             this.terrainTab.Location = new System.Drawing.Point(4, 22);
             this.terrainTab.Name = "terrainTab";
             this.terrainTab.Padding = new System.Windows.Forms.Padding(3);
-            this.terrainTab.Size = new System.Drawing.Size(304, 579);
+            this.terrainTab.Size = new System.Drawing.Size(304, 373);
             this.terrainTab.TabIndex = 0;
             this.terrainTab.Text = "Terrain";
             this.terrainTab.UseVisualStyleBackColor = true;
@@ -150,9 +157,9 @@
             // glMiniMapControl
             // 
             this.glMiniMapControl.BackColor = System.Drawing.Color.Black;
-            this.glMiniMapControl.Location = new System.Drawing.Point(34, 321);
+            this.glMiniMapControl.Location = new System.Drawing.Point(945, 439);
             this.glMiniMapControl.Name = "glMiniMapControl";
-            this.glMiniMapControl.Size = new System.Drawing.Size(234, 220);
+            this.glMiniMapControl.Size = new System.Drawing.Size(200, 200);
             this.glMiniMapControl.TabIndex = 8;
             this.glMiniMapControl.VSync = false;
             // 
@@ -233,13 +240,6 @@
             this.glLoadSpeedLabel.TabIndex = 9;
             this.glLoadSpeedLabel.Text = "Rendered in: N/A";
             // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
             // devPanel
             // 
             this.devPanel.Controls.Add(this.button6);
@@ -264,11 +264,22 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // layerSelectionBox
+            // 
+            this.layerSelectionBox.FormattingEnabled = true;
+            this.layerSelectionBox.Location = new System.Drawing.Point(1149, 439);
+            this.layerSelectionBox.Name = "layerSelectionBox";
+            this.layerSelectionBox.Size = new System.Drawing.Size(106, 21);
+            this.layerSelectionBox.TabIndex = 11;
+            this.layerSelectionBox.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.layerSelectionBox);
+            this.Controls.Add(this.glMiniMapControl);
             this.Controls.Add(this.devPanel);
             this.Controls.Add(this.glLoadSpeedLabel);
             this.Controls.Add(this.button3);
@@ -311,6 +322,7 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.Panel devPanel;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ComboBox layerSelectionBox;
     }
 }
 

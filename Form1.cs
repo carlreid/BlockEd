@@ -33,6 +33,7 @@ namespace BlockEd
         bool DEVMODE = false;
         bool mapLoaded = false;
         string mapFilePath = null;
+        string layerSelected = null;
         //bool opentkLoaded = false;
 
         Color alphaColorKey;
@@ -72,6 +73,7 @@ namespace BlockEd
         protected override void OnPaint(PaintEventArgs e)
         {
             updateGL(glMapMain);
+            updateGL(glMiniMapControl);
             base.OnPaint(e);
         }
 
@@ -79,7 +81,7 @@ namespace BlockEd
         {
             if (mapLoaded)
             {
-                glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles);
+                glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles, layerSelected);
             }
         }
 
@@ -210,6 +212,16 @@ namespace BlockEd
             stopWatch.Stop();
             var executionTime = stopWatch.Elapsed;
             glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
+
+            //List<GameLevel> level = loadedMap.getLevelList();
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    layerSelectionBox.Items.Add(map.getMapName());
+                }
+            }
+
         }
 
         public string glLoadSpeed
@@ -241,6 +253,16 @@ namespace BlockEd
             data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
             updateGL(glMapMain);
+        }
+
+        private void layerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox layerSelect = (ComboBox)sender;
+            string layerSelectedName = (string)layerSelect.SelectedItem;
+
+            layerSelected = layerSelectedName;
+            //Debug.WriteLine(layerSelectedName);
+
         }
 
     }

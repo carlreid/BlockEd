@@ -27,9 +27,9 @@ namespace BlockEd
 
         }
 
-        public void addLayer(int width, int height, int drawType, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
+        public void addLayer(int width, int height, int drawType, int zDepth, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
         {
-            _mapLayers.Add(new MapData(width, height, drawType, mapName, maxTileWidth, maxTileHeight));
+            _mapLayers.Add(new MapData(width, height, drawType, zDepth, mapName, maxTileWidth, maxTileHeight));
             _mapLayers.Sort(delegate(MapData a, MapData b)
                            {
                                return a.getZDepth().CompareTo(b.getZDepth());
