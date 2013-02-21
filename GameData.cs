@@ -23,8 +23,25 @@ namespace BlockEd
                 _maxScrollY = maxScrollY;
             }
 
+            _numberOfTiles = 0;
+
             _level = new List<GameLevel>();
 
+        }
+
+        public void incrementNumTiles()
+        {
+            _numberOfTiles += 1;
+        }
+
+        public void decrementNumTiles()
+        {
+            _numberOfTiles -= 1;
+        }
+
+        public int getNumTiles()
+        {
+            return _numberOfTiles;
         }
 
         public void setMaxScroll(int maxX, int maxY)
@@ -59,6 +76,7 @@ namespace BlockEd
         private string _name;
         private int _maxScrollX;
         private int _maxScrollY;
+        private int _numberOfTiles;
         private List<GameLevel> _level;
 
 

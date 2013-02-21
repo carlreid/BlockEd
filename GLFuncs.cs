@@ -12,9 +12,23 @@ using OpenTK.Input;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace BlockEd
 {
+    public struct Vertex
+    {
+        public Vector3 position;
+        public Vector2 tex_coords;
+
+        public Vertex(Vector3 position, Vector2 tex_coords)
+            : this()
+        {
+            this.position = position;
+            this.tex_coords = tex_coords;
+        }
+    }
+
     class GLFuncs
     {
         //Useful source on loading in shaders/setting them up: http://www.opentk.com/node/92
@@ -31,40 +45,64 @@ namespace BlockEd
         public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, string layerSelected = null)
         {
 
-           
-
             //Create a program and fragment shader.
             int _fragShader = GL.CreateShader(ShaderType.FragmentShader);
+            int _vertexShader = GL.CreateShader(ShaderType.VertexShader);
             int _program = GL.CreateProgram();
             string _fragString = @"
                             #version 330
 
                             uniform sampler2D texture_id;
                             uniform int apply_red;
-                            
+
+                            in vec2 varying_texcoord;
                             out vec4 fragment_colour;
                             void main(void)
                             {
                                 //vec3 color = vec3(0, 1, 0);
-                                vec3 color = texture(texture_id, vec2(0,0)).rgb;
-                                if(apply_red == 1){
-                                    color = vec3(1, 0, 0);
-                                }
+                                vec3 color = texture(texture_id, varying_texcoord).rgb;
+                                //if(apply_red == 1){
+                                //    color = vec3(1, 0, 0);
+                                //}
                                 fragment_colour = vec4(color, 1.0);
                             }";
+//            string _vertexString = @"
+//                            #version 330
+//                            in vec3 vertex_position;
+//                            in vec2 vertex_texcoord;
+//
+//                            out vec2 varying_texcoord;
+//                            void main(void)
+//                            {
+//                                varying_texcoord = vertex_texcoord;
+//                                gl_Position = vec4(vertex_position, 1.0);
+//                            }";
             GL.ShaderSource(_fragShader, @_fragString);
+            //GL.ShaderSource(_vertexShader, _vertexString);
             GL.CompileShader(_fragShader);
+            //GL.CompileShader(_vertexShader);
             GL.AttachShader(_program, _fragShader);
+            //GL.AttachShader(_program, _vertexShader);
+
+            //GL.BindAttribLocation(_program, 0, "vertex_position");
+            //GL.BindAttribLocation(_program, 1, "vertex_texcoord");
+
+
+
+            //GL.BindAttribLocation(_program, 0, "vertex_texcoord");
+            //int texcoord_index = GL.GetAttribLocation(_program, "vertex_texcoord");
+
+
             GL.LinkProgram(_program);
-            GL.UseProgram(_program);
+            //GL.UseProgram(_program);
 
             string info;
             GL.GetProgramInfoLog(_program, out info);
 
-            if(info != "")
+            if (info != "")
                 Debug.WriteLine(info);
 
-            bool applyTint = false;
+            //bool applyTint = false;
 
             if (loadedMap.getLevelList() == null)
                 return;
@@ -82,10 +120,15 @@ namespace BlockEd
 
             //Set alpha blend function -- Will probably need to toggle due to "drawtype"
             ////GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            
 
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.ColorMaterial);
+
+            GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+
+            //List<Vertex> vertices = new List<Vertex>();
 
             //Draw all the tiles
             foreach (GameLevel level in loadedMap.getLevelList())
@@ -132,23 +175,17 @@ namespace BlockEd
                         );
 
                         //Bind the sheet to GL                       
+                        GL.ActiveTexture((TextureUnit)tileSheet.getGLTexId());
                         GL.BindTexture(TextureTarget.Texture2D, tileSheet.getGLTexId());
                         GL.Uniform1(GL.GetUniformLocation(_program, "texture_id"), tileSheet.getGLTexId());
 
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)All.Clamp);
+                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)All.Clamp);
 
+                        GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, Color.Red);
 
-                        //SpriteSheet currentTexture = null;
-
-                        //Setup to use the correct texture.
-                        //foreach (SpriteSheet sheet in graphicFiles)
-                        //{
-                        //    if (sheet.getFileId() == graphicTiles[curTile].getFileID())
-                        //    {
-                        //        currentTexture = sheet;
-                        //        GL.BindTexture(TextureTarget.Texture2D, sheet.getGLTexId());
-                        //        break;
-                        //    }
-                        //}
 
                         int textureWidth = tileSheet.getWidth();
                         int textureHeight = tileSheet.getHeight();
@@ -166,22 +203,47 @@ namespace BlockEd
                         float tilePositionY = tileOffsetY + tile._yPos * layer.getMaxTileHeight();
 
 
+                        float z_depth = layer.getZDepth() / 10; //Z depth is currently an int (0, 1, 5 etc) but we want it between -1 .. 1
+
 
                         GL.Begin(BeginMode.Quads);
+                        if (layerSelected != null)
+                        {
+                            if (layer.getMapName() != layerSelected)
+                            {
+                                GL.Color4(0.2f, 0.1f, 0.1f, 0.1f);
+                            }
+                            else
+                            {
+                                GL.Color4(1f, 1f, 1f, 1f);
+                            }
+                        }
 
+                        //GL.Color4(1, 0, 0, 0.1f);
                         GL.TexCoord2(u0, v0);
-                        GL.Vertex2(tilePositionX, tilePositionY);
+                        GL.Vertex3(tilePositionX, tilePositionY, z_depth);
 
+                        //GL.Color4(0, 1, 0, 0.4f);
                         GL.TexCoord2(u1, v0);
-                        GL.Vertex2(tilePositionX + tileData.getWidth(), tilePositionY);
+                        GL.Vertex3(tilePositionX + tileData.getWidth(), tilePositionY, z_depth);
 
+                        //GL.Color4(0, 0, 1, 0.6f);
                         GL.TexCoord2(u1, v1);
-                        GL.Vertex2(tilePositionX + tileData.getWidth(), tilePositionY + tileData.getHeight());
+                        GL.Vertex3(tilePositionX + tileData.getWidth(), tilePositionY + tileData.getHeight(), z_depth);
 
+                        //GL.Color4(1, 0, 1, 0.8f);
                         GL.TexCoord2(u0, v1);
-                        GL.Vertex2(tilePositionX, tilePositionY + tileData.getHeight());
+                        GL.Vertex3(tilePositionX, tilePositionY + tileData.getHeight(), z_depth);
 
                         GL.End();
+
+                        //GL.Disable(EnableCap.ColorMaterial);
+
+                        //Used to populate List<Vertex> with tile data
+                        //vertices.Add(new Vertex(new Vector3(tilePositionX, tilePositionY, z_depth), new Vector2(u0, v0)));
+                        //vertices.Add(new Vertex(new Vector3(tilePositionX + tileData.getWidth(), tilePositionY, z_depth), new Vector2(u1, v0)));
+                        //vertices.Add(new Vertex(new Vector3(tilePositionX + tileData.getWidth(), tilePositionY + tileData.getHeight(), z_depth), new Vector2(u1, v1)));
+                        //vertices.Add(new Vertex(new Vector3(tilePositionX, tilePositionY + tileData.getHeight(), z_depth), new Vector2(u0, v1)));
 
                         if (tile._spriteID == 51)
                         {
@@ -191,17 +253,54 @@ namespace BlockEd
                 }
             }
 
+            #region Attempt at creating buffers
+            /*
+            int VBO;
+            GL.GenBuffers(1, out VBO);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+            int arraySize = vertices.Count;
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Count * (sizeof(float) * 5)),
+                          vertices.ToArray(), BufferUsageHint.StaticDraw);  //vertices.ToArray() may be costly.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            int VAO;
+            GL.GenVertexArrays(1, out VAO);
+            GL.BindVertexArray(VAO);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elementData[0]); //Need to create element vbo and replace 0
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+
+            //Vertex Position
+            GL.EnableVertexAttribArray(0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float) * 5, 0);
+
+            //Vertex Texcoord
+            GL.EnableVertexAttribArray(1);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, sizeof(float) * 5, sizeof(float) * 3);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindVertexArray(0);
+
+            GL.EnableClientState(ArrayCap.VertexArray);
+            GL.DrawElements(BeginMode.Quads, elementData.Length, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+            GL.DisableClientState(ArrayCap.VertexArray);
+            GL.Disable(EnableCap.Blend);
+            GL.Disable(EnableCap.Texture2D);
+            */
+            #endregion
+
+
+
+            glControl.SwapBuffers();
+
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
 
-            glControl.SwapBuffers();
+            //GL.DeleteBuffers(1, ref VBO);
 
             stopWatch.Stop();
             var executionTime = stopWatch.Elapsed;
             callerForm.updateGlLoadSpeedLabel(executionTime.ToString());
-            //glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
-
-            //Form1.Controls.glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
 
         }
 

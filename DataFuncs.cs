@@ -387,6 +387,7 @@ namespace BlockEd
                     }
 
                     loadedMap.getLastLoadedLevel().getLastAddedLayer().addTile(spriteID, tileX, tileY);
+                    loadedMap.incrementNumTiles();
 
                 }
                 #endregion
