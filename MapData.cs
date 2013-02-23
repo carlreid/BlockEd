@@ -36,6 +36,11 @@ namespace BlockEd
             _tiles.Add(new MapDataTile(tileID, xPos, yPos));
         }
 
+        public void addTile(MapTile tile)
+        {
+            _tiles.Add(new MapDataTile(tile.getID(), tile.getX(), tile.getY()));
+        }
+
         public int getZDepth(){
             return _zDepth;
         }

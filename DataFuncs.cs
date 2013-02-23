@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,15 @@ namespace BlockEd
     class DataFuncs
     {
         bool DEVMODE = false;
+
+        private PictureBox _lastModifiedTile = null;
+        private Image _lastModifiedTileImage = null;
+        private MapTile _selectedTile = null;
+
+        public DataFuncs(MapTile currentTile)
+        {
+            _selectedTile = currentTile;
+        }
 
         public void loadGraphics(List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, ref bool mapLoaded)
         {
@@ -470,9 +480,45 @@ namespace BlockEd
 
         public void pictureBoxClick(object sender, System.EventArgs e)
         {
-            PictureBox invokePanel = (PictureBox)sender;
-            String[] panelData = invokePanel.Name.Split(':');
-            MessageBox.Show("Invoker = " + panelData[1]);
+            if (_lastModifiedTile != null)
+            {
+                _lastModifiedTile.Image = _lastModifiedTileImage;
+            }
+
+
+            PictureBox invokePicture = (PictureBox)sender;
+            _lastModifiedTile = invokePicture;
+
+            Bitmap curImage = (Bitmap)invokePicture.Image;
+            _lastModifiedTileImage = new Bitmap(curImage);
+
+            for (int curX = 0; curX < curImage.Width; ++curX)
+            {
+                for (int curY = 0; curY < curImage.Height; ++curY)
+                {
+                    Color pixelCol = curImage.GetPixel(curX, curY);
+                    byte R = pixelCol.R;
+                    byte G = pixelCol.G;
+                    byte B = pixelCol.B;
+
+                    R = (byte)(R / 2);
+                    G = (byte)(G + 20);
+                    B = (byte)(B / 2);
+                    Color newCol = Color.FromArgb(R, G, B);
+                    curImage.SetPixel(curX, curY, newCol);
+                }
+            }
+
+            invokePicture.Image = curImage;
+
+            String[] tileData = invokePicture.Name.Split(':');
+            int tileID;
+            Int32.TryParse(tileData[1], out tileID);
+
+            
+            _selectedTile.newData(tileID, 0, 0);
+
+            Debug.WriteLine("Clicked on tile id: " + tileID);
         }
 
     }

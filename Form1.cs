@@ -18,14 +18,9 @@ using System.Drawing.Imaging;
 using System.Xml;
 using System.Xml.Schema;
 using System.Diagnostics;
-//using System.Xml.Linq;
-
-
-
 
 namespace BlockEd
 {
-    
 
     public partial class Form1 : Form
     {
@@ -34,7 +29,7 @@ namespace BlockEd
         bool mapLoaded = false;
         string mapFilePath = null;
         string layerSelected = null;
-        //bool opentkLoaded = false;
+        MapTile currentTile = null;
 
         Color alphaColorKey;
 
@@ -44,7 +39,7 @@ namespace BlockEd
         GameData loadedMap = null;
         GLFuncs glFuncs;
 
-        DataFuncs data = new DataFuncs();
+        DataFuncs data;
 
         float tileOffsetX = 0;
         float tileOffsetY = 0;
@@ -54,6 +49,8 @@ namespace BlockEd
         {
             InitializeComponent();
             glFuncs = new GLFuncs(this);
+            currentTile = new MapTile(-1, -1, -1);
+            data = new DataFuncs(currentTile);
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
@@ -106,25 +103,6 @@ namespace BlockEd
             GL.ClearColor(Color.Black);
 
             alphaColorKey = Color.Black;
-
-            //opentkLoaded = true;
-
-            //Image imgsrc = Image.FromFile("C:/Users/k0256525/Desktop/smiley.jpg"); // your PNG file
-            //int imgwidth = imgsrc.Width;
-            //int n = 10;
-            //int imgindex = 1;
-            //Image imgdst = new Bitmap(imgwidth / n, imgsrc.Height);
-            //using (Graphics gr = Graphics.FromImage(imgdst))
-            //{
-            //    gr.DrawImage(imgsrc,
-            //        new RectangleF(0, 0, imgdst.Width, imgdst.Height),
-            //        new RectangleF(imgindex * imgwidth / n, 0, imgwidth / n, imgsrc.Height),
-            //        GraphicsUnit.Pixel);
-            //}
-
-
-            //From: http://social.msdn.microsoft.com/Forums/en/Vsexpressvcs/thread/6bd4da70-5942-48cd-90c7-75abb40a3773
-            //panel1.Paint += new PaintEventHandler(panel1_Paint);
            
         }
         void panel1_Paint(object sender, PaintEventArgs e)
@@ -267,6 +245,53 @@ namespace BlockEd
             layerSelected = layerSelectedName;
             //Debug.WriteLine(layerSelectedName);
 
+        }
+
+        private void clickGL(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (loadedMap == null)
+            {
+                return;
+            }
+
+            if (layerSelectionBox.Text == "" || layerSelectionBox.Text == null)
+            {
+                MessageBox.Show("Please select a layer to place the tile on.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (currentTile.getID() == -1)
+            {
+                MessageBox.Show("You need to select a tile first.");
+                return;
+            }
+
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == layerSelectionBox.Text)
+                    {
+                        foreach (GraphicTile graphic in graphicTiles)
+                        {
+                            if (graphic.getTileID() != currentTile.getID())
+                            {
+                                continue;
+                            }
+
+                            //Debug.WriteLine(tileOffsetX + " - " + tileOffsetY);
+
+                            int tileX = (((int)tileOffsetX * -1) + e.X) / map.getMaxTileWidth();
+                            int tileY = (((int)tileOffsetY * -1) + e.Y) / map.getMaxTileHeight();
+                            
+                            currentTile.setPosition(tileX, tileY);
+                            map.addTile(currentTile);
+                            updateGL(glMapMain);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
     }

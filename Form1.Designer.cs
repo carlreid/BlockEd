@@ -90,6 +90,7 @@
             this.glMapMain.TabIndex = 1;
             this.glMapMain.VSync = false;
             this.glMapMain.Load += new System.EventHandler(this.glControl1_Load);
+            this.glMapMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clickGL);
             this.glMapMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mousePanGL);
             // 
             // updateButton
