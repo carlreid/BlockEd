@@ -124,7 +124,7 @@ namespace BlockEd
 
 
             //From: http://social.msdn.microsoft.com/Forums/en/Vsexpressvcs/thread/6bd4da70-5942-48cd-90c7-75abb40a3773
-            panel1.Paint += new PaintEventHandler(panel1_Paint);
+            //panel1.Paint += new PaintEventHandler(panel1_Paint);
            
         }
         void panel1_Paint(object sender, PaintEventArgs e)
@@ -221,6 +221,10 @@ namespace BlockEd
                     layerSelectionBox.Items.Add(map.getMapName());
                 }
             }
+
+            data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
+
+            tileTypeLabel.Text = "Tile Types: " + graphicTiles.Count;
 
         }
 

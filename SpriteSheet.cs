@@ -22,7 +22,13 @@ namespace BlockEd
 
         public string getImagePath()
         {
-            return _imagePath;
+            return "data/" + _imagePath;
+        }
+
+        public string getImageFileName()
+        {
+            String[] fileNameExplode = _imagePath.Split('.');
+            return fileNameExplode[0];
         }
 
         public int getFileId()

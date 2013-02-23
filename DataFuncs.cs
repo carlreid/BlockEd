@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -84,7 +85,7 @@ namespace BlockEd
                             graphicsReader.MoveToElement();
                             fileName = graphicsReader.ReadElementContentAsString();
 
-                            graphicFiles.Add(new SpriteSheet(fileID, "data/" + fileName));
+                            graphicFiles.Add(new SpriteSheet(fileID, fileName));
 
                         }
                         //graphicsReader.ReadEndElement();
@@ -397,6 +398,82 @@ namespace BlockEd
             }
             return loadedMap;
         }
-    
+
+        public void addTilesToTabControl(List<SpriteSheet> spriteSheets, List<GraphicTile> tiles, TabControl tabControl)
+        {
+            foreach (SpriteSheet sheet in spriteSheets)
+            {
+                TabPage sheetPage = new TabPage(sheet.getImageFileName());
+                tabControl.TabPages.Add(sheetPage);
+
+                //Image imgsrc = Image.FromFile("C:/Users/k0256525/Desktop/smiley.jpg"); // your PNG file
+                //int imgwidth = imgsrc.Width;
+                //int n = 10;
+                //int imgindex = 1;
+                //Image imgdst = new Bitmap(imgwidth / n, imgsrc.Height);
+                //using (Graphics gr = Graphics.FromImage(imgdst))
+                //{
+                //    gr.DrawImage(imgsrc,
+                //        new RectangleF(0, 0, imgdst.Width, imgdst.Height),
+                //        new RectangleF(imgindex * imgwidth / n, 0, imgwidth / n, imgsrc.Height),
+                //        GraphicsUnit.Pixel);
+                //}
+
+                Bitmap spriteSheetImage = new Bitmap(sheet.getImagePath());
+
+                int tileCurX = 0;
+                int tileCurY = 0;
+                int maxTileY = 0;
+
+                foreach (GraphicTile tile in tiles)
+                {
+
+                    if (tile.getFileID() != sheet.getFileId())
+                    {
+                        continue;
+                    }
+
+                    //Create a picture box to load the tile image into -- Possibly PictureBox is slow? Seems okay for now.
+                    PictureBox newPictureBox = new PictureBox();
+                    newPictureBox.Name = "tile:" + tile.getTileID();    //In order to identify which tile the user has clicked (Parsed with .split(':') later)
+                    newPictureBox.Width = tile.getWidth();
+                    newPictureBox.Height = tile.getHeight();
+
+                    //Create a new cropped bitmap to be loaded into the PictureBox
+                    OpenTK.Vector2 tilePos = tile.getPosition();
+                    Rectangle tileRect = new Rectangle((int)tilePos.X, (int)tilePos.Y, tile.getWidth(), tile.getHeight());
+                    Bitmap cropped = (Bitmap)spriteSheetImage.Clone(tileRect, spriteSheetImage.PixelFormat);
+                    newPictureBox.Image = cropped;
+
+                    //Position the PictureBox within the sheetPage control
+                    newPictureBox.Left = tileCurX;
+                    newPictureBox.Top = tileCurY;
+                    newPictureBox.Click += pictureBoxClick;
+                    sheetPage.Controls.Add(newPictureBox);
+
+                    //Increment the int that keeps track of X position.
+                    tileCurX += tile.getWidth();
+                    if (tile.getHeight() > maxTileY)
+                    {
+                        maxTileY = tile.getHeight();
+                    }
+
+                    if ((tileCurX + tile.getWidth()) > sheetPage.Width)
+                    {
+                        tileCurX = 0;
+                        tileCurY += maxTileY;
+                        maxTileY = 0;   //Make sure to reset this or other rows will be affected.
+                    }
+                }
+            }
+        }
+
+        public void pictureBoxClick(object sender, System.EventArgs e)
+        {
+            PictureBox invokePanel = (PictureBox)sender;
+            String[] panelData = invokePanel.Name.Split(':');
+            MessageBox.Show("Invoker = " + panelData[1]);
+        }
+
     }
 }

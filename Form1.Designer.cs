@@ -38,12 +38,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.tilePicker = new System.Windows.Forms.TabControl();
-            this.terrainTab = new System.Windows.Forms.TabPage();
             this.glMiniMapControl = new OpenTK.GLControl();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.objectsTab = new System.Windows.Forms.TabPage();
-            this.mobTab = new System.Windows.Forms.TabPage();
-            this.pickupTabs = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -51,9 +46,8 @@
             this.devPanel = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
             this.layerSelectionBox = new System.Windows.Forms.ComboBox();
+            this.tileTypeLabel = new System.Windows.Forms.Label();
             this.topMenu.SuspendLayout();
-            this.tilePicker.SuspendLayout();
-            this.terrainTab.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,26 +127,11 @@
             // 
             // tilePicker
             // 
-            this.tilePicker.Controls.Add(this.terrainTab);
-            this.tilePicker.Controls.Add(this.objectsTab);
-            this.tilePicker.Controls.Add(this.mobTab);
-            this.tilePicker.Controls.Add(this.pickupTabs);
             this.tilePicker.Location = new System.Drawing.Point(945, 34);
             this.tilePicker.Name = "tilePicker";
             this.tilePicker.SelectedIndex = 0;
             this.tilePicker.Size = new System.Drawing.Size(312, 399);
             this.tilePicker.TabIndex = 5;
-            // 
-            // terrainTab
-            // 
-            this.terrainTab.Controls.Add(this.panel1);
-            this.terrainTab.Location = new System.Drawing.Point(4, 22);
-            this.terrainTab.Name = "terrainTab";
-            this.terrainTab.Padding = new System.Windows.Forms.Padding(3);
-            this.terrainTab.Size = new System.Drawing.Size(304, 373);
-            this.terrainTab.TabIndex = 0;
-            this.terrainTab.Text = "Terrain";
-            this.terrainTab.UseVisualStyleBackColor = true;
             // 
             // glMiniMapControl
             // 
@@ -162,44 +141,6 @@
             this.glMiniMapControl.Size = new System.Drawing.Size(200, 200);
             this.glMiniMapControl.TabIndex = 8;
             this.glMiniMapControl.VSync = false;
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.DarkRed;
-            this.panel1.Location = new System.Drawing.Point(6, 6);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(50, 50);
-            this.panel1.TabIndex = 0;
-            // 
-            // objectsTab
-            // 
-            this.objectsTab.Location = new System.Drawing.Point(4, 22);
-            this.objectsTab.Name = "objectsTab";
-            this.objectsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.objectsTab.Size = new System.Drawing.Size(304, 579);
-            this.objectsTab.TabIndex = 1;
-            this.objectsTab.Text = "Objects";
-            this.objectsTab.UseVisualStyleBackColor = true;
-            // 
-            // mobTab
-            // 
-            this.mobTab.Location = new System.Drawing.Point(4, 22);
-            this.mobTab.Name = "mobTab";
-            this.mobTab.Padding = new System.Windows.Forms.Padding(3);
-            this.mobTab.Size = new System.Drawing.Size(304, 579);
-            this.mobTab.TabIndex = 2;
-            this.mobTab.Text = "Mobs";
-            this.mobTab.UseVisualStyleBackColor = true;
-            // 
-            // pickupTabs
-            // 
-            this.pickupTabs.Location = new System.Drawing.Point(4, 22);
-            this.pickupTabs.Name = "pickupTabs";
-            this.pickupTabs.Padding = new System.Windows.Forms.Padding(3);
-            this.pickupTabs.Size = new System.Drawing.Size(304, 579);
-            this.pickupTabs.TabIndex = 3;
-            this.pickupTabs.Text = "Pickups";
-            this.pickupTabs.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -242,6 +183,7 @@
             // 
             // devPanel
             // 
+            this.devPanel.Controls.Add(this.tileTypeLabel);
             this.devPanel.Controls.Add(this.button6);
             this.devPanel.Controls.Add(this.button1);
             this.devPanel.Controls.Add(this.button2);
@@ -273,6 +215,15 @@
             this.layerSelectionBox.TabIndex = 11;
             this.layerSelectionBox.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
             // 
+            // tileTypeLabel
+            // 
+            this.tileTypeLabel.AutoSize = true;
+            this.tileTypeLabel.Location = new System.Drawing.Point(26, 127);
+            this.tileTypeLabel.Name = "tileTypeLabel";
+            this.tileTypeLabel.Size = new System.Drawing.Size(59, 13);
+            this.tileTypeLabel.TabIndex = 12;
+            this.tileTypeLabel.Text = "Tile Types:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -291,9 +242,8 @@
             this.Text = "Form1";
             this.topMenu.ResumeLayout(false);
             this.topMenu.PerformLayout();
-            this.tilePicker.ResumeLayout(false);
-            this.terrainTab.ResumeLayout(false);
             this.devPanel.ResumeLayout(false);
+            this.devPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -309,11 +259,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabControl tilePicker;
-        private System.Windows.Forms.TabPage terrainTab;
-        private System.Windows.Forms.TabPage objectsTab;
-        private System.Windows.Forms.TabPage mobTab;
-        private System.Windows.Forms.TabPage pickupTabs;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private OpenTK.GLControl glMiniMapControl;
@@ -323,6 +268,7 @@
         private System.Windows.Forms.Panel devPanel;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.ComboBox layerSelectionBox;
+        private System.Windows.Forms.Label tileTypeLabel;
     }
 }
 
