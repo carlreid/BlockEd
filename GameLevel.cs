@@ -25,6 +25,14 @@ namespace BlockEd
 
             _mapLayers = new List<MapData>();
 
+            _hasExit = false;
+
+        }
+
+        public void setExit(int exitX, int exitY){
+            _hasExit = true;
+            _exitPosX = exitX;
+            _exitPosY = exitY;
         }
 
         public void addLayer(int width, int height, int drawType, int zDepth, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
@@ -47,11 +55,48 @@ namespace BlockEd
             return _mapLayers;
         }
 
+        public int getID()
+        {
+            return _id;
+        }
+
+        public string getName()
+        {
+            return _name;
+        }
+
+        public int getStartX()
+        {
+            return _startPosX;
+        }
+
+        public int getStartY()
+        {
+            return _startPosY;
+        }
+
+        public bool hasExitBeenSet()
+        {
+            return _hasExit;
+        }
+
+        public int getExitX()
+        {
+            return _exitPosX;
+        }
+
+        public int getExitY()
+        {
+            return _exitPosY;
+        }
+
         private int _id; //Rq
         private string _name;
 
         private int _startPosX; //Rq
         private int _startPosY; //Rq
+
+        private bool _hasExit;
         private int _exitPosX;
         private int _exitPosY;
 

@@ -310,5 +310,11 @@ namespace BlockEd
             }
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //richTextBox1.Text = data.ToXML(loadedMap);
+            data.saveMapXml(loadedMap, "map", "test");
+        }
+
     }
 }

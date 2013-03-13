@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace BlockEd
 {
@@ -267,33 +269,63 @@ namespace BlockEd
 
                 #region GameLevel
 
+                int levelID = 0;
                 string levelName = null;
                 int levelStartX = 0;
                 int levelStartY = 0;
 
                 if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Level")
                 {
+                    if (mapReader.MoveToAttribute("id"))
+                    {
+                        levelID = mapReader.ReadContentAsInt();
+                        if (DEVMODE) Console.WriteLine("Level ID: " + levelID.ToString());
+                    }
+
                     if (mapReader.MoveToAttribute("name"))
                     {
                         levelName = mapReader.ReadContentAsString();
                         if (DEVMODE) Console.WriteLine("Level Name: " + levelName);
                     }
+
+                    mapReader.ReadToFollowing("startposition");
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
+                    {
+                        if (mapReader.MoveToAttribute("x"))
+                        {
+                            levelStartX = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Level Start X: " + levelStartX.ToString());
+                        }
+                        if (mapReader.MoveToAttribute("y"))
+                        {
+                            levelStartY = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Level Start Y: " + levelStartY.ToString());
+                        }
+                    }
+                    loadedMap.addLevel(levelID, levelStartX, levelStartY, levelName);
+
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
+                    {
+                        int exitX = 0;
+                        int exitY = 0;
+
+                        if (mapReader.MoveToAttribute("x"))
+                        {
+                            exitX = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Level Exit X: " + exitX.ToString());
+                        }
+                        if (mapReader.MoveToAttribute("y"))
+                        {
+                            exitY = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Level Exit Y: " + exitY.ToString());
+                        }
+
+                        loadedMap.getLastLoadedLevel().setExit(exitX, exitY);
+                    }
+                    
                 }
 
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
-                {
-                    if (mapReader.MoveToAttribute("x"))
-                    {
-                        levelStartX = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Level Start X: " + levelStartX.ToString());
-                    }
-                    if (mapReader.MoveToAttribute("y"))
-                    {
-                        levelStartY = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Level Start Y: " + levelStartY.ToString());
-                    }
-                    loadedMap.addLevel(levelStartX, levelStartY, levelName);
-                }
+
 
 
 
@@ -415,6 +447,107 @@ namespace BlockEd
             return loadedMap;
         }
 
+        // Display any validation errors.
+        private static void ValidationCallBack(object sender, ValidationEventArgs e)
+        {
+            Console.WriteLine("Validation Error: {0}", e.Message);
+        }
+
+        //public string ToXML(Object oObject)
+        //{
+        //    XmlDocument xmlDoc = new XmlDocument();
+        //    XmlSerializer xmlSerializer = new XmlSerializer(oObject.GetType());
+        //    using (MemoryStream xmlStream = new MemoryStream())
+        //    {
+        //        xmlSerializer.Serialize(xmlStream, oObject);
+        //        xmlStream.Position = 0;
+        //        xmlDoc.Load(xmlStream);
+        //        return xmlDoc.InnerXml;
+        //    }
+        //} 
+
+        public void saveMapXml(GameData mapData, string saveLocation, string fileName)
+        {
+            XmlDocument document = new XmlDocument();
+            XmlDeclaration docDecleration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
+            document.AppendChild(docDecleration);// Create the root element
+
+            XmlElement root = document.CreateElement("Game");
+            root.SetAttribute("name", mapData.getName());
+            document.AppendChild(root);
+
+            //GameData and scroll_area elements
+            XmlElement gameData = document.CreateElement("GameData");
+            XmlElement scroll_area = document.CreateElement("scroll_area");
+            scroll_area.SetAttribute("TripWndX", mapData.getMaxScrollX().ToString());
+            scroll_area.SetAttribute("TripWndY", mapData.getMaxScrollY().ToString());
+            gameData.AppendChild(scroll_area);
+            root.AppendChild(gameData);
+
+            foreach (GameLevel level in mapData.getLevelList())
+            {
+                XmlElement levelElement = document.CreateElement("Level");
+                levelElement.SetAttribute("id", level.getID().ToString());
+                levelElement.SetAttribute("name", level.getName());
+
+                XmlElement startposition = document.CreateElement("startposition");
+                startposition.SetAttribute("x", level.getStartX().ToString());
+                startposition.SetAttribute("y", level.getStartY().ToString());
+                levelElement.AppendChild(startposition);
+
+                if (level.hasExitBeenSet())
+                {
+                    XmlElement exitposition = document.CreateElement("exitposition");
+                    exitposition.SetAttribute("x", level.getExitX().ToString());
+                    exitposition.SetAttribute("y", level.getExitY().ToString());
+                    levelElement.AppendChild(exitposition);
+                }
+                else
+                {
+                    //Don't add any data to exitposition
+                    XmlElement exitposition = document.CreateElement("exitposition");
+                    levelElement.AppendChild(exitposition);
+                }
+
+                XmlElement mapList = document.CreateElement("MapList");
+                foreach (MapData map in level.getLayerList())
+                {
+                    XmlElement mapElement = document.CreateElement("map");
+                    mapElement.SetAttribute("name", map.getMapName());
+                    mapElement.SetAttribute("z_depth", map.getZDepth().ToString());
+                    mapElement.SetAttribute("width", map.getMapWidth().ToString());
+                    mapElement.SetAttribute("height", map.getMapHeight().ToString());
+                    mapElement.SetAttribute("xsz", map.getMaxTileWidth().ToString());
+                    mapElement.SetAttribute("ysz", map.getMaxTileHeight().ToString());
+                    mapElement.SetAttribute("drawtype", map.getDrawType().ToString());
+
+                    XmlElement layerOffset = document.CreateElement("layer_offset");
+                    layerOffset.SetAttribute("x", map.getLayerOffsetX().ToString());
+                    layerOffset.SetAttribute("y", map.getLayerOffsetY().ToString());
+                    mapElement.AppendChild(layerOffset);
+
+                    foreach (MapDataTile tile in map.getTileList())
+                    {
+                        XmlElement tileElement = document.CreateElement("tile");
+                        tileElement.SetAttribute("sp", tile._spriteID.ToString());
+                        tileElement.SetAttribute("x", tile._xPos.ToString());
+                        tileElement.SetAttribute("y", tile._yPos.ToString());
+                        mapElement.AppendChild(tileElement);
+                    }
+                    mapList.AppendChild(mapElement);
+                }
+
+                levelElement.AppendChild(mapList);
+                root.AppendChild(levelElement);
+            }
+
+
+            document.Save(saveLocation + "\\" + fileName + ".xml");
+
+            //return document.OuterXml;
+
+        }
+
         public void addTilesToTabControl(List<SpriteSheet> spriteSheets, List<GraphicTile> tiles, TabControl tabControl)
         {
             foreach (SpriteSheet sheet in spriteSheets)
@@ -514,11 +647,7 @@ namespace BlockEd
             Debug.WriteLine("Clicked on tile id: " + tileID);
         }
 
-        // Display any validation errors.
-        private static void ValidationCallBack(object sender, ValidationEventArgs e)
-        {
-            Console.WriteLine("Validation Error: {0}", e.Message);
-        }
+
 
     }
 }

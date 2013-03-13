@@ -69,8 +69,23 @@ namespace BlockEd
             return _level;
         }
 
-        public void addLevel(int startX, int startY, string levelName = null){
-            _level.Add(new GameLevel(_level.Count, startX, startY, levelName));
+        public void addLevel(int id, int startX, int startY, string levelName = null){
+            _level.Add(new GameLevel(id, startX, startY, levelName));
+        }
+
+        public string getName()
+        {
+            return _name;
+        }
+
+        public int getMaxScrollX()
+        {
+            return _maxScrollX;
+        }
+
+        public int getMaxScrollY()
+        {
+            return _maxScrollY;
         }
 
         private string _name;

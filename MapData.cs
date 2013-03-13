@@ -65,6 +65,31 @@ namespace BlockEd
             return _mapName;
         }
 
+        public int getMapWidth()
+        {
+            return _width;
+        }
+
+        public int getMapHeight()
+        {
+            return _height;
+        }
+
+        public int getDrawType()
+        {
+            return _drawType;
+        }
+
+        public int getLayerOffsetX()
+        {
+            return _layerOffsetX;
+        }
+
+        public int getLayerOffsetY()
+        {
+            return _layerOffsetY;
+        }
+
         private string _mapName;
         private int _zDepth; //Rq
         private int _width; //Rq

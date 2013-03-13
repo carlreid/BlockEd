@@ -44,9 +44,10 @@
             this.button5 = new System.Windows.Forms.Button();
             this.glLoadSpeedLabel = new System.Windows.Forms.Label();
             this.devPanel = new System.Windows.Forms.Panel();
+            this.tileTypeLabel = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
             this.layerSelectionBox = new System.Windows.Forms.ComboBox();
-            this.tileTypeLabel = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.SuspendLayout();
@@ -184,6 +185,7 @@
             // 
             // devPanel
             // 
+            this.devPanel.Controls.Add(this.button7);
             this.devPanel.Controls.Add(this.tileTypeLabel);
             this.devPanel.Controls.Add(this.button6);
             this.devPanel.Controls.Add(this.button1);
@@ -196,6 +198,15 @@
             this.devPanel.Size = new System.Drawing.Size(402, 250);
             this.devPanel.TabIndex = 10;
             this.devPanel.Visible = false;
+            // 
+            // tileTypeLabel
+            // 
+            this.tileTypeLabel.AutoSize = true;
+            this.tileTypeLabel.Location = new System.Drawing.Point(26, 149);
+            this.tileTypeLabel.Name = "tileTypeLabel";
+            this.tileTypeLabel.Size = new System.Drawing.Size(59, 13);
+            this.tileTypeLabel.TabIndex = 12;
+            this.tileTypeLabel.Text = "Tile Types:";
             // 
             // button6
             // 
@@ -216,14 +227,15 @@
             this.layerSelectionBox.TabIndex = 11;
             this.layerSelectionBox.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
             // 
-            // tileTypeLabel
+            // button7
             // 
-            this.tileTypeLabel.AutoSize = true;
-            this.tileTypeLabel.Location = new System.Drawing.Point(26, 127);
-            this.tileTypeLabel.Name = "tileTypeLabel";
-            this.tileTypeLabel.Size = new System.Drawing.Size(59, 13);
-            this.tileTypeLabel.TabIndex = 12;
-            this.tileTypeLabel.Text = "Tile Types:";
+            this.button7.Location = new System.Drawing.Point(110, 114);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 13;
+            this.button7.Text = "Save Map";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
@@ -270,6 +282,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.ComboBox layerSelectionBox;
         private System.Windows.Forms.Label tileTypeLabel;
+        private System.Windows.Forms.Button button7;
     }
 }
 
