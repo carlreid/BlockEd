@@ -1,0 +1,44 @@
+
+  <!ENTITY pickup "1">
+  <!ENTITY change "2">
+  <!ENTITY power "3">
+  <!ENTITY gener "4">
+  <!ENTITY replace "5">
+  
+  <!--for GGame Version 3.1-->
+
+  <!ELEMENT GraphicsList (transparentcolour?, FileList, SpriteList, AnimationList) >
+  <!ATTLIST GraphicsList name CDATA #IMPLIED >
+  <!ATTLIST GraphicsList version CDATA "3.1" >
+
+  <!ELEMENT transparentcolour EMPTY >
+    <!ATTLIST transparentcolour red CDATA #REQUIRED>
+    <!ATTLIST transparentcolour green CDATA #REQUIRED>
+    <!ATTLIST transparentcolour blue CDATA #REQUIRED>
+
+    <!ELEMENT FileList (file+) >
+    <!ELEMENT file (#PCDATA) >
+    <!ATTLIST file id CDATA #REQUIRED >
+    <!ATTLIST file name CDATA #IMPLIED >
+
+    <!ELEMENT SpriteList (sprite+) >
+    <!ELEMENT sprite EMPTY >
+    <!ATTLIST sprite id CDATA #REQUIRED >
+    <!ATTLIST sprite file CDATA #REQUIRED >
+    <!ATTLIST sprite name CDATA #IMPLIED >
+    <!ATTLIST sprite set CDATA #IMPLIED >
+    <!ATTLIST sprite type (1|2|3|4|5|6) #IMPLIED >
+    <!ATTLIST sprite data1 CDATA #IMPLIED >
+    <!ATTLIST sprite data2 CDATA #IMPLIED >
+    <!ATTLIST sprite block (true | false) "false" >
+    <!ATTLIST sprite x CDATA #REQUIRED >
+    <!ATTLIST sprite y CDATA #REQUIRED >
+    <!ATTLIST sprite w CDATA "32" >
+    <!ATTLIST sprite h CDATA "32" >
+  
+    <!ELEMENT AnimationList (animation+) >
+    <!ELEMENT animation (#PCDATA) >
+    <!ATTLIST animation id CDATA #REQUIRED >
+    <!ATTLIST animation name CDATA #IMPLIED >
+    <!ATTLIST animation set CDATA #IMPLIED >
+

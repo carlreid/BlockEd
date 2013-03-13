@@ -279,10 +279,26 @@ namespace BlockEd
                                 continue;
                             }
 
-                            //Debug.WriteLine(tileOffsetX + " - " + tileOffsetY);
+                            //Debug.WriteLine(e.X + " - " + e.Y);
+                            //int tileX;
+                            //int tileY;
 
-                            int tileX = (((int)tileOffsetX * -1) + e.X) / map.getMaxTileWidth();
-                            int tileY = (((int)tileOffsetY * -1) + e.Y) / map.getMaxTileHeight();
+                            //if (tileOffsetX < 0 || tileOffsetY < 0)
+                            //{
+                            //    tileX = (((int)tileOffsetX * -1) + e.X) / map.getMaxTileWidth();
+                            //    tileY = (((int)tileOffsetY * -1) + e.Y) / map.getMaxTileHeight();
+                            //}
+                            //else
+                            //{
+                            //    tileX = (((int)Math.Floor(0.5 + tileOffsetX) * -1) + e.X) / map.getMaxTileWidth();
+                            //    tileY = (((int)Math.Floor(0.5 + tileOffsetY) * -1) + e.Y) / map.getMaxTileHeight();
+                            //}
+
+                            Debug.WriteLine(tileOffsetX + " -- " + Math.Abs(tileOffsetX));
+
+                            int tileX = (int)((tileOffsetX * -1 + e.X) / map.getMaxTileWidth());
+                            int tileY = (int)((tileOffsetY * -1 + e.Y) / map.getMaxTileHeight());
+
                             
                             currentTile.setPosition(tileX, tileY);
                             map.addTile(currentTile);

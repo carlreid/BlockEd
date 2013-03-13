@@ -1,0 +1,56 @@
+  <!--for GGame Version 3.1-->
+
+  <!ELEMENT Game (GameData?, Level+) >
+  <!ATTLIST Game name CDATA #IMPLIED >
+  <!ATTLIST Game version CDATA "3.1" >
+
+  <!ELEMENT GameData (scroll_area? , controls?) >
+      <!ELEMENT scroll_area EMPTY >
+      <!ATTLIST scroll_area TripWndX CDATA #IMPLIED>
+      <!ATTLIST scroll_area TripWndY CDATA #IMPLIED>
+      <!ELEMENT controls EMPTY >
+
+    <!ELEMENT Level (startposition?, exitposition?, MapList*)>
+    <!ATTLIST Level id CDATA #REQUIRED >
+    <!ATTLIST Level name CDATA #IMPLIED >
+      <!ELEMENT startposition EMPTY>
+      <!ATTLIST startposition x CDATA #REQUIRED>
+      <!ATTLIST startposition y CDATA #REQUIRED>
+      <!ELEMENT exitposition EMPTY>
+      <!ATTLIST exitposition x CDATA #IMPLIED>
+      <!ATTLIST exitposition y CDATA #IMPLIED>
+
+      <!ELEMENT MapList (map+)>
+        <!ELEMENT map (layer_offset? , fillcolour? , borderfillcolour? , position? , data? , tile*)>
+        <!ATTLIST map name CDATA #IMPLIED >
+        <!--<!ATTLIST map z_depth (1|3|5|7|9) #REQUIRED>-->
+        <!ATTLIST map z_depth (1|2|3|4|5|6|7|8|9|10) #REQUIRED>
+        <!ATTLIST map width CDATA #REQUIRED>
+        <!ATTLIST map height CDATA #REQUIRED>
+        <!ATTLIST map xsz CDATA "32">
+        <!ATTLIST map ysz CDATA "32">
+        <!ATTLIST map drawtype (0|1|2|3) #IMPLIED>
+        <!--<!ATTLIST map drawtype (0|1|2|3|4|5|6) #IMPLIED>-->
+          <!ELEMENT layer_offset EMPTY>
+          <!ATTLIST layer_offset x CDATA #REQUIRED>
+          <!ATTLIST layer_offset y CDATA #REQUIRED>
+
+          <!ELEMENT fillcolour EMPTY>
+          <!ATTLIST fillcolour red CDATA #REQUIRED>
+          <!ATTLIST fillcolour green CDATA #REQUIRED>
+          <!ATTLIST fillcolour blue CDATA #REQUIRED>
+          <!ELEMENT borderfillcolour EMPTY>
+          <!ATTLIST borderfillcolour red CDATA #REQUIRED>
+          <!ATTLIST borderfillcolour green CDATA #REQUIRED>
+          <!ATTLIST borderfillcolour blue CDATA #REQUIRED>
+
+          <!ELEMENT data (#PCDATA)>
+  
+          <!ELEMENT position EMPTY>
+          <!ATTLIST position x CDATA #REQUIRED>
+          <!ATTLIST position y CDATA #REQUIRED>
+
+          <!ELEMENT tile EMPTY>
+          <!ATTLIST tile sp CDATA #REQUIRED>
+          <!ATTLIST tile x CDATA #REQUIRED>
+          <!ATTLIST tile y CDATA #REQUIRED>

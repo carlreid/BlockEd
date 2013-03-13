@@ -43,6 +43,11 @@ namespace BlockEd
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreWhitespace = true;
             settings.IgnoreComments = true;
+            settings.DtdProcessing = DtdProcessing.Parse;
+            settings.ValidationType = ValidationType.DTD;
+            settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
+
+
             Color alphaColorKey;
 
             XmlReader graphicsReader = XmlReader.Create("data/Graphics.xml", settings);
@@ -199,8 +204,9 @@ namespace BlockEd
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreWhitespace = true;
             settings.IgnoreComments = true;
+            settings.DtdProcessing = DtdProcessing.Parse;
             settings.ValidationType = ValidationType.DTD;
-            settings.ValidationFlags = XmlSchemaValidationFlags.ReportValidationWarnings;
+            settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
             //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
             XmlReader mapReader = null;
@@ -416,19 +422,6 @@ namespace BlockEd
                 TabPage sheetPage = new TabPage(sheet.getImageFileName());
                 tabControl.TabPages.Add(sheetPage);
 
-                //Image imgsrc = Image.FromFile("C:/Users/k0256525/Desktop/smiley.jpg"); // your PNG file
-                //int imgwidth = imgsrc.Width;
-                //int n = 10;
-                //int imgindex = 1;
-                //Image imgdst = new Bitmap(imgwidth / n, imgsrc.Height);
-                //using (Graphics gr = Graphics.FromImage(imgdst))
-                //{
-                //    gr.DrawImage(imgsrc,
-                //        new RectangleF(0, 0, imgdst.Width, imgdst.Height),
-                //        new RectangleF(imgindex * imgwidth / n, 0, imgwidth / n, imgsrc.Height),
-                //        GraphicsUnit.Pixel);
-                //}
-
                 Bitmap spriteSheetImage = new Bitmap(sheet.getImagePath());
 
                 int tileCurX = 0;
@@ -519,6 +512,12 @@ namespace BlockEd
             _selectedTile.newData(tileID, 0, 0);
 
             Debug.WriteLine("Clicked on tile id: " + tileID);
+        }
+
+        // Display any validation errors.
+        private static void ValidationCallBack(object sender, ValidationEventArgs e)
+        {
+            Console.WriteLine("Validation Error: {0}", e.Message);
         }
 
     }

@@ -6,10 +6,10 @@
   <!ENTITY gener "4">
   <!ENTITY replace "5">
 ]>-->
+<!DOCTYPE GraphicsList SYSTEM "GraphicsDTD.xml">
 <GraphicsList name="Gauntlet">
   <transparentcolour red="0" green="0" blue="0" />
   <FileList>
-    List of Files
     <file id="1">T_G1.bmp</file>
     <file id="2">PlayerB.bmp</file>
     <!--<file id="3">MANG2.bmp</file>-->
@@ -19,8 +19,7 @@
     <file id="10">TILES.bmp</file>
   </FileList>
   <SpriteList>
-    List of Sprites
-    <sprite id="1" file="1" x="0" y="0" w="32" h="32">test</sprite>
+    <sprite id="1" file="1" x="0" y="0" w="32" h="32"></sprite>
     <sprite id="2" file="2" name="manga1" x="0" y="0" w="100" h="100"></sprite>
     <!--<sprite id="3" file="3" name="manga2" x="0" y="0" w="100" h="100"></sprite>-->
 
@@ -122,10 +121,8 @@
     
   </SpriteList>
   <AnimationList>
-    List of Animations
     <animation id="1"> </animation>
     <animation id="2"> </animation>
     <animation id="3"> </animation>
-
   </AnimationList>
 </GraphicsList>

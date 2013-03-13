@@ -162,7 +162,7 @@ namespace BlockEd
                         debugTilesRendered += 1;
                     }
                 }
-                Debug.WriteLine("Counted: " + debugTilesRendered);
+                //Debug.WriteLine("Counted: " + debugTilesRendered);
             }
 
             glControl.SwapBuffers();
