@@ -33,6 +33,7 @@
             this.topMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.glMapMain = new OpenTK.GLControl();
             this.updateButton = new System.Windows.Forms.Button();
@@ -57,15 +58,20 @@
             this.redoStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.buildStripButton = new System.Windows.Forms.ToolStripButton();
-            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileTypeCombo = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tileDataGroupBox = new System.Windows.Forms.GroupBox();
+            this.tileData2ValueLabel = new System.Windows.Forms.Label();
+            this.tileData2ValueTextBox = new System.Windows.Forms.TextBox();
             this.tileData1Combo = new System.Windows.Forms.ComboBox();
-            this.tileData2Combo = new System.Windows.Forms.ComboBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.dataOneTextBox = new System.Windows.Forms.TextBox();
+            this.dataOneLabel = new System.Windows.Forms.Label();
+            this.dataTwoLabel = new System.Windows.Forms.Label();
+            this.dataTwoTextBox = new System.Windows.Forms.TextBox();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.tileDataGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // topMenu
@@ -90,9 +96,16 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As...";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
@@ -151,7 +164,7 @@
             this.tilePicker.Location = new System.Drawing.Point(945, 57);
             this.tilePicker.Name = "tilePicker";
             this.tilePicker.SelectedIndex = 0;
-            this.tilePicker.Size = new System.Drawing.Size(312, 399);
+            this.tilePicker.Size = new System.Drawing.Size(312, 377);
             this.tilePicker.TabIndex = 5;
             // 
             // glMiniMapControl
@@ -165,7 +178,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1168, 639);
+            this.button3.Location = new System.Drawing.Point(868, 655);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 6;
@@ -250,7 +263,7 @@
             // layerSelectionBox
             // 
             this.layerSelectionBox.FormattingEnabled = true;
-            this.layerSelectionBox.Location = new System.Drawing.Point(1149, 462);
+            this.layerSelectionBox.Location = new System.Drawing.Point(1147, 437);
             this.layerSelectionBox.Name = "layerSelectionBox";
             this.layerSelectionBox.Size = new System.Drawing.Size(106, 21);
             this.layerSelectionBox.TabIndex = 11;
@@ -329,13 +342,6 @@
             this.buildStripButton.Text = "Test (F5)";
             this.buildStripButton.Click += new System.EventHandler(this.buildStripButton_Click);
             // 
-            // saveAsToolStripMenuItem
-            // 
-            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As...";
-            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
-            // 
             // tileTypeCombo
             // 
             this.tileTypeCombo.FormattingEnabled = true;
@@ -353,17 +359,38 @@
             this.tileTypeCombo.TabIndex = 11;
             this.tileTypeCombo.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
             // 
-            // groupBox1
+            // tileDataGroupBox
             // 
-            this.groupBox1.Controls.Add(this.tileData2Combo);
-            this.groupBox1.Controls.Add(this.tileData1Combo);
-            this.groupBox1.Controls.Add(this.tileTypeCombo);
-            this.groupBox1.Location = new System.Drawing.Point(1149, 489);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(106, 104);
-            this.groupBox1.TabIndex = 15;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Tile Data";
+            this.tileDataGroupBox.Controls.Add(this.dataTwoTextBox);
+            this.tileDataGroupBox.Controls.Add(this.dataTwoLabel);
+            this.tileDataGroupBox.Controls.Add(this.dataOneTextBox);
+            this.tileDataGroupBox.Controls.Add(this.dataOneLabel);
+            this.tileDataGroupBox.Controls.Add(this.tileData2ValueLabel);
+            this.tileDataGroupBox.Controls.Add(this.tileData2ValueTextBox);
+            this.tileDataGroupBox.Controls.Add(this.tileData1Combo);
+            this.tileDataGroupBox.Controls.Add(this.tileTypeCombo);
+            this.tileDataGroupBox.Location = new System.Drawing.Point(1150, 464);
+            this.tileDataGroupBox.Name = "tileDataGroupBox";
+            this.tileDataGroupBox.Size = new System.Drawing.Size(106, 198);
+            this.tileDataGroupBox.TabIndex = 15;
+            this.tileDataGroupBox.TabStop = false;
+            this.tileDataGroupBox.Text = "Tile Data";
+            // 
+            // tileData2ValueLabel
+            // 
+            this.tileData2ValueLabel.AutoSize = true;
+            this.tileData2ValueLabel.Location = new System.Drawing.Point(6, 70);
+            this.tileData2ValueLabel.Name = "tileData2ValueLabel";
+            this.tileData2ValueLabel.Size = new System.Drawing.Size(37, 13);
+            this.tileData2ValueLabel.TabIndex = 13;
+            this.tileData2ValueLabel.Text = "Value:";
+            // 
+            // tileData2ValueTextBox
+            // 
+            this.tileData2ValueTextBox.Location = new System.Drawing.Point(6, 86);
+            this.tileData2ValueTextBox.Name = "tileData2ValueTextBox";
+            this.tileData2ValueTextBox.Size = new System.Drawing.Size(91, 20);
+            this.tileData2ValueTextBox.TabIndex = 12;
             // 
             // tileData1Combo
             // 
@@ -374,21 +401,53 @@
             this.tileData1Combo.TabIndex = 11;
             this.tileData1Combo.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
             // 
-            // tileData2Combo
+            // splitter1
             // 
-            this.tileData2Combo.FormattingEnabled = true;
-            this.tileData2Combo.Location = new System.Drawing.Point(4, 73);
-            this.tileData2Combo.Name = "tileData2Combo";
-            this.tileData2Combo.Size = new System.Drawing.Size(96, 21);
-            this.tileData2Combo.TabIndex = 11;
-            this.tileData2Combo.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
+            this.splitter1.Location = new System.Drawing.Point(0, 49);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 633);
+            this.splitter1.TabIndex = 16;
+            this.splitter1.TabStop = false;
+            // 
+            // dataOneTextBox
+            // 
+            this.dataOneTextBox.Location = new System.Drawing.Point(6, 133);
+            this.dataOneTextBox.Name = "dataOneTextBox";
+            this.dataOneTextBox.Size = new System.Drawing.Size(91, 20);
+            this.dataOneTextBox.TabIndex = 14;
+            // 
+            // dataOneLabel
+            // 
+            this.dataOneLabel.AutoSize = true;
+            this.dataOneLabel.Location = new System.Drawing.Point(6, 116);
+            this.dataOneLabel.Name = "dataOneLabel";
+            this.dataOneLabel.Size = new System.Drawing.Size(37, 13);
+            this.dataOneLabel.TabIndex = 13;
+            this.dataOneLabel.Text = "Value:";
+            // 
+            // dataTwoLabel
+            // 
+            this.dataTwoLabel.AutoSize = true;
+            this.dataTwoLabel.Location = new System.Drawing.Point(7, 157);
+            this.dataTwoLabel.Name = "dataTwoLabel";
+            this.dataTwoLabel.Size = new System.Drawing.Size(37, 13);
+            this.dataTwoLabel.TabIndex = 13;
+            this.dataTwoLabel.Text = "Value:";
+            // 
+            // dataTwoTextBox
+            // 
+            this.dataTwoTextBox.Location = new System.Drawing.Point(7, 174);
+            this.dataTwoTextBox.Name = "dataTwoTextBox";
+            this.dataTwoTextBox.Size = new System.Drawing.Size(91, 20);
+            this.dataTwoTextBox.TabIndex = 14;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.tileDataGroupBox);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.layerSelectionBox);
             this.Controls.Add(this.glMiniMapControl);
@@ -408,7 +467,8 @@
             this.devPanel.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
+            this.tileDataGroupBox.ResumeLayout(false);
+            this.tileDataGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -444,10 +504,16 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton buildStripButton;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ComboBox tileTypeCombo;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox tileData2Combo;
-        private System.Windows.Forms.ComboBox tileData1Combo;
+        internal System.Windows.Forms.ComboBox tileTypeCombo;
+        internal System.Windows.Forms.TextBox tileData2ValueTextBox;
+        internal System.Windows.Forms.ComboBox tileData1Combo;
+        internal System.Windows.Forms.Label tileData2ValueLabel;
+        internal System.Windows.Forms.GroupBox tileDataGroupBox;
+        internal System.Windows.Forms.Label dataOneLabel;
+        private System.Windows.Forms.Splitter splitter1;
+        internal System.Windows.Forms.TextBox dataOneTextBox;
+        internal System.Windows.Forms.TextBox dataTwoTextBox;
+        internal System.Windows.Forms.Label dataTwoLabel;
     }
 }
 

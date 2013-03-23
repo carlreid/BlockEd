@@ -48,6 +48,9 @@ namespace BlockEd
 
         void loadXML()
         {
+            data.loadTileData(ref _tileData);
+            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+
             OpenFileDialog fileBrowser = new OpenFileDialog();
             fileBrowser.Multiselect = false;
             fileBrowser.InitialDirectory = Application.ExecutablePath;

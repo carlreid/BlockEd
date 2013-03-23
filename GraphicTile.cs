@@ -69,6 +69,21 @@ namespace BlockEd
             return _id;
         }
 
+        public int getTypeID()
+        {
+            return _type;
+        }
+
+        public int getDataOne()
+        {
+            return _data1;
+        }
+
+        public int getDataTwo()
+        {
+            return _data2;
+        }
+
         //Can do: private bool _block{get; set;}
         private Vector2 _Position;
         private Vector2 _TexCoord;

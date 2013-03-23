@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TileData SYSTEM "TileData.dtd">
+<TileData>
+
+  <Type id="1" name="Pickup">
+    <DataOne id="1" name="Bag/Treasure">
+	<DataTwo name="Score" melee="Pickup" shot="Immune" />
+    </DataOne>
+    <DataOne id="2" name="Health">
+	<DataTwo name="Health" melee="Pickup" shot="Destroyed" />
+    </DataOne>
+    <DataOne id="3" name="Poison">
+	<DataTwo name="Health Loss" melee="Pickup" shot="Destroyed" />
+    </DataOne>
+    <DataOne id="4" name="Change">
+	<DataTwo name="Tile ID" melee="Changes" shot="Changes" />
+    </DataOne>
+  </Type>
+
+  <Type id="2" name="Change">
+    <DataOne>
+	<DataTwo name="Object ID" melee="Trigger" shot="Trigger" />
+    </DataOne>
+  </Type>
+
+  <Type id="3" name="Power Effect">
+    <DataOne id="1" name="Melee Power">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="2" name="Move Speed">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="3" name="Shot Speed">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="4" name="Shot Power">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="5" name="Shot Range">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="6" name="Potion Power">
+	<DataTwo name="Change" melee="Pickup " shot="Ignores" />
+    </DataOne>
+    <DataOne id="8" name="Key">
+	<DataTwo melee="+ Keys" shot="Immune" />
+    </DataOne>
+    <DataOne id="9" name="Potion">
+	<DataTwo name="Tile ID" melee="+ Potion" shot="Low Power" />
+    </DataOne>
+  </Type>
+
+  <Type id="4" name="Mob Spawner">
+    <DataOne name="Mob Generated">
+	<DataTwo name="Downgrade to" melee="Damage" shot="Damage" />
+    </DataOne>
+  </Type>
+
+  <Type id="5" name="Replace">
+    <DataOne>
+	<DataTwo name="Object ID" melee="Triggered " shot="Ignore" />
+    </DataOne>
+  </Type>
+
+  <Type id="6" name="Exit">
+    <DataOne name="New Level">
+	<DataTwo melee="Message " shot="Ignore" />
+    </DataOne>
+  </Type>
+
+  <Type id="7" name="Teleport">
+    <DataOne name="New X">
+	<DataTwo name="New Y" melee="Teleported " shot="Ignore" />
+    </DataOne>
+  </Type>
+
+</TileData>

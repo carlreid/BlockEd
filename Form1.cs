@@ -73,7 +73,9 @@ namespace BlockEd
             InitializeComponent();
             glFuncs = new GLFuncs(this);
             currentTile = new MapTile(-1, -1, -1);
-            data = new DataFuncs(currentTile);
+            data = new DataFuncs(currentTile, _tileData, this);
+            //tileData = new ObjectData(this);
+            tileDataGroupBox.Enabled = false;
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
@@ -210,7 +212,6 @@ namespace BlockEd
             var stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
 
-            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
             loadXML();
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
             updateGL(glMapMain);

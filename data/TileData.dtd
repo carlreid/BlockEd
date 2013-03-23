@@ -1,0 +1,16 @@
+
+<!ELEMENT DataOne ( DataTwo ) >
+<!ATTLIST DataOne id NMTOKEN #IMPLIED >
+<!ATTLIST DataOne name CDATA #IMPLIED >
+
+<!ELEMENT DataTwo EMPTY >
+<!ATTLIST DataTwo melee CDATA #REQUIRED >
+<!ATTLIST DataTwo name CDATA #IMPLIED >
+<!ATTLIST DataTwo shot CDATA #REQUIRED >
+
+<!ELEMENT TileData ( Type+ ) >
+
+<!ELEMENT Type ( DataOne+ ) >
+<!ATTLIST Type id NMTOKEN #REQUIRED >
+<!ATTLIST Type name CDATA #REQUIRED >
+

@@ -22,10 +22,14 @@ namespace BlockEd
         private PictureBox _lastModifiedTile = null;
         private Image _lastModifiedTileImage = null;
         private MapTile _selectedTile = null;
+        private TileData _tileData = null;
+        private Form1 _mainForm = null;
 
-        public DataFuncs(MapTile currentTile)
+        public DataFuncs(MapTile currentTile, TileData tileData, Form1 mainForm)
         {
             _selectedTile = currentTile;
+            _tileData = tileData;
+            _mainForm = mainForm;
         }
 
         public void loadGraphics(List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, ref bool mapLoaded)
@@ -636,10 +640,100 @@ namespace BlockEd
             
             _selectedTile.newData(tileID, 0, 0);
 
+
+            _mainForm.updateTileUI(_selectedTile.getID());
+
+
+
             Debug.WriteLine("Clicked on tile id: " + tileID);
         }
 
+        public void loadTileData(ref TileData loadInto)
+        {
+            XmlSchema mapSchema = new XmlSchema();
 
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreWhitespace = true;
+            settings.IgnoreComments = true;
+            settings.DtdProcessing = DtdProcessing.Parse;
+            settings.ValidationType = ValidationType.DTD;
+            settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
+
+            //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
+            XmlReader dataReader = XmlReader.Create("data/TileData.xml", settings);
+
+            //XmlValidatingReader myReader = new XmlValidatingReader(mapReader);
+
+            if (dataReader == null)
+            {
+                Debug.WriteLine("Failed to load map");
+            }
+            dataReader.Read();
+
+            while (dataReader.Read())
+            {
+                if (dataReader.NodeType == XmlNodeType.Element && dataReader.Name == "Type")
+                {
+                    int id;
+                    string name;
+
+                    dataReader.MoveToAttribute("id");
+                    id = dataReader.ReadContentAsInt();
+                    if (DEVMODE) Console.WriteLine("Type ID: " + id);
+
+                    dataReader.MoveToAttribute("name");
+                    name = dataReader.ReadContentAsString();
+                    if (DEVMODE) Console.WriteLine("Type Name: " + name);
+
+                    loadInto.addTileType(id, name);
+                }
+
+                if (dataReader.NodeType == XmlNodeType.Element && dataReader.Name == "DataOne")
+                {
+
+                    int id = 0;
+                    string name = null;
+
+                    if (dataReader.MoveToAttribute("id"))
+                    {
+                        id = dataReader.ReadContentAsInt();
+                        if (DEVMODE) Console.WriteLine("Type ID: " + id);
+                    }
+                    if (dataReader.MoveToAttribute("name"))
+                    {
+                        name = dataReader.ReadContentAsString();
+                        if (DEVMODE) Console.WriteLine("Type Name: " + name);
+                    }
+
+                    loadInto.getLastList().addDataOne(id, name);
+
+                }
+
+                if (dataReader.NodeType == XmlNodeType.Element && dataReader.Name == "DataTwo")
+                {
+                    string name = null;
+                    string melee;
+                    string shot;
+
+                    if (dataReader.MoveToAttribute("name"))
+                    {
+                        name = dataReader.ReadContentAsString();
+                        if (DEVMODE) Console.WriteLine("Type Name: " + name);
+                    }
+
+                    dataReader.MoveToAttribute("melee");
+                    melee = dataReader.ReadContentAsString();
+                    if (DEVMODE) Console.WriteLine("Type Name: " + melee);
+
+                    dataReader.MoveToAttribute("shot");
+                    shot = dataReader.ReadContentAsString();
+                    if (DEVMODE) Console.WriteLine("Type Name: " + shot);
+
+                    loadInto.getLastList().getLastList().setSecondData(name, melee, shot);
+
+                }
+            }
+        }
 
     }
 }
