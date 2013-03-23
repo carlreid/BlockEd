@@ -199,7 +199,7 @@ namespace BlockEd
             mapLoaded = true;
         }
 
-        public GameData loadMap(GameData loadedMap, string mapFilePath = null)
+        public GameData loadMap(GameData loadedMap, string mapFilePath)
         {
             XmlSchema mapSchema = new XmlSchema();
 
@@ -211,15 +211,7 @@ namespace BlockEd
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
             //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
-            XmlReader mapReader = null;
-            if (mapFilePath == null)
-            {
-                mapReader = XmlReader.Create("map/TestMap.xml", settings);
-            }
-            else
-            {
-                mapReader = XmlReader.Create(mapFilePath, settings);
-            }
+            XmlReader mapReader = XmlReader.Create(mapFilePath, settings);
 
             //XmlValidatingReader myReader = new XmlValidatingReader(mapReader);
 

@@ -18,6 +18,7 @@ using System.Drawing.Imaging;
 using System.Xml;
 using System.Xml.Schema;
 using System.Diagnostics;
+using System.Threading;
 
 namespace BlockEd
 {
@@ -26,6 +27,7 @@ namespace BlockEd
     {
 
         bool DEVMODE = false;
+        bool changeMade = false;
         bool mapLoaded = false;
         string mapFilePath = null;
         string layerSelected = null;
@@ -44,6 +46,27 @@ namespace BlockEd
         float tileOffsetX = 0;
         float tileOffsetY = 0;
 
+        bool isMousePanning = false;
+        int lastMouseX;
+        int lastMouseY;
+
+        private void setOffsetX(float value)
+        {
+            if (value > 0)
+            {
+                value = 0;
+            }
+            tileOffsetX = value;
+        }
+
+        private void setOffsetY(float value)
+        {
+            if (value > 0)
+            {
+                value = 0;
+            }
+            tileOffsetY = value;
+        }
 
         public Form1()
         {
@@ -88,11 +111,13 @@ namespace BlockEd
             int width = glMapMain.Width;
             int height = glMapMain.Height;
 
+            GraphicsContext.ShareContexts = true;
+
             glMiniMapControl.MakeCurrent();
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, width, height, 0, -1, 1);
-            GL.Viewport(0, 0, width, height);
+            GL.Viewport(0, 0, glMiniMapControl.Width, glMiniMapControl.Height);
             GL.ClearColor(Color.Black);
 
             glMapMain.MakeCurrent();
@@ -132,17 +157,13 @@ namespace BlockEd
 
         private void button2_Click(object sender, EventArgs e)
         {
-            loadedMap = data.loadMap(loadedMap);
+            //loadedMap = data.loadMap(loadedMap);
+            loadXML();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             devPanel.Visible = !devPanel.Visible;
-        }
-
-        private void mousePanGL(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            //tileOffsetX += 1;
         }
 
         private bool keyboardPanGLControl(KeyEventArgs e)
@@ -151,22 +172,29 @@ namespace BlockEd
 
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
             {
-                tileOffsetX += 10;
+                setOffsetX(tileOffsetX + 10);
                 handled = true;
             }
             else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
             {
-                tileOffsetX -= 10;
+                setOffsetX(tileOffsetX - 10);
                 handled = true;
             }
             else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
             {
-                tileOffsetY += 10;
+                setOffsetY(tileOffsetY + 10);
                 handled = true;
             }
             else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
             {
-                tileOffsetY -= 10;
+                setOffsetY(tileOffsetY - 10);
+
+                Debug.WriteLine(tileOffsetY + " - Which is " + ((tileOffsetY - glMapMain.Height) / 64) * -1 + " tiles.");
+
+                if (((tileOffsetY - glMapMain.Height) / 64) * -1 > loadedMap.getMaxScrollY())
+                {
+                    tileOffsetY = ((loadedMap.getMaxScrollY() * 64) - glMapMain.Height) * -1;
+                }
                 handled = true;
             }
             if (handled)
@@ -183,7 +211,7 @@ namespace BlockEd
             stopWatch.Start();
 
             data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
-            loadedMap = data.loadMap(loadedMap);
+            loadXML();
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
             updateGL(glMapMain);
             
@@ -219,22 +247,23 @@ namespace BlockEd
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog fileBrowser = new OpenFileDialog();
-            fileBrowser.Multiselect = false;
-            fileBrowser.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
-            fileBrowser.Filter = "XML Files (*.xml)|*.xml";
-            if (fileBrowser.ShowDialog(this) == DialogResult.OK)
-            {
-                mapFilePath = fileBrowser.FileName;
-            }
-            else
-            {
-                return;
-            }
-            loadedMap = data.loadMap(loadedMap, mapFilePath);
-            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
-            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
-            updateGL(glMapMain);
+            //OpenFileDialog fileBrowser = new OpenFileDialog();
+            //fileBrowser.Multiselect = false;
+            //fileBrowser.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
+            //fileBrowser.Filter = "XML Files (*.xml)|*.xml";
+            //if (fileBrowser.ShowDialog(this) == DialogResult.OK)
+            //{
+            //    mapFilePath = fileBrowser.FileName;
+            //}
+            //else
+            //{
+            //    return;
+            //}
+            //loadedMap = data.loadMap(loadedMap, mapFilePath);
+            //data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+            //glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+            //updateGL(glMapMain);
+            loadXML();
         }
 
         private void layerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -249,8 +278,28 @@ namespace BlockEd
 
         private void clickGL(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //richTextBox1.Text = data.ToXML(loadedMap);
+            data.saveMapXml(loadedMap, "map", "test");
+        }
+
+        private void mouseDownGL(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
             if (loadedMap == null)
             {
+                return;
+            }
+
+            if (e.Button == MouseButtons.Middle)
+            {
+                isMousePanning = true;
+                lastMouseX = e.X;
+                lastMouseY = e.Y;
+                Debug.WriteLine("Mouse Middle Down");
                 return;
             }
 
@@ -266,6 +315,85 @@ namespace BlockEd
                 return;
             }
 
+            placeTile(e.X, e.Y);
+        }
+
+        private void mouseUpGL(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                isMousePanning = false;
+                Debug.WriteLine("Mouse Middle Up");
+                return;
+            }
+        }
+
+        private void mousePanGL(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (isMousePanning)
+            {
+                if (e.X == lastMouseX && e.Y == lastMouseY)
+                {
+                    return;
+                }
+
+                setOffsetX(tileOffsetX - (lastMouseX - e.X));
+                setOffsetY(tileOffsetY - (lastMouseY - e.Y));
+                lastMouseX = e.X;
+                lastMouseY = e.Y;
+                updateGL(glMapMain);
+                Debug.WriteLine("Mouse Middle is down, performing move.");
+            }
+        }
+
+        private void buildStripButton_Click(object sender, EventArgs e)
+        {
+            launchTest();
+        }
+
+        private void saveStripButton_Click(object sender, EventArgs e)
+        {
+            //if (loadedMap == null)
+            //{
+            //    MessageBox.Show("Please load a map first.", "No map open", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    return;
+            //}
+
+            //SaveFileDialog saveDialog = new SaveFileDialog();
+            //saveDialog.Filter = "XML|*.xml";
+            //saveDialog.InitialDirectory = Application.ExecutablePath;
+            //saveDialog.CheckPathExists = true;
+            //saveDialog.DefaultExt = "xml";
+            //DialogResult saveResult = saveDialog.ShowDialog();
+
+            //if(saveResult == DialogResult.OK){
+            //    string savePath = saveDialog.FileName;
+            //    string saveDirectory = System.IO.Path.GetDirectoryName(savePath);
+            //    string saveName = System.IO.Path.GetFileNameWithoutExtension(savePath);
+            //    data.saveMapXml(loadedMap, saveDirectory, saveName);
+            //}
+
+            saveXML();
+
+        }
+
+        private void editorClosing(object sender, FormClosingEventArgs e)
+        {
+            if (changeMade)
+            {
+                DialogResult shouldQuit = MessageBox.Show("You have unsaved changes. Are you sure you want to quit?", "Unsaved Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (shouldQuit == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+
+            }
+        }
+
+        private void placeTile(int mouseX, int mouseY)
+        {
+            changeMade = true;
             foreach (GameLevel level in loadedMap.getLevelList())
             {
                 foreach (MapData map in level.getLayerList())
@@ -294,12 +422,12 @@ namespace BlockEd
                             //    tileY = (((int)Math.Floor(0.5 + tileOffsetY) * -1) + e.Y) / map.getMaxTileHeight();
                             //}
 
-                            Debug.WriteLine(tileOffsetX + " -- " + Math.Abs(tileOffsetX));
+                            //Debug.WriteLine(tileOffsetX + " -- " + Math.Abs(tileOffsetX));
 
-                            int tileX = (int)((tileOffsetX * -1 + e.X) / map.getMaxTileWidth());
-                            int tileY = (int)((tileOffsetY * -1 + e.Y) / map.getMaxTileHeight());
+                            int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
+                            int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
 
-                            
+
                             currentTile.setPosition(tileX, tileY);
                             map.addTile(currentTile);
                             updateGL(glMapMain);
@@ -310,10 +438,10 @@ namespace BlockEd
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //richTextBox1.Text = data.ToXML(loadedMap);
-            data.saveMapXml(loadedMap, "map", "test");
+            mapFilePath = null;
+            saveXML();
         }
 
     }

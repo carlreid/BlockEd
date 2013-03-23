@@ -13,26 +13,26 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace BlockEd
 {
-    public struct Vertex
-    {
-        public Vector3 position;
-        public Vector2 tex_coords;
+    //public struct Vertex
+    //{
+    //    public Vector3 position;
+    //    public Vector2 tex_coords;
 
-        public Vertex(Vector3 position, Vector2 tex_coords)
-            : this()
-        {
-            this.position = position;
-            this.tex_coords = tex_coords;
-        }
-    }
+    //    public Vertex(Vector3 position, Vector2 tex_coords)
+    //        : this()
+    //    {
+    //        this.position = position;
+    //        this.tex_coords = tex_coords;
+    //    }
+    //}
 
     class GLFuncs
     {
         //Useful source on loading in shaders/setting them up: http://www.opentk.com/node/92
-
 
         private Form1 callerForm;
 
