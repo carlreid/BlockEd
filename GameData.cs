@@ -3,30 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace BlockEd
 {
+    [DataContract]
     class GameData
     {
 
-        public GameData(string name = "Default", int maxScrollX = 0, int maxScrollY = 0)
+        public GameData()
         {
-            _name = name;
+            //_name = name;
 
-            if (maxScrollX != 0)
-            {
-                _maxScrollX = maxScrollX;
-            }
+            //if (maxScrollX != 0)
+            //{
+            //    _maxScrollX = maxScrollX;
+            //}
 
-            if (maxScrollY != 0)
-            {
-                _maxScrollY = maxScrollY;
-            }
+            //if (maxScrollY != 0)
+            //{
+            //    _maxScrollY = maxScrollY;
+            //}
 
             _numberOfTiles = 0;
 
             _level = new List<GameLevel>();
+        }
 
+        public void setName(string name)
+        {
+            _name = name;
         }
 
         public void incrementNumTiles()
@@ -88,10 +94,15 @@ namespace BlockEd
             return _maxScrollY;
         }
 
+        [DataMember]
         private string _name;
+        [DataMember]
         private int _maxScrollX;
+        [DataMember]
         private int _maxScrollY;
+        [DataMember]
         private int _numberOfTiles;
+        [DataMember]
         private List<GameLevel> _level;
 
 

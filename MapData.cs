@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BlockEd
 {
+    [DataContract]
     class MapData
     {
-
         public MapData(int width, int height, int drawType, int zDepth, string mapName = "Default", int maxTileWidth = 32, int maxTileHeight = 32)
         {
             _width = width;
@@ -38,7 +39,24 @@ namespace BlockEd
 
         public void addTile(MapTile tile)
         {
+            foreach (MapDataTile checkTile in _tiles)
+            {
+                if (checkTile._xPos == tile.getX() && checkTile._yPos == tile.getY())
+                {
+                    checkTile._spriteID = tile.getID();
+                    return;
+                }
+            }
+
             _tiles.Add(new MapDataTile(tile.getID(), tile.getX(), tile.getY()));
+        }
+
+        public void removeTile(int tileX, int tileY)
+       {
+            _tiles.RemoveAll(delegate(MapDataTile tile)
+            {
+                return (tile._xPos == tileX && tile._yPos == tileY);
+            });
         }
 
         public int getZDepth(){
@@ -90,15 +108,25 @@ namespace BlockEd
             return _layerOffsetY;
         }
 
+        [DataMember]
         private string _mapName;
+        [DataMember]
         private int _zDepth; //Rq
+        [DataMember]
         private int _width; //Rq
+        [DataMember]
         private int _height; //Rq
+        [DataMember]
         private int _maxTileWidth;
+        [DataMember]
         private int _maxTileHeight;
+        [DataMember]
         private int _layerOffsetX;
+        [DataMember]
         private int _layerOffsetY;
+        [DataMember]
         private int _drawType; //Wtf
+        [DataMember]
         private List<MapDataTile> _tiles;
 
     }

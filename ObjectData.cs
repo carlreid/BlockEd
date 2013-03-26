@@ -43,6 +43,9 @@ namespace BlockEd
 
             tileTypeCombo.Items.Clear();
             tileData1Combo.Items.Clear();
+            tileTypeCombo.Text = "";
+            tileData1Combo.Text = "";
+
             tileTypeCombo.Enabled = true;
             tileData1Combo.Enabled = true;
             tileTypeLabel.Enabled = true;
@@ -63,7 +66,7 @@ namespace BlockEd
                     foreach(TileDataOne tileDataOne in tileData.getList()){
                         if (tileDataOne._id == 0)
                         {
-                            tileTypeCombo.Enabled = false;
+                            //tileTypeCombo.Enabled = false;
                             tileData1Combo.Enabled = false;
                             tileTypeLabel.Enabled = false;
                             tileData2ValueLabel.Enabled = false;

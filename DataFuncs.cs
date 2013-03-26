@@ -239,8 +239,8 @@ namespace BlockEd
                         string mapName = mapReader.ReadContentAsString();
                         if (DEVMODE) Console.WriteLine("Map Name: " + mapName);
 
-                        loadedMap = new GameData(mapName);
-
+                        loadedMap = new GameData();
+                        loadedMap.setName(mapName);
                     }
                 }
 
@@ -549,6 +549,7 @@ namespace BlockEd
             foreach (SpriteSheet sheet in spriteSheets)
             {
                 TabPage sheetPage = new TabPage(sheet.getImageFileName());
+                sheetPage.AutoScroll = true;
                 tabControl.TabPages.Add(sheetPage);
 
                 Bitmap spriteSheetImage = new Bitmap(sheet.getImagePath());

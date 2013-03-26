@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BlockEd
 {
+    [DataContract]
     class GameLevel
     {
         public GameLevel(int id, int startX, int startY, string levelName = null)
@@ -90,16 +92,24 @@ namespace BlockEd
             return _exitPosY;
         }
 
+        [DataMember]
         private int _id; //Rq
+        [DataMember]
         private string _name;
 
+        [DataMember]
         private int _startPosX; //Rq
+        [DataMember]
         private int _startPosY; //Rq
 
+        [DataMember]
         private bool _hasExit;
+        [DataMember]
         private int _exitPosX;
+        [DataMember]
         private int _exitPosY;
 
+        [DataMember]
         List<MapData> _mapLayers;
 
     }

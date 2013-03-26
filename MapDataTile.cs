@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BlockEd
 {
+    [DataContract]
     public class MapDataTile
     {
 
@@ -16,8 +18,11 @@ namespace BlockEd
             _yPos = y;
         }
 
+        [DataMember]
         public int _spriteID;
+        [DataMember]
         public int _xPos;
+        [DataMember]
         public int _yPos;
     }
 }

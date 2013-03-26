@@ -129,7 +129,7 @@ namespace BlockEd
 
 
                         GL.Begin(BeginMode.Quads);
-                        if (layerSelected != null)
+                        if (layerSelected != null && layerSelected != "Show All")
                         {
                             if (layer.getMapName() != layerSelected)
                             {
@@ -139,6 +139,10 @@ namespace BlockEd
                             {
                                 GL.Color4(1f, 1f, 1f, 1f);
                             }
+                        }
+                        else
+                        {
+                            GL.Color4(1f, 1f, 1f, 1f);
                         }
 
                         //GL.Color4(1, 0, 0, 0.1f);
