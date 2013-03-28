@@ -35,14 +35,14 @@ namespace BlockEd
             _name = name;
         }
 
-        public void incrementNumTiles()
+        public void incrementNumTiles(int incAmount = 1)
         {
-            _numberOfTiles += 1;
+            _numberOfTiles += incAmount;
         }
 
-        public void decrementNumTiles()
+        public void decrementNumTiles(int decAmount = 1)
         {
-            _numberOfTiles -= 1;
+            _numberOfTiles -= decAmount;
         }
 
         public int getNumTiles()

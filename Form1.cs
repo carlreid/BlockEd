@@ -32,6 +32,8 @@ namespace BlockEd
         string mapFilePath = null;
         string layerSelected = null;
         MapTile currentTile = null;
+        const int maxAmountTiles = 1000;
+        const int maxZDepth = 10;
 
         Color alphaColorKey;
 
@@ -53,6 +55,38 @@ namespace BlockEd
         //bool isRightDown = false;
         int lastMouseX;
         int lastMouseY;
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.O))
+            {
+                loadMap();
+                return true;
+            } else if(keyData == (Keys.Control | Keys.S)){
+                saveXML();
+                return true;
+            }
+            else if (keyData == Keys.F5)
+            {
+                if (!isTestAppRunning)
+                {
+                    launchTest();
+                }
+                else
+                {
+                    gameTestApplication.Kill();
+                    isTestAppRunning = false;
+                    buildStripButton.Image = BlockEd.Properties.Resources.StatusAnnotations_Play_32xLG_color;
+                }
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public int getMaxZDepth()
+        {
+            return maxZDepth;
+        }
 
         private void findBiggestLayer()
         {
@@ -125,7 +159,7 @@ namespace BlockEd
             var stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
 
-            loadXML();                                              //Load the Map, Graphics and TileData XML
+            if(!loadXML()) return;                                  //Load the Map, Graphics and TileData XML
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);  //Load the graphics into OpenGL
             findBiggestLayer();                                     //Setup variables to the max layer size
 
@@ -155,18 +189,40 @@ namespace BlockEd
             glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
 
             //Add the list of layers to the layer selection box
-            foreach (GameLevel level in loadedMap.getLevelList())
-            {
-                foreach (MapData map in level.getLayerList())
-                {
-                    layerSelectionBox.Items.Add(map.getMapName());
-                }
-            }
+            updateLayerList();
 
             //Add the various loaded in graphics to the tile picker.
             data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
 
+            editControlsGroupBox.Enabled = true;
+            updateTileCount();
+
             tileTypeLabel.Text = "Tile Types: " + graphicTiles.Count;
+        }
+
+        private void updateLayerList()
+        {
+            layerSelectionBox.Items.Clear();
+            layerSelectionBox.Items.Add("Show All");
+            for (int curZDepth = 1; curZDepth <= maxZDepth; ++curZDepth)
+            {
+                foreach (GameLevel level in loadedMap.getLevelList())
+                {
+                    MapData currentLayer = level.getLayerList().Find(delegate(MapData map)
+                    {
+                        return map.getZDepth() == curZDepth;
+                    });
+
+                    if (currentLayer != null)
+                    {
+                        layerSelectionBox.Items.Add(currentLayer.getMapName());
+                    }
+                    //foreach (MapData map in level.getLayerList())
+                    //{
+                    //    layerSelectionBox.Items.Add(map.getMapName());
+                    //}
+                }
+            }
         }
 
         public Form1()
@@ -175,6 +231,8 @@ namespace BlockEd
             glFuncs = new GLFuncs(this);
             currentTile = new MapTile(-1, -1, -1);
             tileDataGroupBox.Enabled = false;
+            layerDataGroupBox.Enabled = false;
+            editControlsGroupBox.Enabled = false;
             data = new DataFuncs(currentTile, _tileData, this);
 
             ToolTip newLayerToolTop = new ToolTip();
@@ -328,34 +386,51 @@ namespace BlockEd
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //OpenFileDialog fileBrowser = new OpenFileDialog();
-            //fileBrowser.Multiselect = false;
-            //fileBrowser.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
-            //fileBrowser.Filter = "XML Files (*.xml)|*.xml";
-            //if (fileBrowser.ShowDialog(this) == DialogResult.OK)
-            //{
-            //    mapFilePath = fileBrowser.FileName;
-            //}
-            //else
-            //{
-            //    return;
-            //}
-            //loadedMap = data.loadMap(loadedMap, mapFilePath);
-            //data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
-            //glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
-            //updateGL(glMapMain);
             loadMap();
+        }
+
+        private void updateLayerSelectionBox()
+        {
+            string layerSelectedName = (string)layerSelectionBox.SelectedItem;
+
+            layerSelected = layerSelectedName;
+
+            updateGL(glMapMain);
+            updateGL(glMiniMapControl, false);
+
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                foreach (MapData layer in level.getLayerList())
+                {
+                    if (layer.getMapName() == layerSelected)
+                    {
+                        layerDataGroupBox.Enabled = true;
+                        layerWidthTextBox.Text = layer.getMapWidth().ToString();
+                        layerHeightTextBox.Text = layer.getMapHeight().ToString();
+                        layerZDepthTextBox.Text = layer.getZDepth().ToString();
+                        maxTileWidthTextBox.Text = layer.getMaxTileWidth().ToString();
+                        maxTileHeightTextBox.Text = layer.getMaxTileHeight().ToString();
+                        layerDrawTypeComboBox.SelectedIndex = layer.getDrawType();
+                        return;
+                    }
+                }
+            }
+
+            //Above did not return sao unknown layer or Select All selected
+            layerDataGroupBox.Enabled = false;
+            layerWidthTextBox.Text = "";
+            layerHeightTextBox.Text = "";
+            layerZDepthTextBox.Text = "";
+            maxTileWidthTextBox.Text = "";
+            maxTileHeightTextBox.Text = "";
+            layerDrawTypeComboBox.Text = "";
+
+            //Debug.WriteLine(layerSelectedName);
         }
 
         private void layerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox layerSelect = (ComboBox)sender;
-            string layerSelectedName = (string)layerSelect.SelectedItem;
-
-            layerSelected = layerSelectedName;
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl, false);
-            //Debug.WriteLine(layerSelectedName);
+            updateLayerSelectionBox();
 
         }
 
@@ -386,13 +461,15 @@ namespace BlockEd
                 return;
             }
 
-            if (layerSelectionBox.Text == "" || layerSelectionBox.Text == null)
+            
+
+            if (String.IsNullOrEmpty(layerSelectionBox.Text) || layerSelectionBox.Text == "Show All")
             {
-                MessageBox.Show("Please select a layer to place the tile on.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select a layer to edit.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            if (currentTile.getID() == -1)
+            if (currentTile.getID() == -1 && e.Button != MouseButtons.Right)
             {
                 MessageBox.Show("You need to select a tile first.");
                 return;
@@ -467,28 +544,7 @@ namespace BlockEd
 
         private void saveStripButton_Click(object sender, EventArgs e)
         {
-            //if (loadedMap == null)
-            //{
-            //    MessageBox.Show("Please load a map first.", "No map open", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    return;
-            //}
-
-            //SaveFileDialog saveDialog = new SaveFileDialog();
-            //saveDialog.Filter = "XML|*.xml";
-            //saveDialog.InitialDirectory = Application.ExecutablePath;
-            //saveDialog.CheckPathExists = true;
-            //saveDialog.DefaultExt = "xml";
-            //DialogResult saveResult = saveDialog.ShowDialog();
-
-            //if(saveResult == DialogResult.OK){
-            //    string savePath = saveDialog.FileName;
-            //    string saveDirectory = System.IO.Path.GetDirectoryName(savePath);
-            //    string saveName = System.IO.Path.GetFileNameWithoutExtension(savePath);
-            //    data.saveMapXml(loadedMap, saveDirectory, saveName);
-            //}
-
             saveXML();
-
         }
 
         private void editorClosing(object sender, FormClosingEventArgs e)
@@ -510,8 +566,32 @@ namespace BlockEd
 
         }
 
+        private void updateTileCount()
+        {
+            int currentTileAmount = loadedMap.getNumTiles();
+            float greenAmount = (1f - ((float)currentTileAmount / (float)maxAmountTiles)) * 100f;
+            float redAmount = 100f - greenAmount;
+            numTilesLoadedLabel.ForeColor = Color.FromArgb((int)redAmount, (int)greenAmount, 0);
+            numTilesLoadedLabel.Text = "Number of Tiles: " + currentTileAmount.ToString();
+
+            if (currentTileAmount == maxAmountTiles)
+            {
+                numTilesLoadedLabel.Font = new Font(numTilesLoadedLabel.Font.Name, numTilesLoadedLabel.Font.Size, FontStyle.Bold);
+            }
+            else
+            {
+                numTilesLoadedLabel.Font = new Font(numTilesLoadedLabel.Font.Name, numTilesLoadedLabel.Font.Size, FontStyle.Regular);
+            }
+
+        }
+
         private void placeTile(int mouseX, int mouseY)
         {
+            if (loadedMap.getNumTiles() >= maxAmountTiles)
+            {
+                Console.Beep(1000, 50);
+                return;
+            }
             changeMade = true;
             foreach (GameLevel level in loadedMap.getLevelList())
             {
@@ -531,8 +611,10 @@ namespace BlockEd
 
 
                             currentTile.setPosition(tileX, tileY);
-                            map.addTile(currentTile);
+                            loadedMap.incrementNumTiles(map.addTile(currentTile));
                             updateGL(glMapMain);
+                            updateGL(glMiniMapControl, false);
+                            updateTileCount();
                             return;
                         }
                     }
@@ -552,8 +634,10 @@ namespace BlockEd
                         int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
                         int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
 
-                        map.removeTile(tileX, tileY);
+                        loadedMap.decrementNumTiles(map.removeTile(tileX, tileY));
                         updateGL(glMapMain);
+                        updateGL(glMiniMapControl, false);
+                        updateTileCount();
                         return;
                     }
                 }
@@ -585,7 +669,75 @@ namespace BlockEd
             loadedMap = (GameData)Deserialize(text, loadedMap.GetType());
         }
 
+        private void moveLayerZ(bool moveUp)
+        {
+            int moveDirection = (moveUp ? 1 : -1);
 
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == layerSelectionBox.Text)
+                    {
+                        int desinationLayer = map.getZDepth() + moveDirection;
+
+                        if (desinationLayer < 0 || desinationLayer > maxZDepth)
+                        {
+                            return;
+                        }
+
+                        foreach (MapData mapCheck in level.getLayerList())
+                        {
+                            if (mapCheck.getZDepth() == desinationLayer)
+                            {
+                                mapCheck.setZDepth(map.getZDepth());
+                                break;
+                            }
+                        }
+
+                        map.setZDepth(desinationLayer);
+                        updateLayerSelectionBox();
+                        updateLayerList();
+                        layerSelectionBox.Text = map.getMapName();
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        private void moveLayerDownPictureBox_Click(object sender, EventArgs e)
+        {
+            moveLayerZ(false);
+            updateGL(glMapMain);
+            updateGL(glMiniMapControl, false);
+        }
+
+        private void moveLayerUpPictureBox_Click(object sender, EventArgs e)
+        {
+            moveLayerZ(true);
+            updateGL(glMapMain);
+            updateGL(glMiniMapControl, false);
+        }
+
+        private void ghostingStripButton_Click(object sender, EventArgs e)
+        {
+            if (ghostingStripButton.Checked)
+            {
+                ghostingStripButton.Checked = false;
+                glFuncs.useLayerGhosting(true);
+            }
+            else
+            {
+                ghostingStripButton.Checked = true;
+                glFuncs.useLayerGhosting(false);
+            }
+        }
+
+        private void openStripButton_Click(object sender, EventArgs e)
+        {
+            loadMap();
+        }
 
     }
 }

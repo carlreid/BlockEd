@@ -35,6 +35,7 @@ namespace BlockEd
         //Useful source on loading in shaders/setting them up: http://www.opentk.com/node/92
 
         private Form1 callerForm;
+        private bool applyLayerGhosting = true;
 
         public GLFuncs(Form1 callerForm)
         {
@@ -42,10 +43,15 @@ namespace BlockEd
 
         }
 
+        public void useLayerGhosting(bool value)
+        {
+            applyLayerGhosting = value;
+        }
+
         public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, string layerSelected = null)
         {
-
-            if (loadedMap.getLevelList() == null)
+            
+            if (loadedMap == null)
                 return;
 
             var stopWatch = new System.Diagnostics.Stopwatch();
@@ -55,6 +61,7 @@ namespace BlockEd
 
             GL.ClearColor(Color.Black);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.ClearDepth( 1.0 );
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
@@ -62,10 +69,15 @@ namespace BlockEd
             //Set alpha blend function -- Will probably need to toggle due to "drawtype"
             ////GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.DepthFunc(DepthFunction.Less);
 
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.ColorMaterial);
+            GL.Enable(EnableCap.DepthTest);
+
+            //GL.DepthMask(true);
+            //GL.DepthRange(2.0, 0.0);
 
             int debugTilesRendered = 0;
 
@@ -125,11 +137,10 @@ namespace BlockEd
                         float tilePositionY = tileOffsetY + tile._yPos * layer.getMaxTileHeight();
 
 
-                        float z_depth = layer.getZDepth() / 10; //Z depth is currently an int (0, 1, 5 etc) but we want it between -1 .. 1
-
+                        float z_depth = (float)layer.getZDepth() / (float)callerForm.getMaxZDepth(); //Z depth is currently an int (0, 1, 5 etc) but we want it between -1 .. 1
 
                         GL.Begin(BeginMode.Quads);
-                        if (layerSelected != null && layerSelected != "Show All")
+                        if (layerSelected != null && layerSelected != "Show All" && applyLayerGhosting)
                         {
                             if (layer.getMapName() != layerSelected)
                             {
@@ -173,6 +184,7 @@ namespace BlockEd
 
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.DepthTest);
 
             //GL.DeleteBuffers(1, ref VBO);
 

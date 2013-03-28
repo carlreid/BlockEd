@@ -46,28 +46,30 @@ namespace BlockEd
 
         }
 
-        void loadXML()
+        bool loadXML()
         {
-            data.loadTileData(ref _tileData);
-            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
-
             OpenFileDialog fileBrowser = new OpenFileDialog();
             fileBrowser.Multiselect = false;
             fileBrowser.InitialDirectory = Application.ExecutablePath;
             fileBrowser.Filter = "XML Files (*.xml)|*.xml";
-            if (fileBrowser.ShowDialog(this) == DialogResult.OK)
+            DialogResult browseResult = fileBrowser.ShowDialog();
+            if (browseResult == DialogResult.OK)
             {
+                data.loadTileData(ref _tileData);
+                data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+
                 mapFilePath = fileBrowser.FileName;
+                loadedMap = data.loadMap(loadedMap, mapFilePath);
+                data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+                glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+                updateGL(glMapMain);
+                this.Text = "BlockEd - " + System.IO.Path.GetFileNameWithoutExtension(mapFilePath);
+                return true;
             }
             else
             {
-                return;
+                return false;
             }
-            loadedMap = data.loadMap(loadedMap, mapFilePath);
-            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
-            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
-            updateGL(glMapMain);
-            this.Text = "BlockEd - " + System.IO.Path.GetFileNameWithoutExtension(mapFilePath);
         }
 
     }

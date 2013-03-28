@@ -37,30 +37,53 @@ namespace BlockEd
             _tiles.Add(new MapDataTile(tileID, xPos, yPos));
         }
 
-        public void addTile(MapTile tile)
+        public int addTile(MapTile tile)
         {
             foreach (MapDataTile checkTile in _tiles)
             {
                 if (checkTile._xPos == tile.getX() && checkTile._yPos == tile.getY())
                 {
                     checkTile._spriteID = tile.getID();
-                    return;
+                    return 0;
                 }
             }
 
             _tiles.Add(new MapDataTile(tile.getID(), tile.getX(), tile.getY()));
+            return 1;
         }
 
-        public void removeTile(int tileX, int tileY)
+        public int removeTile(int tileX, int tileY)
        {
+           bool didRemove = false;
             _tiles.RemoveAll(delegate(MapDataTile tile)
             {
-                return (tile._xPos == tileX && tile._yPos == tileY);
+                if (tile._xPos == tileX && tile._yPos == tileY)
+                {
+                    didRemove = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             });
+            if (didRemove)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public int getZDepth(){
             return _zDepth;
+        }
+
+        public void setZDepth(int zDepth)
+        {
+            _zDepth = zDepth;
         }
 
         public List<MapDataTile> getTileList()

@@ -205,7 +205,7 @@ namespace BlockEd
 
         public GameData loadMap(GameData loadedMap, string mapFilePath)
         {
-            XmlSchema mapSchema = new XmlSchema();
+            //XmlSchema mapSchema = new XmlSchema();
 
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreWhitespace = true;
@@ -440,6 +440,7 @@ namespace BlockEd
                 #endregion
 
             }
+            mapReader.Close();
             return loadedMap;
         }
 
@@ -447,6 +448,7 @@ namespace BlockEd
         private static void ValidationCallBack(object sender, ValidationEventArgs e)
         {
             Console.WriteLine("Validation Error: {0}", e.Message);
+            MessageBox.Show("Error validating XML: " + e.Message + ". The map will still try to load.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         //public string ToXML(Object oObject)
@@ -467,6 +469,12 @@ namespace BlockEd
             XmlDocument document = new XmlDocument();
             XmlDeclaration docDecleration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
             document.AppendChild(docDecleration);// Create the root element
+
+            //<!DOCTYPE Game SYSTEM "MapDTD.xml">
+            File.Copy("map/MapDTD.xml", "MapDTD.xml", true);
+            XmlDocumentType doctype = document.CreateDocumentType("Game", null, "MapDTD.xml", null);
+            document.AppendChild(doctype); //Add doctype reference
+            File.Delete("MapDTD.xml");
 
             XmlElement root = document.CreateElement("Game");
             root.SetAttribute("name", mapData.getName());
@@ -505,6 +513,12 @@ namespace BlockEd
                     levelElement.AppendChild(exitposition);
                 }
 
+                //Do a check to see if the current level has any layers or not.
+                if (level.getLayerList().Count == 0)
+                {
+                    root.AppendChild(levelElement);
+                    break;
+                }
                 XmlElement mapList = document.CreateElement("MapList");
                 foreach (MapData map in level.getLayerList())
                 {
@@ -546,6 +560,20 @@ namespace BlockEd
 
         public void addTilesToTabControl(List<SpriteSheet> spriteSheets, List<GraphicTile> tiles, TabControl tabControl)
         {
+            //Remove any previous graphics
+            if (tabControl.TabPages.Count != 0)
+            {
+                foreach (TabPage page in tabControl.TabPages)
+                {
+                    foreach (PictureBox picBox in page.Controls)
+                    {
+                        picBox.Dispose();
+                    }
+                    page.Dispose();
+                }
+                tabControl.TabPages.Clear();
+            }
+
             foreach (SpriteSheet sheet in spriteSheets)
             {
                 TabPage sheetPage = new TabPage(sheet.getImageFileName());

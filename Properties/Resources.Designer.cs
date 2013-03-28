@@ -73,6 +73,26 @@ namespace BlockEd.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MoveLayerDown {
+            get {
+                object obj = ResourceManager.GetObject("MoveLayerDown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MoveLayerUp {
+            get {
+                object obj = ResourceManager.GetObject("MoveLayerUp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap NewRequest_8796 {
             get {
                 object obj = ResourceManager.GetObject("NewRequest_8796", resourceCulture);
@@ -156,6 +176,16 @@ namespace BlockEd.Properties {
         internal static System.Drawing.Bitmap StatusAnnotations_Stop_32xLG_color {
             get {
                 object obj = ResourceManager.GetObject("StatusAnnotations_Stop_32xLG_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToggleGhosting {
+            get {
+                object obj = ResourceManager.GetObject("ToggleGhosting", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

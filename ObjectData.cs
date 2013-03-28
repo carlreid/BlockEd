@@ -36,6 +36,18 @@ namespace BlockEd
             if (typeID == 0)
             {
                 tileDataGroupBox.Enabled = false;
+
+                tileTypeCombo.Items.Clear();
+                tileData1Combo.Items.Clear();
+                tileTypeCombo.Text = "";
+                tileData1Combo.Text = "";
+                tileData2ValueLabel.Text = "Value:";
+                tileData2ValueTextBox.Text = "";
+                dataTwoLabel.Text = "Value:";
+                dataTwoTextBox.Text = "";
+                dataOneLabel.Text = "Value:";
+                dataOneTextBox.Text = "";
+
                 return;
             }
 
