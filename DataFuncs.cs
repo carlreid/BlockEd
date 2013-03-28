@@ -603,9 +603,20 @@ namespace BlockEd
                     //Create a new cropped bitmap to be loaded into the PictureBox
                     OpenTK.Vector2 tilePos = tile.getPosition();
                     Rectangle tileRect = new Rectangle((int)tilePos.X, (int)tilePos.Y, tile.getWidth(), tile.getHeight());
-                    Bitmap cropped = (Bitmap)spriteSheetImage.Clone(tileRect, spriteSheetImage.PixelFormat);
+
+                    Bitmap cropped = null;
+                    if (tileRect.X == 0 && tileRect.Y == 0 && tileRect.Width == spriteSheetImage.Width && tileRect.Height == spriteSheetImage.Height)
+                    {
+                        cropped = new Bitmap(spriteSheetImage);
+                    }
+                    else
+                    {
+                        cropped = new Bitmap(spriteSheetImage.Clone(tileRect, spriteSheetImage.PixelFormat));
+                    }
+                    
                     newPictureBox.Image = cropped;
 
+                    
                     //Position the PictureBox within the sheetPage control
                     newPictureBox.Left = tileCurX;
                     newPictureBox.Top = tileCurY;
@@ -625,7 +636,9 @@ namespace BlockEd
                         tileCurY += maxTileY;
                         maxTileY = 0;   //Make sure to reset this or other rows will be affected.
                     }
+
                 }
+                spriteSheetImage.Dispose();
             }
         }
 
@@ -634,6 +647,17 @@ namespace BlockEd
             if (_lastModifiedTile != null)
             {
                 _lastModifiedTile.Image = _lastModifiedTileImage;
+            }
+
+            MouseEventArgs mouseEvent = (MouseEventArgs)e;
+            if (mouseEvent.Button == MouseButtons.Right)
+            {
+                PictureBox invoker = (PictureBox)sender;
+                String[] tileNameData = invoker.Name.Split(':');
+                int parsedTileID;
+                Int32.TryParse(tileNameData[1], out parsedTileID);
+                _mainForm.displayTileEditor(parsedTileID);
+                return;
             }
 
 

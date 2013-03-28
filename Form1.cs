@@ -35,13 +35,13 @@ namespace BlockEd
         const int maxAmountTiles = 1000;
         const int maxZDepth = 10;
 
-        Color alphaColorKey;
+        internal Color alphaColorKey;
 
-        List<GraphicTile> graphicTiles = new List<GraphicTile>();
-        List<SpriteSheet> graphicFiles = new List<SpriteSheet>();
-        List<MapTile> mapTiles = new List<MapTile>();
+        internal List<GraphicTile> graphicTiles = new List<GraphicTile>();
+        internal List<SpriteSheet> graphicFiles = new List<SpriteSheet>();
+        internal  List<MapTile> mapTiles = new List<MapTile>();
         GameData loadedMap = null;
-        GLFuncs glFuncs;
+        internal GLFuncs glFuncs;
 
         DataFuncs data;
 
@@ -223,6 +223,17 @@ namespace BlockEd
                     //}
                 }
             }
+        }
+
+        internal void updateGLComponents()
+        {
+            updateGL(glMapMain);
+            updateGL(glMiniMapControl, false);
+        }
+
+        internal void updateTabControl()
+        {
+            data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
         }
 
         public Form1()
@@ -498,6 +509,11 @@ namespace BlockEd
 
         private void mousePanGL(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (loadedMap == null)
+            {
+                return;
+            }
+
             if (e.Button == MouseButtons.Middle)
             {
                 if (e.X == lastMouseX && e.Y == lastMouseY)
@@ -737,6 +753,18 @@ namespace BlockEd
         private void openStripButton_Click(object sender, EventArgs e)
         {
             loadMap();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            tileGraphicEditor tileEditor = new tileGraphicEditor(22, ref graphicFiles, ref graphicTiles, this);
+            tileEditor.Show();
+        }
+
+        internal void displayTileEditor(int tileID)
+        {
+            tileGraphicEditor tileEditor = new tileGraphicEditor(tileID, ref graphicFiles, ref graphicTiles, this);
+            tileEditor.Show();
         }
 
     }

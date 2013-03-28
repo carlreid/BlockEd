@@ -93,6 +93,7 @@
             this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ghostingStripButton = new System.Windows.Forms.ToolStripButton();
+            this.button10 = new System.Windows.Forms.Button();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -734,11 +735,22 @@
             this.ghostingStripButton.Text = "Toggle Layer Ghosting";
             this.ghostingStripButton.Click += new System.EventHandler(this.ghostingStripButton_Click);
             // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(760, 626);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 24;
+            this.button10.Text = "button10";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.editControlsGroupBox);
             this.Controls.Add(this.statusStrip1);
@@ -842,6 +854,7 @@
         private System.Windows.Forms.PictureBox moveLayerUpPictureBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton ghostingStripButton;
+        private System.Windows.Forms.Button button10;
     }
 }
 

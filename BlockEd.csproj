@@ -79,6 +79,12 @@
     </Compile>
     <Compile Include="SpriteSheet.cs" />
     <Compile Include="GraphicTile.cs" />
+    <Compile Include="tileGraphicEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tileGraphicEditor.Designer.cs">
+      <DependentUpon>tileGraphicEditor.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +98,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="tileGraphicEditor.resx">
+      <DependentUpon>tileGraphicEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
