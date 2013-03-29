@@ -767,5 +767,146 @@ namespace BlockEd
             tileEditor.Show();
         }
 
+        private void tileTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            //tileTypeCombo.Items.Clear();
+            //tileData1Combo.Items.Clear();
+
+            foreach (TileType tileData in _tileData.getList())
+            {
+                if (tileData._name == tileTypeCombo.Text)
+                {
+                    foreach (TileDataOne tileDataOne in tileData.getList())
+                    {
+                        if (tileDataOne._id == 0)
+                        {
+                            //tileTypeCombo.Enabled = false;
+                            tileData1Combo.Enabled = false;
+                            tileTypeLabel.Enabled = false;
+                            tileData2ValueLabel.Enabled = false;
+                            tileData2ValueTextBox.Enabled = false;
+
+                            dataOneLabel.Enabled = true;
+                            dataOneTextBox.Enabled = true;
+                            dataTwoLabel.Enabled = true;
+                            dataTwoTextBox.Enabled = true;
+
+                            dataOneLabel.Text = tileDataOne._name + ":";
+                            dataOneTextBox.Text = "0";
+
+                            if (tileDataOne.getSecondData()._name == null)
+                            {
+                                dataTwoLabel.Enabled = false;
+                                dataTwoTextBox.Enabled = false;
+                            }
+                            else
+                            {
+                                dataTwoLabel.Text = tileDataOne.getSecondData()._name + ":";
+                                dataTwoTextBox.Text = "0";
+                            }
+                        }
+                        else
+                        {
+                            dataOneLabel.Enabled = false;
+                            dataOneTextBox.Enabled = false;
+                            dataTwoLabel.Enabled = false;
+                            dataTwoTextBox.Enabled = false;
+
+                            tileData1Combo.Enabled = true;
+                            tileTypeLabel.Enabled = true;
+                            tileData2ValueLabel.Enabled = true;
+                            tileData2ValueTextBox.Enabled = true;
+
+                            if (tileDataOne._name == null)
+                            {
+                                tileData1Combo.Enabled = false;
+                            }
+                            else
+                            {
+                                tileData1Combo.Items.Add(tileDataOne._name);
+                            }
+
+                            if (tileDataOne._id == 1)
+                            {
+                                tileData1Combo.SelectedIndex = 0;
+                                tileData2ValueLabel.Text = tileDataOne.getSecondData()._name + ":";
+                                tileData2ValueTextBox.Text = "0";
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void tileData1Combo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (TileType tileData in _tileData.getList())
+            {
+                if (tileData._name == tileTypeCombo.Text)
+                {
+                    foreach (TileDataOne tileDataOne in tileData.getList())
+                    {
+                        if (tileDataOne._name == tileData1Combo.Text)
+                        {
+                            tileData2ValueLabel.Text = tileDataOne.getSecondData()._name + ":";
+                            tileData2ValueTextBox.Text = "0";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void tileDataApplyChangesButton_Click(object sender, EventArgs e)
+        {
+            foreach (GraphicTile gfxTile in graphicTiles)
+            {
+                if (gfxTile.getTileID() == currentTile.getID())
+                {
+                    if (tileData1Combo.Enabled)
+                    {
+                        foreach (TileType tileData in _tileData.getList())
+                        {
+                            if (tileData._name == tileTypeCombo.Text)
+                            {
+                                gfxTile.setTypeID(tileData._id);
+                                foreach (TileDataOne tileDataOne in tileData.getList())
+                                {
+                                    if (tileDataOne._name == tileData1Combo.Text)
+                                    {
+                                        gfxTile.setDataOne(tileDataOne._id);
+                                        gfxTile.setDataTwo(Int32.Parse(tileData2ValueTextBox.Text));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (TileType tileData in _tileData.getList())
+                        {
+                            if (tileData._name == tileTypeCombo.Text)
+                            {
+                                gfxTile.setTypeID(tileData._id);
+
+                                if (String.IsNullOrEmpty(tileData.getList()[0].getSecondData()._name))
+                                {
+                                    gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
+                                }
+                                else
+                                {
+                                    gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
+                                    gfxTile.setDataTwo(Int32.Parse(dataTwoTextBox.Text));
+                                }
+                            }
+                        }
+                    }
+                    return;
+                }
+
+            }
+        }
+
     }
 }

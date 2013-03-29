@@ -21,6 +21,9 @@ namespace BlockEd
             int dataOne = 0;
             int dataTwo = 0;
 
+            tileTypeCombo.Items.Clear();
+            tileData1Combo.Items.Clear();
+
             foreach (GraphicTile gfxTile in graphicTiles)
             {
                 if (gfxTile.getTileID() == tileID)
@@ -37,8 +40,6 @@ namespace BlockEd
             {
                 tileDataGroupBox.Enabled = false;
 
-                tileTypeCombo.Items.Clear();
-                tileData1Combo.Items.Clear();
                 tileTypeCombo.Text = "";
                 tileData1Combo.Text = "";
                 tileData2ValueLabel.Text = "Value:";
@@ -52,9 +53,6 @@ namespace BlockEd
             }
 
             tileDataGroupBox.Enabled = true;
-
-            tileTypeCombo.Items.Clear();
-            tileData1Combo.Items.Clear();
             tileTypeCombo.Text = "";
             tileData1Combo.Text = "";
 
