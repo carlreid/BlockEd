@@ -133,6 +133,9 @@ namespace BlockEd
             {
                 tileOffsetX = (maxLayerX - glMapMain.Width) * -1;
             }
+
+            updateGLComponents();
+
         }
 
         private void setOffsetY(float value)
@@ -153,6 +156,9 @@ namespace BlockEd
             {
                 tileOffsetY = (maxLayerY - glMapMain.Height) * -1;
             }
+
+            updateGLComponents();
+
         }
 
         private void loadMap(){
@@ -244,6 +250,7 @@ namespace BlockEd
             tileDataGroupBox.Enabled = false;
             layerDataGroupBox.Enabled = false;
             editControlsGroupBox.Enabled = false;
+            //glMiniMapControl.Enabled = true;
             data = new DataFuncs(currentTile, _tileData, this);
 
             ToolTip newLayerToolTop = new ToolTip();
@@ -350,30 +357,33 @@ namespace BlockEd
         {
             bool handled = false;
 
-            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
+            if (glMapMain.Focused)
             {
-                setOffsetX(tileOffsetX + 10);
-                handled = true;
-            }
-            else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
-            {
-                setOffsetX(tileOffsetX - 10);
-                handled = true;
-            }
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
-            {
-                setOffsetY(tileOffsetY + 10);
-                handled = true;
-            }
-            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
-            {
-                setOffsetY(tileOffsetY - 10);
+                if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A)
+                {
+                    setOffsetX(tileOffsetX + 10);
+                    handled = true;
+                }
+                else if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D)
+                {
+                    setOffsetX(tileOffsetX - 10);
+                    handled = true;
+                }
+                else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
+                {
+                    setOffsetY(tileOffsetY + 10);
+                    handled = true;
+                }
+                else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
+                {
+                    setOffsetY(tileOffsetY - 10);
 
-                handled = true;
-            }
-            if (handled)
-            {
-                updateGL(glMapMain);
+                    handled = true;
+                }
+                if (handled)
+                {
+                    updateGL(glMapMain);
+                }
             }
 
             return handled;
@@ -447,11 +457,6 @@ namespace BlockEd
 
         }
 
-        private void clickGL(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-
-        }
-
         private void button7_Click(object sender, EventArgs e)
         {
             //richTextBox1.Text = data.ToXML(loadedMap);
@@ -476,25 +481,32 @@ namespace BlockEd
 
             
 
-            if (String.IsNullOrEmpty(layerSelectionBox.Text) || layerSelectionBox.Text == "Show All")
-            {
-                MessageBox.Show("Please select a layer to edit.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            //if (String.IsNullOrEmpty(layerSelectionBox.Text) || layerSelectionBox.Text == "Show All")
+            //{
+            //    MessageBox.Show("Please select a layer to edit.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    return;
+            //}
 
-            if (currentTile.getID() == -1 && e.Button != MouseButtons.Right)
-            {
-                MessageBox.Show("You need to select a tile first.");
-                return;
-            }
+            //if (currentTile.getID() == -1 && e.Button != MouseButtons.Right)
+            //{
+            //    MessageBox.Show("You need to select a tile first.");
+            //    return;
+            //}
 
-            if (e.Button == MouseButtons.Left)
+            if (!String.IsNullOrEmpty(layerSelectionBox.Text) && layerSelectionBox.Text != "Show All")
             {
-                placeTile(e.X, e.Y);
+                if (e.Button == MouseButtons.Left && currentTile.getID() != -1)
+                {
+                    placeTile(e.X, e.Y);
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    removeTile(e.X, e.Y);
+                }
             }
-            else if (e.Button == MouseButtons.Right)
+            else
             {
-                removeTile(e.X, e.Y);
+                glMapMain.Focus();
             }
 
         }
@@ -726,16 +738,22 @@ namespace BlockEd
 
         private void moveLayerDownPictureBox_Click(object sender, EventArgs e)
         {
-            moveLayerZ(false);
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl, false);
+            if (layerSelectionBox.Text != "Show All")
+            {
+                moveLayerZ(false);
+                updateGL(glMapMain);
+                updateGL(glMiniMapControl, false);
+            }
         }
 
         private void moveLayerUpPictureBox_Click(object sender, EventArgs e)
         {
-            moveLayerZ(true);
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl, false);
+            if (layerSelectionBox.Text != "Show All")
+            {
+                moveLayerZ(true);
+                updateGL(glMapMain);
+                updateGL(glMiniMapControl, false);
+            }
         }
 
         private void ghostingStripButton_Click(object sender, EventArgs e)
@@ -926,7 +944,7 @@ namespace BlockEd
 
         private void button11_Click(object sender, EventArgs e)
         {
-            editControlsGroupBox.Enabled = true;
+            MessageBox.Show("Length: " + layerWidthTextBox.Text.Length);
         }
 
     }
