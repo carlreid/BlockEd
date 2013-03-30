@@ -168,6 +168,16 @@ namespace BlockEd
             _layerOffsetY = newY;
         }
 
+        public void setMapName(string name)
+        {
+            _mapName = name;
+        }
+
+        public void setDrawType(int type)
+        {
+            _drawType = type;
+        }
+
         [DataMember]
         private string _mapName;
         [DataMember]

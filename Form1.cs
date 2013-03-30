@@ -430,6 +430,7 @@ namespace BlockEd
                         layerOffsetYTextBox.Text = layer.getLayerOffsetY().ToString();
                         layerWidthTextBox.Text = layer.getMapWidth().ToString();
                         layerHeightTextBox.Text = layer.getMapHeight().ToString();
+                        layerNameTextBox.Text = layer.getMapName();
                         layerZDepthTextBox.Text = layer.getZDepth().ToString();
                         maxTileWidthTextBox.Text = layer.getMaxTileWidth().ToString();
                         maxTileHeightTextBox.Text = layer.getMaxTileHeight().ToString();
@@ -709,23 +710,23 @@ namespace BlockEd
                 {
                     if (map.getMapName() == layerSelectionBox.Text)
                     {
-                        int desinationLayer = map.getZDepth() + moveDirection;
+                        int destinationLayer = map.getZDepth() + moveDirection;
 
-                        if (desinationLayer < 0 || desinationLayer > maxZDepth)
+                        if (destinationLayer < 0 || destinationLayer > maxZDepth)
                         {
                             return;
                         }
 
                         foreach (MapData mapCheck in level.getLayerList())
                         {
-                            if (mapCheck.getZDepth() == desinationLayer)
+                            if (mapCheck.getZDepth() == destinationLayer)
                             {
                                 mapCheck.setZDepth(map.getZDepth());
                                 break;
                             }
                         }
 
-                        map.setZDepth(desinationLayer);
+                        map.setZDepth(destinationLayer);
                         updateLayerSelectionBox();
                         updateLayerList();
                         layerSelectionBox.Text = map.getMapName();
@@ -936,7 +937,45 @@ namespace BlockEd
                 {
                     if (map.getMapName() == layerSelectionBox.Text)
                     {
+                        map.setWidth(Int32.Parse(layerWidthTextBox.Text));
+                        map.setHeight(Int32.Parse(layerHeightTextBox.Text));
+                        map.setLayerOffsetX(Int32.Parse(layerOffsetXTextBox.Text));
+                        map.setLayerOffsetY(Int32.Parse(layerOffsetYTextBox.Text));
+                        map.setMapName(layerNameTextBox.Text);
+                        //map.setZDepth(Int32.Parse(layerZDepthTextBox.Text)); //!!!
+                        map.setMaxTileWidth(Int32.Parse(maxTileWidthTextBox.Text));
+                        map.setMaxTileHeight(Int32.Parse(maxTileHeightTextBox.Text));
+                        map.setDrawType(layerDrawTypeComboBox.SelectedIndex); //!
+
+                        //Change Z Depth
+                        int destinationLayer = Int32.Parse(layerZDepthTextBox.Text);
+                        foreach (MapData mapCheck in level.getLayerList())
+                        {
+                            if (mapCheck.getZDepth() == destinationLayer && mapCheck.getMapName() != map.getMapName())
+                            {
+                                DialogResult shouldSwitch = MessageBox.Show("A layer clash has been found with the layer: " + map.getMapName().ToString() + ". Would you like to swap the layer positions?", 
+                                                                            "Layer Clash", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                                if (shouldSwitch == DialogResult.Yes)
+                                {
+                                    mapCheck.setZDepth(map.getZDepth());
+                                    map.setZDepth(destinationLayer);
+                                    layerSelectionBox.Text = map.getMapName();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Okay, reverting to previous Z Depth.", "Reverting...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    layerZDepthTextBox.Text = map.getZDepth().ToString();
+                                }
+                                break;
+                            }
+                        }
+
+                        updateLayerList();
+                        layerSelectionBox.SelectedItem = map.getMapName();                       
+                        updateLayerSelectionBox();
                         
+
                     }
                 }
             }
@@ -945,6 +984,11 @@ namespace BlockEd
         private void button11_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Length: " + layerWidthTextBox.Text.Length);
+        }
+
+        private void newLayerPictureBox_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

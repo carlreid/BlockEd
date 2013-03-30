@@ -44,6 +44,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.devPanel = new System.Windows.Forms.Panel();
+            this.button11 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -65,6 +66,9 @@
             this.tileDataApplyChangesButton = new System.Windows.Forms.Button();
             this.typeLabel = new System.Windows.Forms.Label();
             this.dataTwoLabel = new System.Windows.Forms.Label();
+            this.tileData2ValueTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.dataTwoTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.dataOneTextBox = new System.Windows.Forms.MaskedTextBox();
             this.dataOneLabel = new System.Windows.Forms.Label();
             this.tileData2ValueLabel = new System.Windows.Forms.Label();
             this.tileData1Combo = new System.Windows.Forms.ComboBox();
@@ -74,48 +78,44 @@
             this.glLoadSpeedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.layerWidthLabel = new System.Windows.Forms.Label();
             this.layerDataGroupBox = new System.Windows.Forms.GroupBox();
+            this.layerNameTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.layerHeightTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.layerOffsetYTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.layerOffsetXTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.layerWidthTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.layerNameLabel = new System.Windows.Forms.Label();
+            this.layerZDepthTextBox = new System.Windows.Forms.NumericUpDown();
             this.layerOffsetYLabel = new System.Windows.Forms.Label();
             this.layerOffsetXLabel = new System.Windows.Forms.Label();
             this.layerDataApplyChangesButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.maxTileWidthTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.maxTileHeightTextBox = new System.Windows.Forms.MaskedTextBox();
             this.maxTileWidthLabel = new System.Windows.Forms.Label();
             this.maxTileHeightLabel = new System.Windows.Forms.Label();
-            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
             this.layerDrawTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
-            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.layerDrawTypeLabel = new System.Windows.Forms.Label();
-            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.layerZDepthLabel = new System.Windows.Forms.Label();
             this.layerHeightLabel = new System.Windows.Forms.Label();
+            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
+            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
+            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
+            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.editControlsGroupBox = new System.Windows.Forms.GroupBox();
             this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.layerZDepthTextBox = new System.Windows.Forms.NumericUpDown();
-            this.layerNameLabel = new System.Windows.Forms.Label();
-            this.maxTileHeightTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.maxTileWidthTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.layerWidthTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.layerHeightTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.layerOffsetXTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.layerOffsetYTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.layerNameTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.dataOneTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.dataTwoTextBox = new System.Windows.Forms.MaskedTextBox();
-            this.tileData2ValueTextBox = new System.Windows.Forms.MaskedTextBox();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tileDataGroupBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.layerDataGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).BeginInit();
             this.editControlsGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).BeginInit();
             this.SuspendLayout();
             // 
             // topMenu
@@ -267,6 +267,16 @@
             this.devPanel.Size = new System.Drawing.Size(402, 250);
             this.devPanel.TabIndex = 10;
             this.devPanel.Visible = false;
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(142, 189);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 23);
+            this.button11.TabIndex = 16;
+            this.button11.Text = "button11";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // button9
             // 
@@ -484,6 +494,39 @@
             this.dataTwoLabel.TabIndex = 13;
             this.dataTwoLabel.Text = "Value:";
             // 
+            // tileData2ValueTextBox
+            // 
+            this.tileData2ValueTextBox.AllowPromptAsInput = false;
+            this.tileData2ValueTextBox.Location = new System.Drawing.Point(78, 36);
+            this.tileData2ValueTextBox.Mask = "00000";
+            this.tileData2ValueTextBox.Name = "tileData2ValueTextBox";
+            this.tileData2ValueTextBox.PromptChar = ' ';
+            this.tileData2ValueTextBox.Size = new System.Drawing.Size(240, 20);
+            this.tileData2ValueTextBox.TabIndex = 25;
+            this.tileData2ValueTextBox.ValidatingType = typeof(int);
+            // 
+            // dataTwoTextBox
+            // 
+            this.dataTwoTextBox.AllowPromptAsInput = false;
+            this.dataTwoTextBox.Location = new System.Drawing.Point(174, 75);
+            this.dataTwoTextBox.Mask = "00000";
+            this.dataTwoTextBox.Name = "dataTwoTextBox";
+            this.dataTwoTextBox.PromptChar = ' ';
+            this.dataTwoTextBox.Size = new System.Drawing.Size(143, 20);
+            this.dataTwoTextBox.TabIndex = 25;
+            this.dataTwoTextBox.ValidatingType = typeof(int);
+            // 
+            // dataOneTextBox
+            // 
+            this.dataOneTextBox.AllowPromptAsInput = false;
+            this.dataOneTextBox.Location = new System.Drawing.Point(12, 75);
+            this.dataOneTextBox.Mask = "00000";
+            this.dataOneTextBox.Name = "dataOneTextBox";
+            this.dataOneTextBox.PromptChar = ' ';
+            this.dataOneTextBox.Size = new System.Drawing.Size(143, 20);
+            this.dataOneTextBox.TabIndex = 25;
+            this.dataOneTextBox.ValidatingType = typeof(int);
+            // 
             // dataOneLabel
             // 
             this.dataOneLabel.AutoSize = true;
@@ -579,6 +622,88 @@
             this.layerDataGroupBox.TabStop = false;
             this.layerDataGroupBox.Text = "Layer Data";
             // 
+            // layerNameTextBox
+            // 
+            this.layerNameTextBox.Location = new System.Drawing.Point(251, 63);
+            this.layerNameTextBox.Name = "layerNameTextBox";
+            this.layerNameTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerNameTextBox.TabIndex = 25;
+            // 
+            // layerHeightTextBox
+            // 
+            this.layerHeightTextBox.AllowPromptAsInput = false;
+            this.layerHeightTextBox.Location = new System.Drawing.Point(243, 37);
+            this.layerHeightTextBox.Mask = "00000";
+            this.layerHeightTextBox.Name = "layerHeightTextBox";
+            this.layerHeightTextBox.PromptChar = ' ';
+            this.layerHeightTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerHeightTextBox.TabIndex = 25;
+            this.layerHeightTextBox.ValidatingType = typeof(int);
+            // 
+            // layerOffsetYTextBox
+            // 
+            this.layerOffsetYTextBox.AllowPromptAsInput = false;
+            this.layerOffsetYTextBox.Location = new System.Drawing.Point(92, 37);
+            this.layerOffsetYTextBox.Mask = "00000";
+            this.layerOffsetYTextBox.Name = "layerOffsetYTextBox";
+            this.layerOffsetYTextBox.PromptChar = ' ';
+            this.layerOffsetYTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerOffsetYTextBox.TabIndex = 25;
+            this.layerOffsetYTextBox.ValidatingType = typeof(int);
+            // 
+            // layerOffsetXTextBox
+            // 
+            this.layerOffsetXTextBox.AllowPromptAsInput = false;
+            this.layerOffsetXTextBox.Location = new System.Drawing.Point(92, 16);
+            this.layerOffsetXTextBox.Mask = "00000";
+            this.layerOffsetXTextBox.Name = "layerOffsetXTextBox";
+            this.layerOffsetXTextBox.PromptChar = ' ';
+            this.layerOffsetXTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerOffsetXTextBox.TabIndex = 25;
+            this.layerOffsetXTextBox.ValidatingType = typeof(int);
+            // 
+            // layerWidthTextBox
+            // 
+            this.layerWidthTextBox.AllowPromptAsInput = false;
+            this.layerWidthTextBox.Location = new System.Drawing.Point(243, 16);
+            this.layerWidthTextBox.Mask = "00000";
+            this.layerWidthTextBox.Name = "layerWidthTextBox";
+            this.layerWidthTextBox.PromptChar = ' ';
+            this.layerWidthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerWidthTextBox.TabIndex = 25;
+            this.layerWidthTextBox.ValidatingType = typeof(int);
+            // 
+            // layerNameLabel
+            // 
+            this.layerNameLabel.AutoSize = true;
+            this.layerNameLabel.Location = new System.Drawing.Point(215, 66);
+            this.layerNameLabel.Name = "layerNameLabel";
+            this.layerNameLabel.Size = new System.Drawing.Size(38, 13);
+            this.layerNameLabel.TabIndex = 31;
+            this.layerNameLabel.Text = "Name:";
+            // 
+            // layerZDepthTextBox
+            // 
+            this.layerZDepthTextBox.Location = new System.Drawing.Point(251, 89);
+            this.layerZDepthTextBox.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.layerZDepthTextBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.layerZDepthTextBox.Name = "layerZDepthTextBox";
+            this.layerZDepthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerZDepthTextBox.TabIndex = 30;
+            this.layerZDepthTextBox.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // layerOffsetYLabel
             // 
             this.layerOffsetYLabel.AutoSize = true;
@@ -620,6 +745,28 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tile Size";
             // 
+            // maxTileWidthTextBox
+            // 
+            this.maxTileWidthTextBox.AllowPromptAsInput = false;
+            this.maxTileWidthTextBox.Location = new System.Drawing.Point(42, 15);
+            this.maxTileWidthTextBox.Mask = "00000";
+            this.maxTileWidthTextBox.Name = "maxTileWidthTextBox";
+            this.maxTileWidthTextBox.PromptChar = ' ';
+            this.maxTileWidthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.maxTileWidthTextBox.TabIndex = 25;
+            this.maxTileWidthTextBox.ValidatingType = typeof(int);
+            // 
+            // maxTileHeightTextBox
+            // 
+            this.maxTileHeightTextBox.AllowPromptAsInput = false;
+            this.maxTileHeightTextBox.Location = new System.Drawing.Point(42, 38);
+            this.maxTileHeightTextBox.Mask = "00000";
+            this.maxTileHeightTextBox.Name = "maxTileHeightTextBox";
+            this.maxTileHeightTextBox.PromptChar = ' ';
+            this.maxTileHeightTextBox.Size = new System.Drawing.Size(70, 20);
+            this.maxTileHeightTextBox.TabIndex = 25;
+            this.maxTileHeightTextBox.ValidatingType = typeof(int);
+            // 
             // maxTileWidthLabel
             // 
             this.maxTileWidthLabel.AutoSize = true;
@@ -638,17 +785,6 @@
             this.maxTileHeightLabel.TabIndex = 21;
             this.maxTileHeightLabel.Text = "Height:";
             // 
-            // moveLayerUpPictureBox
-            // 
-            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
-            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(302, 332);
-            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
-            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.moveLayerUpPictureBox.TabIndex = 24;
-            this.moveLayerUpPictureBox.TabStop = false;
-            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
-            // 
             // layerDrawTypeComboBox
             // 
             this.layerDrawTypeComboBox.FormattingEnabled = true;
@@ -660,6 +796,44 @@
             this.layerDrawTypeComboBox.Name = "layerDrawTypeComboBox";
             this.layerDrawTypeComboBox.Size = new System.Drawing.Size(115, 21);
             this.layerDrawTypeComboBox.TabIndex = 25;
+            // 
+            // layerDrawTypeLabel
+            // 
+            this.layerDrawTypeLabel.AutoSize = true;
+            this.layerDrawTypeLabel.Location = new System.Drawing.Point(206, 191);
+            this.layerDrawTypeLabel.Name = "layerDrawTypeLabel";
+            this.layerDrawTypeLabel.Size = new System.Drawing.Size(62, 13);
+            this.layerDrawTypeLabel.TabIndex = 21;
+            this.layerDrawTypeLabel.Text = "Draw Type:";
+            // 
+            // layerZDepthLabel
+            // 
+            this.layerZDepthLabel.AutoSize = true;
+            this.layerZDepthLabel.Location = new System.Drawing.Point(204, 91);
+            this.layerZDepthLabel.Name = "layerZDepthLabel";
+            this.layerZDepthLabel.Size = new System.Drawing.Size(49, 13);
+            this.layerZDepthLabel.TabIndex = 21;
+            this.layerZDepthLabel.Text = "Z Depth:";
+            // 
+            // layerHeightLabel
+            // 
+            this.layerHeightLabel.AutoSize = true;
+            this.layerHeightLabel.Location = new System.Drawing.Point(173, 40);
+            this.layerHeightLabel.Name = "layerHeightLabel";
+            this.layerHeightLabel.Size = new System.Drawing.Size(70, 13);
+            this.layerHeightLabel.TabIndex = 21;
+            this.layerHeightLabel.Text = "Layer Height:";
+            // 
+            // moveLayerUpPictureBox
+            // 
+            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
+            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(302, 332);
+            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
+            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLayerUpPictureBox.TabIndex = 24;
+            this.moveLayerUpPictureBox.TabStop = false;
+            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
             // 
             // moveLayerDownPictureBox
             // 
@@ -682,15 +856,6 @@
             this.removeLayerPictureBox.TabIndex = 19;
             this.removeLayerPictureBox.TabStop = false;
             // 
-            // layerDrawTypeLabel
-            // 
-            this.layerDrawTypeLabel.AutoSize = true;
-            this.layerDrawTypeLabel.Location = new System.Drawing.Point(206, 191);
-            this.layerDrawTypeLabel.Name = "layerDrawTypeLabel";
-            this.layerDrawTypeLabel.Size = new System.Drawing.Size(62, 13);
-            this.layerDrawTypeLabel.TabIndex = 21;
-            this.layerDrawTypeLabel.Text = "Draw Type:";
-            // 
             // newLayerPictureBox
             // 
             this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
@@ -700,24 +865,7 @@
             this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
             this.newLayerPictureBox.TabIndex = 18;
             this.newLayerPictureBox.TabStop = false;
-            // 
-            // layerZDepthLabel
-            // 
-            this.layerZDepthLabel.AutoSize = true;
-            this.layerZDepthLabel.Location = new System.Drawing.Point(204, 91);
-            this.layerZDepthLabel.Name = "layerZDepthLabel";
-            this.layerZDepthLabel.Size = new System.Drawing.Size(49, 13);
-            this.layerZDepthLabel.TabIndex = 21;
-            this.layerZDepthLabel.Text = "Z Depth:";
-            // 
-            // layerHeightLabel
-            // 
-            this.layerHeightLabel.AutoSize = true;
-            this.layerHeightLabel.Location = new System.Drawing.Point(173, 40);
-            this.layerHeightLabel.Name = "layerHeightLabel";
-            this.layerHeightLabel.Size = new System.Drawing.Size(70, 13);
-            this.layerHeightLabel.TabIndex = 21;
-            this.layerHeightLabel.Text = "Layer Height:";
+            this.newLayerPictureBox.Click += new System.EventHandler(this.newLayerPictureBox_Click);
             // 
             // editControlsGroupBox
             // 
@@ -745,153 +893,6 @@
             this.button10.Text = "button10";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(142, 189);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(75, 23);
-            this.button11.TabIndex = 16;
-            this.button11.Text = "button11";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
-            // 
-            // layerZDepthTextBox
-            // 
-            this.layerZDepthTextBox.Location = new System.Drawing.Point(251, 89);
-            this.layerZDepthTextBox.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.layerZDepthTextBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.layerZDepthTextBox.Name = "layerZDepthTextBox";
-            this.layerZDepthTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerZDepthTextBox.TabIndex = 30;
-            this.layerZDepthTextBox.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // layerNameLabel
-            // 
-            this.layerNameLabel.AutoSize = true;
-            this.layerNameLabel.Location = new System.Drawing.Point(215, 66);
-            this.layerNameLabel.Name = "layerNameLabel";
-            this.layerNameLabel.Size = new System.Drawing.Size(38, 13);
-            this.layerNameLabel.TabIndex = 31;
-            this.layerNameLabel.Text = "Name:";
-            // 
-            // maxTileHeightTextBox
-            // 
-            this.maxTileHeightTextBox.AllowPromptAsInput = false;
-            this.maxTileHeightTextBox.Location = new System.Drawing.Point(42, 38);
-            this.maxTileHeightTextBox.Mask = "00000";
-            this.maxTileHeightTextBox.Name = "maxTileHeightTextBox";
-            this.maxTileHeightTextBox.PromptChar = ' ';
-            this.maxTileHeightTextBox.Size = new System.Drawing.Size(70, 20);
-            this.maxTileHeightTextBox.TabIndex = 25;
-            this.maxTileHeightTextBox.ValidatingType = typeof(int);
-            // 
-            // maxTileWidthTextBox
-            // 
-            this.maxTileWidthTextBox.AllowPromptAsInput = false;
-            this.maxTileWidthTextBox.Location = new System.Drawing.Point(42, 15);
-            this.maxTileWidthTextBox.Mask = "00000";
-            this.maxTileWidthTextBox.Name = "maxTileWidthTextBox";
-            this.maxTileWidthTextBox.PromptChar = ' ';
-            this.maxTileWidthTextBox.Size = new System.Drawing.Size(70, 20);
-            this.maxTileWidthTextBox.TabIndex = 25;
-            this.maxTileWidthTextBox.ValidatingType = typeof(int);
-            // 
-            // layerWidthTextBox
-            // 
-            this.layerWidthTextBox.AllowPromptAsInput = false;
-            this.layerWidthTextBox.Location = new System.Drawing.Point(243, 16);
-            this.layerWidthTextBox.Mask = "00000";
-            this.layerWidthTextBox.Name = "layerWidthTextBox";
-            this.layerWidthTextBox.PromptChar = ' ';
-            this.layerWidthTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerWidthTextBox.TabIndex = 25;
-            this.layerWidthTextBox.ValidatingType = typeof(int);
-            // 
-            // layerHeightTextBox
-            // 
-            this.layerHeightTextBox.AllowPromptAsInput = false;
-            this.layerHeightTextBox.Location = new System.Drawing.Point(243, 37);
-            this.layerHeightTextBox.Mask = "00000";
-            this.layerHeightTextBox.Name = "layerHeightTextBox";
-            this.layerHeightTextBox.PromptChar = ' ';
-            this.layerHeightTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerHeightTextBox.TabIndex = 25;
-            this.layerHeightTextBox.ValidatingType = typeof(int);
-            // 
-            // layerOffsetXTextBox
-            // 
-            this.layerOffsetXTextBox.AllowPromptAsInput = false;
-            this.layerOffsetXTextBox.Location = new System.Drawing.Point(92, 16);
-            this.layerOffsetXTextBox.Mask = "00000";
-            this.layerOffsetXTextBox.Name = "layerOffsetXTextBox";
-            this.layerOffsetXTextBox.PromptChar = ' ';
-            this.layerOffsetXTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerOffsetXTextBox.TabIndex = 25;
-            this.layerOffsetXTextBox.ValidatingType = typeof(int);
-            // 
-            // layerOffsetYTextBox
-            // 
-            this.layerOffsetYTextBox.AllowPromptAsInput = false;
-            this.layerOffsetYTextBox.Location = new System.Drawing.Point(92, 37);
-            this.layerOffsetYTextBox.Mask = "00000";
-            this.layerOffsetYTextBox.Name = "layerOffsetYTextBox";
-            this.layerOffsetYTextBox.PromptChar = ' ';
-            this.layerOffsetYTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerOffsetYTextBox.TabIndex = 25;
-            this.layerOffsetYTextBox.ValidatingType = typeof(int);
-            // 
-            // layerNameTextBox
-            // 
-            this.layerNameTextBox.Location = new System.Drawing.Point(251, 63);
-            this.layerNameTextBox.Name = "layerNameTextBox";
-            this.layerNameTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerNameTextBox.TabIndex = 25;
-            // 
-            // dataOneTextBox
-            // 
-            this.dataOneTextBox.AllowPromptAsInput = false;
-            this.dataOneTextBox.Location = new System.Drawing.Point(12, 75);
-            this.dataOneTextBox.Mask = "00000";
-            this.dataOneTextBox.Name = "dataOneTextBox";
-            this.dataOneTextBox.PromptChar = ' ';
-            this.dataOneTextBox.Size = new System.Drawing.Size(143, 20);
-            this.dataOneTextBox.TabIndex = 25;
-            this.dataOneTextBox.ValidatingType = typeof(int);
-            // 
-            // dataTwoTextBox
-            // 
-            this.dataTwoTextBox.AllowPromptAsInput = false;
-            this.dataTwoTextBox.Location = new System.Drawing.Point(174, 75);
-            this.dataTwoTextBox.Mask = "00000";
-            this.dataTwoTextBox.Name = "dataTwoTextBox";
-            this.dataTwoTextBox.PromptChar = ' ';
-            this.dataTwoTextBox.Size = new System.Drawing.Size(143, 20);
-            this.dataTwoTextBox.TabIndex = 25;
-            this.dataTwoTextBox.ValidatingType = typeof(int);
-            // 
-            // tileData2ValueTextBox
-            // 
-            this.tileData2ValueTextBox.AllowPromptAsInput = false;
-            this.tileData2ValueTextBox.Location = new System.Drawing.Point(78, 36);
-            this.tileData2ValueTextBox.Mask = "00000";
-            this.tileData2ValueTextBox.Name = "tileData2ValueTextBox";
-            this.tileData2ValueTextBox.PromptChar = ' ';
-            this.tileData2ValueTextBox.Size = new System.Drawing.Size(240, 20);
-            this.tileData2ValueTextBox.TabIndex = 25;
-            this.tileData2ValueTextBox.ValidatingType = typeof(int);
             // 
             // Form1
             // 
@@ -923,6 +924,7 @@
             this.statusStrip1.PerformLayout();
             this.layerDataGroupBox.ResumeLayout(false);
             this.layerDataGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).EndInit();
@@ -931,7 +933,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).EndInit();
             this.editControlsGroupBox.ResumeLayout(false);
             this.editControlsGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
