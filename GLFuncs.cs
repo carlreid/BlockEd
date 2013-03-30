@@ -86,6 +86,18 @@ namespace BlockEd
             {
                 foreach (MapData layer in level.getLayerList())
                 {
+                    if (layer.getDrawType() == 1)
+                    {
+                        continue;
+                    }
+                    else if (layer.getDrawType() == 2)
+                    {
+                        GL.Disable(EnableCap.Blend);
+                    }
+                    else if (layer.getDrawType() == 3)
+                    {
+                        GL.Enable(EnableCap.Blend);
+                    }
 
                     foreach (MapDataTile tile in layer.getTileList())
                     {

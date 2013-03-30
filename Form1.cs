@@ -416,12 +416,14 @@ namespace BlockEd
                     if (layer.getMapName() == layerSelected)
                     {
                         layerDataGroupBox.Enabled = true;
+                        layerOffsetXTextBox.Text = layer.getLayerOffsetX().ToString();
+                        layerOffsetYTextBox.Text = layer.getLayerOffsetY().ToString();
                         layerWidthTextBox.Text = layer.getMapWidth().ToString();
                         layerHeightTextBox.Text = layer.getMapHeight().ToString();
                         layerZDepthTextBox.Text = layer.getZDepth().ToString();
                         maxTileWidthTextBox.Text = layer.getMaxTileWidth().ToString();
                         maxTileHeightTextBox.Text = layer.getMaxTileHeight().ToString();
-                        layerDrawTypeComboBox.SelectedIndex = layer.getDrawType();
+                        layerDrawTypeComboBox.SelectedIndex = layer.getDrawType() - 1; //Map to zero index
                         return;
                     }
                 }
@@ -906,6 +908,25 @@ namespace BlockEd
                 }
 
             }
+        }
+
+        private void layerDataApplyChangesButton_Click(object sender, EventArgs e)
+        {
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == layerSelectionBox.Text)
+                    {
+                        
+                    }
+                }
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            editControlsGroupBox.Enabled = true;
         }
 
     }

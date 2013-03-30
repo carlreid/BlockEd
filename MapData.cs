@@ -118,6 +118,13 @@ namespace BlockEd
 
         public int getDrawType()
         {
+            if (_drawType <= 0 || _drawType >= 4)
+            {
+                //Default value (blit/copy)
+                //Set draw type to correct the issue.
+                _drawType = 2;
+                return 2;   
+            }
             return _drawType;
         }
 
@@ -129,6 +136,36 @@ namespace BlockEd
         public int getLayerOffsetY()
         {
             return _layerOffsetY;
+        }
+
+        public void setWidth(int width)
+        {
+            _width = width;
+        }
+
+        public void setHeight(int height)
+        {
+            _height = height;
+        }
+
+        public void setMaxTileWidth(int width)
+        {
+            _maxTileWidth = width;
+        }
+
+        public void setMaxTileHeight(int height)
+        {
+            _maxTileHeight = height;
+        }
+
+        public void setLayerOffsetX(int newX)
+        {
+            _layerOffsetX = newX;
+        }
+
+        public void setLayerOffsetY(int newY)
+        {
+            _layerOffsetY = newY;
         }
 
         [DataMember]

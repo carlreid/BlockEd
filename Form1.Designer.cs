@@ -77,25 +77,30 @@
             this.glLoadSpeedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.layerWidthLabel = new System.Windows.Forms.Label();
             this.layerDataGroupBox = new System.Windows.Forms.GroupBox();
+            this.layerOffsetXTextBox = new System.Windows.Forms.TextBox();
+            this.layerOffsetYLabel = new System.Windows.Forms.Label();
+            this.layerOffsetXLabel = new System.Windows.Forms.Label();
+            this.layerDataApplyChangesButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.maxTileWidthTextBox = new System.Windows.Forms.TextBox();
             this.maxTileWidthLabel = new System.Windows.Forms.Label();
             this.maxTileHeightTextBox = new System.Windows.Forms.TextBox();
             this.maxTileHeightLabel = new System.Windows.Forms.Label();
+            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
             this.layerDrawTypeComboBox = new System.Windows.Forms.ComboBox();
-            this.layerZDepthTextBox = new System.Windows.Forms.TextBox();
+            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
             this.layerHeightTextBox = new System.Windows.Forms.TextBox();
             this.layerWidthTextBox = new System.Windows.Forms.TextBox();
+            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.layerDrawTypeLabel = new System.Windows.Forms.Label();
+            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.layerZDepthLabel = new System.Windows.Forms.Label();
             this.layerHeightLabel = new System.Windows.Forms.Label();
             this.editControlsGroupBox = new System.Windows.Forms.GroupBox();
-            this.layerDataApplyChangesButton = new System.Windows.Forms.Button();
-            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
-            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
-            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
-            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.layerOffsetYTextBox = new System.Windows.Forms.TextBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.layerZDepthTextBox = new System.Windows.Forms.NumericUpDown();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -103,11 +108,12 @@
             this.statusStrip1.SuspendLayout();
             this.layerDataGroupBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.editControlsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).BeginInit();
+            this.editControlsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).BeginInit();
             this.SuspendLayout();
             // 
             // topMenu
@@ -200,13 +206,13 @@
             this.tilePicker.Location = new System.Drawing.Point(3, 9);
             this.tilePicker.Name = "tilePicker";
             this.tilePicker.SelectedIndex = 0;
-            this.tilePicker.Size = new System.Drawing.Size(328, 238);
+            this.tilePicker.Size = new System.Drawing.Size(328, 194);
             this.tilePicker.TabIndex = 5;
             // 
             // glMiniMapControl
             // 
             this.glMiniMapControl.BackColor = System.Drawing.Color.Black;
-            this.glMiniMapControl.Location = new System.Drawing.Point(3, 414);
+            this.glMiniMapControl.Location = new System.Drawing.Point(3, 60);
             this.glMiniMapControl.Name = "glMiniMapControl";
             this.glMiniMapControl.Size = new System.Drawing.Size(200, 200);
             this.glMiniMapControl.TabIndex = 8;
@@ -244,6 +250,7 @@
             // 
             // devPanel
             // 
+            this.devPanel.Controls.Add(this.button11);
             this.devPanel.Controls.Add(this.button9);
             this.devPanel.Controls.Add(this.button8);
             this.devPanel.Controls.Add(this.button7);
@@ -314,7 +321,7 @@
             this.layerSelectionBox.FormattingEnabled = true;
             this.layerSelectionBox.Items.AddRange(new object[] {
             "Show All"});
-            this.layerSelectionBox.Location = new System.Drawing.Point(79, 386);
+            this.layerSelectionBox.Location = new System.Drawing.Point(86, 332);
             this.layerSelectionBox.Name = "layerSelectionBox";
             this.layerSelectionBox.Size = new System.Drawing.Size(124, 21);
             this.layerSelectionBox.TabIndex = 11;
@@ -441,7 +448,7 @@
             this.tileDataGroupBox.Controls.Add(this.tileData2ValueTextBox);
             this.tileDataGroupBox.Controls.Add(this.tileData1Combo);
             this.tileDataGroupBox.Controls.Add(this.tileTypeCombo);
-            this.tileDataGroupBox.Location = new System.Drawing.Point(4, 253);
+            this.tileDataGroupBox.Location = new System.Drawing.Point(4, 203);
             this.tileDataGroupBox.Name = "tileDataGroupBox";
             this.tileDataGroupBox.Size = new System.Drawing.Size(326, 125);
             this.tileDataGroupBox.TabIndex = 15;
@@ -527,7 +534,7 @@
             // currentLayerLabel
             // 
             this.currentLayerLabel.AutoSize = true;
-            this.currentLayerLabel.Location = new System.Drawing.Point(2, 389);
+            this.currentLayerLabel.Location = new System.Drawing.Point(9, 335);
             this.currentLayerLabel.Name = "currentLayerLabel";
             this.currentLayerLabel.Size = new System.Drawing.Size(73, 13);
             this.currentLayerLabel.TabIndex = 17;
@@ -560,29 +567,70 @@
             // layerWidthLabel
             // 
             this.layerWidthLabel.AutoSize = true;
-            this.layerWidthLabel.Location = new System.Drawing.Point(7, 19);
+            this.layerWidthLabel.Location = new System.Drawing.Point(176, 19);
             this.layerWidthLabel.Name = "layerWidthLabel";
-            this.layerWidthLabel.Size = new System.Drawing.Size(38, 13);
+            this.layerWidthLabel.Size = new System.Drawing.Size(67, 13);
             this.layerWidthLabel.TabIndex = 21;
-            this.layerWidthLabel.Text = "Width:";
+            this.layerWidthLabel.Text = "Layer Width:";
             // 
             // layerDataGroupBox
             // 
+            this.layerDataGroupBox.Controls.Add(this.layerZDepthTextBox);
+            this.layerDataGroupBox.Controls.Add(this.layerOffsetYTextBox);
+            this.layerDataGroupBox.Controls.Add(this.layerOffsetXTextBox);
+            this.layerDataGroupBox.Controls.Add(this.layerOffsetYLabel);
+            this.layerDataGroupBox.Controls.Add(this.layerOffsetXLabel);
+            this.layerDataGroupBox.Controls.Add(this.layerDataApplyChangesButton);
             this.layerDataGroupBox.Controls.Add(this.groupBox2);
             this.layerDataGroupBox.Controls.Add(this.layerDrawTypeComboBox);
-            this.layerDataGroupBox.Controls.Add(this.layerZDepthTextBox);
             this.layerDataGroupBox.Controls.Add(this.layerHeightTextBox);
             this.layerDataGroupBox.Controls.Add(this.layerWidthTextBox);
+            this.layerDataGroupBox.Controls.Add(this.glMiniMapControl);
             this.layerDataGroupBox.Controls.Add(this.layerDrawTypeLabel);
             this.layerDataGroupBox.Controls.Add(this.layerZDepthLabel);
             this.layerDataGroupBox.Controls.Add(this.layerHeightLabel);
             this.layerDataGroupBox.Controls.Add(this.layerWidthLabel);
-            this.layerDataGroupBox.Location = new System.Drawing.Point(208, 409);
+            this.layerDataGroupBox.Location = new System.Drawing.Point(5, 356);
             this.layerDataGroupBox.Name = "layerDataGroupBox";
-            this.layerDataGroupBox.Size = new System.Drawing.Size(121, 210);
+            this.layerDataGroupBox.Size = new System.Drawing.Size(325, 265);
             this.layerDataGroupBox.TabIndex = 22;
             this.layerDataGroupBox.TabStop = false;
             this.layerDataGroupBox.Text = "Layer Data";
+            // 
+            // layerOffsetXTextBox
+            // 
+            this.layerOffsetXTextBox.Location = new System.Drawing.Point(92, 16);
+            this.layerOffsetXTextBox.Name = "layerOffsetXTextBox";
+            this.layerOffsetXTextBox.Size = new System.Drawing.Size(64, 20);
+            this.layerOffsetXTextBox.TabIndex = 28;
+            // 
+            // layerOffsetYLabel
+            // 
+            this.layerOffsetYLabel.AutoSize = true;
+            this.layerOffsetYLabel.Location = new System.Drawing.Point(11, 40);
+            this.layerOffsetYLabel.Name = "layerOffsetYLabel";
+            this.layerOffsetYLabel.Size = new System.Drawing.Size(77, 13);
+            this.layerOffsetYLabel.TabIndex = 27;
+            this.layerOffsetYLabel.Text = "Layer Offset Y:";
+            // 
+            // layerOffsetXLabel
+            // 
+            this.layerOffsetXLabel.AutoSize = true;
+            this.layerOffsetXLabel.Location = new System.Drawing.Point(11, 19);
+            this.layerOffsetXLabel.Name = "layerOffsetXLabel";
+            this.layerOffsetXLabel.Size = new System.Drawing.Size(77, 13);
+            this.layerOffsetXLabel.TabIndex = 26;
+            this.layerOffsetXLabel.Text = "Layer Offset X:";
+            // 
+            // layerDataApplyChangesButton
+            // 
+            this.layerDataApplyChangesButton.Location = new System.Drawing.Point(205, 207);
+            this.layerDataApplyChangesButton.Name = "layerDataApplyChangesButton";
+            this.layerDataApplyChangesButton.Size = new System.Drawing.Size(117, 25);
+            this.layerDataApplyChangesButton.TabIndex = 17;
+            this.layerDataApplyChangesButton.Text = "Apply Changes";
+            this.layerDataApplyChangesButton.UseVisualStyleBackColor = true;
+            this.layerDataApplyChangesButton.Click += new System.EventHandler(this.layerDataApplyChangesButton_Click);
             // 
             // groupBox2
             // 
@@ -590,9 +638,9 @@
             this.groupBox2.Controls.Add(this.maxTileWidthLabel);
             this.groupBox2.Controls.Add(this.maxTileHeightTextBox);
             this.groupBox2.Controls.Add(this.maxTileHeightLabel);
-            this.groupBox2.Location = new System.Drawing.Point(2, 80);
+            this.groupBox2.Location = new System.Drawing.Point(204, 89);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(118, 62);
+            this.groupBox2.Size = new System.Drawing.Size(118, 66);
             this.groupBox2.TabIndex = 23;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tile Size";
@@ -615,7 +663,7 @@
             // 
             // maxTileHeightTextBox
             // 
-            this.maxTileHeightTextBox.Location = new System.Drawing.Point(42, 36);
+            this.maxTileHeightTextBox.Location = new System.Drawing.Point(42, 39);
             this.maxTileHeightTextBox.Name = "maxTileHeightTextBox";
             this.maxTileHeightTextBox.Size = new System.Drawing.Size(70, 20);
             this.maxTileHeightTextBox.TabIndex = 23;
@@ -623,11 +671,22 @@
             // maxTileHeightLabel
             // 
             this.maxTileHeightLabel.AutoSize = true;
-            this.maxTileHeightLabel.Location = new System.Drawing.Point(1, 39);
+            this.maxTileHeightLabel.Location = new System.Drawing.Point(1, 42);
             this.maxTileHeightLabel.Name = "maxTileHeightLabel";
             this.maxTileHeightLabel.Size = new System.Drawing.Size(41, 13);
             this.maxTileHeightLabel.TabIndex = 21;
             this.maxTileHeightLabel.Text = "Height:";
+            // 
+            // moveLayerUpPictureBox
+            // 
+            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
+            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(302, 332);
+            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
+            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLayerUpPictureBox.TabIndex = 24;
+            this.moveLayerUpPictureBox.TabStop = false;
+            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
             // 
             // layerDrawTypeComboBox
             // 
@@ -636,45 +695,69 @@
             "Empty",
             "Copy",
             "Transparent"});
-            this.layerDrawTypeComboBox.Location = new System.Drawing.Point(4, 159);
+            this.layerDrawTypeComboBox.Location = new System.Drawing.Point(206, 180);
             this.layerDrawTypeComboBox.Name = "layerDrawTypeComboBox";
             this.layerDrawTypeComboBox.Size = new System.Drawing.Size(115, 21);
             this.layerDrawTypeComboBox.TabIndex = 25;
             // 
-            // layerZDepthTextBox
+            // moveLayerDownPictureBox
             // 
-            this.layerZDepthTextBox.Location = new System.Drawing.Point(48, 58);
-            this.layerZDepthTextBox.Name = "layerZDepthTextBox";
-            this.layerZDepthTextBox.Size = new System.Drawing.Size(70, 20);
-            this.layerZDepthTextBox.TabIndex = 24;
+            this.moveLayerDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
+            this.moveLayerDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(273, 332);
+            this.moveLayerDownPictureBox.Name = "moveLayerDownPictureBox";
+            this.moveLayerDownPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLayerDownPictureBox.TabIndex = 23;
+            this.moveLayerDownPictureBox.TabStop = false;
+            this.moveLayerDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
             // 
             // layerHeightTextBox
             // 
-            this.layerHeightTextBox.Location = new System.Drawing.Point(48, 37);
+            this.layerHeightTextBox.Location = new System.Drawing.Point(243, 37);
             this.layerHeightTextBox.Name = "layerHeightTextBox";
-            this.layerHeightTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerHeightTextBox.Size = new System.Drawing.Size(64, 20);
             this.layerHeightTextBox.TabIndex = 22;
             // 
             // layerWidthTextBox
             // 
-            this.layerWidthTextBox.Location = new System.Drawing.Point(48, 16);
+            this.layerWidthTextBox.Location = new System.Drawing.Point(243, 16);
             this.layerWidthTextBox.Name = "layerWidthTextBox";
-            this.layerWidthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerWidthTextBox.Size = new System.Drawing.Size(64, 20);
             this.layerWidthTextBox.TabIndex = 22;
+            // 
+            // removeLayerPictureBox
+            // 
+            this.removeLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
+            this.removeLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.removeLayerPictureBox.Location = new System.Drawing.Point(244, 332);
+            this.removeLayerPictureBox.Name = "removeLayerPictureBox";
+            this.removeLayerPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.removeLayerPictureBox.TabIndex = 19;
+            this.removeLayerPictureBox.TabStop = false;
             // 
             // layerDrawTypeLabel
             // 
             this.layerDrawTypeLabel.AutoSize = true;
-            this.layerDrawTypeLabel.Location = new System.Drawing.Point(4, 143);
+            this.layerDrawTypeLabel.Location = new System.Drawing.Point(206, 164);
             this.layerDrawTypeLabel.Name = "layerDrawTypeLabel";
             this.layerDrawTypeLabel.Size = new System.Drawing.Size(62, 13);
             this.layerDrawTypeLabel.TabIndex = 21;
             this.layerDrawTypeLabel.Text = "Draw Type:";
             // 
+            // newLayerPictureBox
+            // 
+            this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
+            this.newLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.newLayerPictureBox.Location = new System.Drawing.Point(215, 332);
+            this.newLayerPictureBox.Name = "newLayerPictureBox";
+            this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.newLayerPictureBox.TabIndex = 18;
+            this.newLayerPictureBox.TabStop = false;
+            // 
             // layerZDepthLabel
             // 
             this.layerZDepthLabel.AutoSize = true;
-            this.layerZDepthLabel.Location = new System.Drawing.Point(2, 61);
+            this.layerZDepthLabel.Location = new System.Drawing.Point(204, 67);
             this.layerZDepthLabel.Name = "layerZDepthLabel";
             this.layerZDepthLabel.Size = new System.Drawing.Size(49, 13);
             this.layerZDepthLabel.TabIndex = 21;
@@ -683,81 +766,28 @@
             // layerHeightLabel
             // 
             this.layerHeightLabel.AutoSize = true;
-            this.layerHeightLabel.Location = new System.Drawing.Point(4, 40);
+            this.layerHeightLabel.Location = new System.Drawing.Point(173, 40);
             this.layerHeightLabel.Name = "layerHeightLabel";
-            this.layerHeightLabel.Size = new System.Drawing.Size(41, 13);
+            this.layerHeightLabel.Size = new System.Drawing.Size(70, 13);
             this.layerHeightLabel.TabIndex = 21;
-            this.layerHeightLabel.Text = "Height:";
+            this.layerHeightLabel.Text = "Layer Height:";
             // 
             // editControlsGroupBox
             // 
-            this.editControlsGroupBox.Controls.Add(this.layerDataApplyChangesButton);
-            this.editControlsGroupBox.Controls.Add(this.moveLayerUpPictureBox);
-            this.editControlsGroupBox.Controls.Add(this.moveLayerDownPictureBox);
             this.editControlsGroupBox.Controls.Add(this.tilePicker);
             this.editControlsGroupBox.Controls.Add(this.layerDataGroupBox);
-            this.editControlsGroupBox.Controls.Add(this.glMiniMapControl);
+            this.editControlsGroupBox.Controls.Add(this.tileDataGroupBox);
             this.editControlsGroupBox.Controls.Add(this.layerSelectionBox);
             this.editControlsGroupBox.Controls.Add(this.removeLayerPictureBox);
-            this.editControlsGroupBox.Controls.Add(this.tileDataGroupBox);
-            this.editControlsGroupBox.Controls.Add(this.newLayerPictureBox);
             this.editControlsGroupBox.Controls.Add(this.currentLayerLabel);
+            this.editControlsGroupBox.Controls.Add(this.moveLayerDownPictureBox);
+            this.editControlsGroupBox.Controls.Add(this.newLayerPictureBox);
+            this.editControlsGroupBox.Controls.Add(this.moveLayerUpPictureBox);
             this.editControlsGroupBox.Location = new System.Drawing.Point(926, 40);
             this.editControlsGroupBox.Name = "editControlsGroupBox";
             this.editControlsGroupBox.Size = new System.Drawing.Size(334, 619);
             this.editControlsGroupBox.TabIndex = 23;
             this.editControlsGroupBox.TabStop = false;
-            // 
-            // layerDataApplyChangesButton
-            // 
-            this.layerDataApplyChangesButton.Location = new System.Drawing.Point(211, 591);
-            this.layerDataApplyChangesButton.Name = "layerDataApplyChangesButton";
-            this.layerDataApplyChangesButton.Size = new System.Drawing.Size(117, 25);
-            this.layerDataApplyChangesButton.TabIndex = 17;
-            this.layerDataApplyChangesButton.Text = "Apply Changes";
-            this.layerDataApplyChangesButton.UseVisualStyleBackColor = true;
-            // 
-            // moveLayerUpPictureBox
-            // 
-            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
-            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(295, 386);
-            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
-            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.moveLayerUpPictureBox.TabIndex = 24;
-            this.moveLayerUpPictureBox.TabStop = false;
-            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
-            // 
-            // moveLayerDownPictureBox
-            // 
-            this.moveLayerDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
-            this.moveLayerDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(266, 386);
-            this.moveLayerDownPictureBox.Name = "moveLayerDownPictureBox";
-            this.moveLayerDownPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.moveLayerDownPictureBox.TabIndex = 23;
-            this.moveLayerDownPictureBox.TabStop = false;
-            this.moveLayerDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
-            // 
-            // removeLayerPictureBox
-            // 
-            this.removeLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
-            this.removeLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.removeLayerPictureBox.Location = new System.Drawing.Point(237, 386);
-            this.removeLayerPictureBox.Name = "removeLayerPictureBox";
-            this.removeLayerPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.removeLayerPictureBox.TabIndex = 19;
-            this.removeLayerPictureBox.TabStop = false;
-            // 
-            // newLayerPictureBox
-            // 
-            this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
-            this.newLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.newLayerPictureBox.Location = new System.Drawing.Point(208, 386);
-            this.newLayerPictureBox.Name = "newLayerPictureBox";
-            this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.newLayerPictureBox.TabIndex = 18;
-            this.newLayerPictureBox.TabStop = false;
             // 
             // button10
             // 
@@ -768,6 +798,45 @@
             this.button10.Text = "button10";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // layerOffsetYTextBox
+            // 
+            this.layerOffsetYTextBox.Location = new System.Drawing.Point(92, 37);
+            this.layerOffsetYTextBox.Name = "layerOffsetYTextBox";
+            this.layerOffsetYTextBox.Size = new System.Drawing.Size(64, 20);
+            this.layerOffsetYTextBox.TabIndex = 29;
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(142, 189);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 23);
+            this.button11.TabIndex = 16;
+            this.button11.Text = "button11";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // layerZDepthTextBox
+            // 
+            this.layerZDepthTextBox.Location = new System.Drawing.Point(251, 65);
+            this.layerZDepthTextBox.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.layerZDepthTextBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.layerZDepthTextBox.Name = "layerZDepthTextBox";
+            this.layerZDepthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.layerZDepthTextBox.TabIndex = 30;
+            this.layerZDepthTextBox.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
@@ -780,8 +849,8 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.devPanel);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.glMapMain);
             this.Controls.Add(this.topMenu);
+            this.Controls.Add(this.glMapMain);
             this.KeyPreview = true;
             this.MainMenuStrip = this.topMenu;
             this.Name = "Form1";
@@ -801,12 +870,13 @@
             this.layerDataGroupBox.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.editControlsGroupBox.ResumeLayout(false);
-            this.editControlsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).EndInit();
+            this.editControlsGroupBox.ResumeLayout(false);
+            this.editControlsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -868,7 +938,6 @@
         private System.Windows.Forms.Label maxTileHeightLabel;
         private System.Windows.Forms.Label maxTileWidthLabel;
         private System.Windows.Forms.ComboBox layerDrawTypeComboBox;
-        private System.Windows.Forms.TextBox layerZDepthTextBox;
         private System.Windows.Forms.Label layerDrawTypeLabel;
         private System.Windows.Forms.Label layerZDepthLabel;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -881,6 +950,12 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button tileDataApplyChangesButton;
         private System.Windows.Forms.Button layerDataApplyChangesButton;
+        private System.Windows.Forms.TextBox layerOffsetXTextBox;
+        private System.Windows.Forms.Label layerOffsetYLabel;
+        private System.Windows.Forms.Label layerOffsetXLabel;
+        private System.Windows.Forms.TextBox layerOffsetYTextBox;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.NumericUpDown layerZDepthTextBox;
     }
 }
 
