@@ -29,29 +29,62 @@ namespace BlockEd
     {
         MapTile _tile;
         MapData _map;
+        GameData _loadedMap;
 
-        internal CPlaceTile(MapTile tile, MapData addToMap)
+        internal CPlaceTile(MapTile tile, MapData addToMap, GameData loadedMap)
         {
             _tile = new MapTile(tile.getID(), tile.getX(), tile.getY());
             _map = addToMap;
+            _loadedMap = loadedMap;
             _undoName = "Remove tile";
             _redoName = "Place tile";
         }
 
         internal override bool Do()
         {
-            int tileInc = _map.addTile(_tile);
-            if (tileInc == 0)
-            {
-                return false;
-            } else {
-                return true;
-            }
+            _loadedMap.incrementNumTiles(_map.addTile(_tile));
+            return false;
         }
 
         internal override bool Undo()
         {
-            _map.removeTile(_tile.getX(), _tile.getY());
+            _loadedMap.decrementNumTiles(_map.removeTile(_tile.getX(), _tile.getY()));
+            return true;
+        }
+    }
+
+    internal class CRemoveTile : Command
+    {
+        MapTile _tile;
+        MapData _map;
+        GameData _loadedMap;
+
+        internal CRemoveTile(MapTile tile, MapData removeFromMap, GameData loadedMap)
+        {
+            _tile = new MapTile(tile.getID(), tile.getX(), tile.getY());
+            _map = removeFromMap;
+            _loadedMap = loadedMap;
+            _undoName = "Place tile";
+            _redoName = "Remove tile";
+        }
+
+        internal override bool Do()
+        {
+            foreach (MapDataTile tile in _map.getTileList())
+            {
+                if (tile._xPos == _tile.getX() && tile._yPos == _tile.getY())
+                {
+                    _tile.setID(tile._spriteID);
+                    break;
+                }
+            }
+            _loadedMap.decrementNumTiles(_map.removeTile(_tile.getX(), _tile.getY()));
+            return true;
+        }
+
+        internal override bool Undo()
+        {
+            _loadedMap.incrementNumTiles(_map.addTile(_tile));
             return true;
         }
     }

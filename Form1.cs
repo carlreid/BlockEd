@@ -84,6 +84,7 @@ namespace BlockEd
             }
             redoStripButton.Enabled = true;
             updateGLComponents();
+            updateTileCount();
         }
 
         internal void performRedo(int redoAmount)
@@ -100,6 +101,7 @@ namespace BlockEd
             }
             undoStripButton.Enabled = true;
             updateGLComponents();
+            updateTileCount();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -720,7 +722,7 @@ namespace BlockEd
                             int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
                             int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
                             currentTile.setPosition(tileX, tileY);
-                            CPlaceTile placeTile = new CPlaceTile(currentTile, map);
+                            CPlaceTile placeTile = new CPlaceTile(currentTile, map, loadedMap);
 
                             foreach (MapDataTile checkTile in map.getTileList())
                             {
@@ -734,10 +736,8 @@ namespace BlockEd
                             }
 
                             addCommand(placeTile);
-                            if (placeTile.Do())
-                            {
-                                loadedMap.incrementNumTiles(1);
-                            }
+                            placeTile.Do();
+
                             updateGL(glMapMain);
                             updateGL(glMiniMapControl, false);
                             updateTileCount();
@@ -760,12 +760,23 @@ namespace BlockEd
                     {
                         int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
                         int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
+                        currentTile.setPosition(tileX, tileY);
 
-                        loadedMap.decrementNumTiles(map.removeTile(tileX, tileY));
-                        updateGL(glMapMain);
-                        updateGL(glMiniMapControl, false);
-                        updateTileCount();
-                        return;
+                        CRemoveTile removeTile = new CRemoveTile(currentTile, map, loadedMap);
+
+                        foreach (MapDataTile checkTile in map.getTileList())
+                        {
+                            if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
+                            {
+                                addCommand(removeTile);
+                                removeTile.Do();
+
+                                updateGL(glMapMain);
+                                updateGL(glMiniMapControl, false);
+                                updateTileCount();
+                                return;
+                            }
+                        }
                     }
                 }
             }
