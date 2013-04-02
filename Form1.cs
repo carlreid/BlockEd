@@ -39,9 +39,13 @@ namespace BlockEd
 
         internal List<GraphicTile> graphicTiles = new List<GraphicTile>();
         internal List<SpriteSheet> graphicFiles = new List<SpriteSheet>();
-        internal  List<MapTile> mapTiles = new List<MapTile>();
+        internal List<MapTile> mapTiles = new List<MapTile>();
         GameData loadedMap = null;
         internal GLFuncs glFuncs;
+
+        internal Stack<Command> undoStack = new Stack<Command>();
+        internal Stack<Command> redoStack = new Stack<Command>();
+        //internal ToolStripDropDown undoDropDown = new ToolStripDropDown();
 
         DataFuncs data;
 
@@ -55,6 +59,48 @@ namespace BlockEd
         //bool isRightDown = false;
         int lastMouseX;
         int lastMouseY;
+
+        internal void addCommand(Command cmd){
+            undoStack.Push(cmd);
+            undoStripButton.Enabled = true;
+            if (redoStack.Count > 0)
+            {
+                redoStack.Clear();
+                redoStripButton.Enabled = false;
+            }
+        }
+
+        internal void performUndo(int undoAmount)
+        {
+            for (int i = 0; i < undoAmount; ++i)
+            {
+                Command currentCmd = undoStack.Pop();
+                currentCmd.Undo();
+                redoStack.Push(currentCmd);
+            }
+            if (undoStack.Count == 0)
+            {
+                undoStripButton.Enabled = false;
+            }
+            redoStripButton.Enabled = true;
+            updateGLComponents();
+        }
+
+        internal void performRedo(int redoAmount)
+        {
+            for (int i = 0; i < redoAmount; ++i)
+            {
+                Command currentCmd = redoStack.Pop();
+                currentCmd.Do();
+                undoStack.Push(currentCmd);
+            }
+            if (redoStack.Count == 0)
+            {
+                redoStripButton.Enabled = false;
+            }
+            undoStripButton.Enabled = true;
+            updateGLComponents();
+        }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -253,12 +299,46 @@ namespace BlockEd
             //glMiniMapControl.Enabled = true;
             data = new DataFuncs(currentTile, _tileData, this);
 
+            //From: http://stackoverflow.com/questions/8075040/visual-studio-style-undo-drop-down-button-custom-toolstripsplitbutton
+            undoStripButton.DropDownOpening += (sender, e) =>
+            {
+                DrawDropDown(
+                    undoStripButton,
+                    "Undo",
+                    UndoStackList,
+                    performUndo
+                    );
+            };
+
+            redoStripButton.DropDownOpening += (sender, e) =>
+            {
+                DrawDropDown(
+                    redoStripButton,
+                    "Redo",
+                    RedoStackList,
+                    performRedo
+                    );
+            };
+
+            //End From
+
             ToolTip newLayerToolTop = new ToolTip();
             newLayerToolTop.SetToolTip(this.newLayerPictureBox, "Add a layer");
 
             ToolTip removeLayerToolTop = new ToolTip();
             removeLayerToolTop.SetToolTip(this.removeLayerPictureBox, "Remove a layer");
         }
+
+        //From: http://stackoverflow.com/questions/8075040/visual-studio-style-undo-drop-down-button-custom-toolstripsplitbutton
+        private IEnumerable<string> UndoStackList
+        {
+            get { foreach (Command cmd in undoStack) { yield return cmd.getUndoName(); } }
+        }
+        private IEnumerable<string> RedoStackList
+        {
+            get { foreach (Command cmd in redoStack) { yield return cmd.getRedoName(); } }
+        }
+        //End from
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -639,13 +719,29 @@ namespace BlockEd
 
                             int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
                             int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
-
-
                             currentTile.setPosition(tileX, tileY);
-                            loadedMap.incrementNumTiles(map.addTile(currentTile));
+                            CPlaceTile placeTile = new CPlaceTile(currentTile, map);
+
+                            foreach (MapDataTile checkTile in map.getTileList())
+                            {
+                                if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
+                                {
+                                    if (checkTile._spriteID == currentTile.getID())
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+
+                            addCommand(placeTile);
+                            if (placeTile.Do())
+                            {
+                                loadedMap.incrementNumTiles(1);
+                            }
                             updateGL(glMapMain);
                             updateGL(glMiniMapControl, false);
                             updateTileCount();
+
                             return;
                         }
                     }
@@ -945,7 +1041,7 @@ namespace BlockEd
                         //map.setZDepth(Int32.Parse(layerZDepthTextBox.Text)); //!!!
                         map.setMaxTileWidth(Int32.Parse(maxTileWidthTextBox.Text));
                         map.setMaxTileHeight(Int32.Parse(maxTileHeightTextBox.Text));
-                        map.setDrawType(layerDrawTypeComboBox.SelectedIndex); //!
+                        map.setDrawType(layerDrawTypeComboBox.SelectedIndex + 1); //!
 
                         //Change Z Depth
                         int destinationLayer = Int32.Parse(layerZDepthTextBox.Text);
@@ -990,6 +1086,84 @@ namespace BlockEd
         {
 
         }
+
+        //From: http://stackoverflow.com/questions/8075040/visual-studio-style-undo-drop-down-button-custom-toolstripsplitbutton
+        public delegate void UndoRedoCallback(int count);
+        private void DrawDropDown(ToolStripSplitButton button, string action, IEnumerable<string> commands, UndoRedoCallback callback)
+        {
+            int width = 277;
+            int listHeight = 181;
+            int textHeight = 29;
+
+            Panel panel = new Panel()
+            {
+                Size = new Size(width, textHeight + listHeight),
+                Padding = new Padding(0),
+                Margin = new Padding(0),
+                BorderStyle = BorderStyle.FixedSingle,
+            };
+            Label label = new Label()
+            {
+                Size = new Size(width, textHeight),
+                Location = new Point(1, listHeight - 2),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = String.Format("{0} 1 Action", action),
+                Padding = new Padding(0),
+                Margin = new Padding(0),
+            };
+            ListBox list = new ListBox()
+            {
+                Size = new Size(width, listHeight),
+                Location = new Point(1, 1),
+                SelectionMode = SelectionMode.MultiSimple,
+                ScrollAlwaysVisible = true,
+                Padding = new Padding(0),
+                Margin = new Padding(0),
+                BorderStyle = BorderStyle.None,
+                Font = new Font(panel.Font.FontFamily, 9),
+            };
+            foreach (var item in commands) { list.Items.Add(item); }
+            if (list.Items.Count == 0) return;
+            list.SelectedIndex = 0;
+
+            ToolStripControlHost toolHost = new ToolStripControlHost(panel)
+            {
+                Size = panel.Size,
+                Margin = new Padding(0),
+            };
+            ToolStripDropDown toolDrop = new ToolStripDropDown()
+            {
+                Padding = new Padding(0),
+            };
+            toolDrop.Items.Add(toolHost);
+
+            panel.Controls.Add(list);
+            panel.Controls.Add(label);
+            toolDrop.Show(this, new Point(button.Bounds.Left + button.Owner.Left, button.Bounds.Bottom + button.Owner.Top));
+
+            // *Note: These will be "up values" that will exist beyond the scope of this function
+            int index = 1;
+            int lastIndex = 1;
+
+            list.Click += (sender, e) => { toolDrop.Close(); callback(index); };
+            list.MouseMove += (sender, e) =>
+            {
+                index = Math.Max(1, list.IndexFromPoint(e.Location) + 1);
+                if (lastIndex != index)
+                {
+                    int topIndex = Math.Max(0, Math.Min(list.TopIndex + e.Delta, list.Items.Count - 1));
+                    list.BeginUpdate();
+                    list.ClearSelected();
+                    for (int i = 0; i < index; ++i) { list.SelectedIndex = i; }
+                    label.Text = String.Format("{0} {1} Action{2}", action, index, index == 1 ? "" : "s");
+                    lastIndex = index;
+                    list.EndUpdate();
+                    list.TopIndex = topIndex;
+                }
+            };
+            list.Focus();
+        }
+        //End from
 
     }
 }

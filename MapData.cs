@@ -43,8 +43,15 @@ namespace BlockEd
             {
                 if (checkTile._xPos == tile.getX() && checkTile._yPos == tile.getY())
                 {
-                    checkTile._spriteID = tile.getID();
-                    return 0;
+                    if (checkTile._spriteID != tile.getID())
+                    {
+                        checkTile._spriteID = tile.getID();
+                        return 0;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
                 }
             }
 

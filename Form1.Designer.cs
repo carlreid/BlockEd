@@ -55,8 +55,7 @@
             this.openStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.undoStripButton = new System.Windows.Forms.ToolStripButton();
-            this.redoStripButton = new System.Windows.Forms.ToolStripButton();
+            this.undoStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.buildStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -103,6 +102,7 @@
             this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.editControlsGroupBox = new System.Windows.Forms.GroupBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.redoStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -385,20 +385,12 @@
             // undoStripButton
             // 
             this.undoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.undoStripButton.Enabled = false;
             this.undoStripButton.Image = global::BlockEd.Properties.Resources.Undo_16x;
             this.undoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.undoStripButton.Name = "undoStripButton";
-            this.undoStripButton.Size = new System.Drawing.Size(23, 22);
+            this.undoStripButton.Size = new System.Drawing.Size(32, 22);
             this.undoStripButton.Text = "Undo (CTRL+Z)";
-            // 
-            // redoStripButton
-            // 
-            this.redoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.redoStripButton.Image = global::BlockEd.Properties.Resources.Redo_16x;
-            this.redoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.redoStripButton.Name = "redoStripButton";
-            this.redoStripButton.Size = new System.Drawing.Size(23, 22);
-            this.redoStripButton.Text = "Redo (CTRL+Y)";
             // 
             // toolStripSeparator2
             // 
@@ -894,6 +886,17 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // redoStripButton
+            // 
+            this.redoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.redoStripButton.Enabled = false;
+            this.redoStripButton.Image = global::BlockEd.Properties.Resources.Redo_16x;
+            this.redoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.redoStripButton.Name = "redoStripButton";
+            this.redoStripButton.Size = new System.Drawing.Size(32, 22);
+            this.redoStripButton.Text = "toolStripSplitButton1";
+            this.redoStripButton.ToolTipText = "Redo (CTRL + Y)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -962,8 +965,6 @@
         private System.Windows.Forms.ToolStripButton openStripButton;
         private System.Windows.Forms.ToolStripButton saveStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton undoStripButton;
-        private System.Windows.Forms.ToolStripButton redoStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton buildStripButton;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
@@ -1014,6 +1015,8 @@
         private System.Windows.Forms.MaskedTextBox tileData2ValueTextBox;
         private System.Windows.Forms.MaskedTextBox dataTwoTextBox;
         private System.Windows.Forms.MaskedTextBox dataOneTextBox;
+        private System.Windows.Forms.ToolStripSplitButton undoStripButton;
+        private System.Windows.Forms.ToolStripSplitButton redoStripButton;
     }
 }
 
