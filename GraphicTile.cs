@@ -34,6 +34,22 @@ namespace BlockEd
 
         }
 
+        public GraphicTile(GraphicTile copyTile)
+        {
+            _id = copyTile._id;
+            _file = copyTile._file;
+            _set = copyTile._set;
+            _name = copyTile._name;
+            _type = copyTile._type;
+            _data1 = copyTile._data1;
+            _data2 = copyTile._data2;
+            _block = copyTile._block;
+            _Position = copyTile._Position;
+            _TexCoord = copyTile._TexCoord;
+            _width = copyTile._width;
+            _height = copyTile._height;
+        }
+
         public Vector2 getPosition()
         {
             return _Position;

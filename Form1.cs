@@ -110,7 +110,8 @@ namespace BlockEd
             {
                 loadMap();
                 return true;
-            } else if(keyData == (Keys.Control | Keys.S)){
+            }
+            else if(keyData == (Keys.Control | Keys.S)){
                 saveXML();
                 return true;
             }
@@ -127,6 +128,20 @@ namespace BlockEd
                     buildStripButton.Image = BlockEd.Properties.Resources.StatusAnnotations_Play_32xLG_color;
                 }
                 return true;
+            }
+            else if (keyData == (Keys.Control | Keys.Z))
+            {
+                if (undoStripButton.Enabled)
+                {
+                    performUndo(1);
+                }
+            }
+            else if (keyData == (Keys.Control | Keys.Y))
+            {
+                if (redoStripButton.Enabled)
+                {
+                    performRedo(1);
+                }
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -988,52 +1003,55 @@ namespace BlockEd
 
         private void tileDataApplyChangesButton_Click(object sender, EventArgs e)
         {
-            foreach (GraphicTile gfxTile in graphicTiles)
-            {
-                if (gfxTile.getTileID() == currentTile.getID())
-                {
-                    if (tileData1Combo.Enabled)
-                    {
-                        foreach (TileType tileData in _tileData.getList())
-                        {
-                            if (tileData._name == tileTypeCombo.Text)
-                            {
-                                gfxTile.setTypeID(tileData._id);
-                                foreach (TileDataOne tileDataOne in tileData.getList())
-                                {
-                                    if (tileDataOne._name == tileData1Combo.Text)
-                                    {
-                                        gfxTile.setDataOne(tileDataOne._id);
-                                        gfxTile.setDataTwo(Int32.Parse(tileData2ValueTextBox.Text));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (TileType tileData in _tileData.getList())
-                        {
-                            if (tileData._name == tileTypeCombo.Text)
-                            {
-                                gfxTile.setTypeID(tileData._id);
+            CApplyTileData applyChange = new CApplyTileData(currentTile, ref graphicTiles, ref _tileData, this);
+            addCommand(applyChange);
+            applyChange.Do();
+            //foreach (GraphicTile gfxTile in graphicTiles)
+            //{
+            //    if (gfxTile.getTileID() == currentTile.getID())
+            //    {
+            //        if (tileData1Combo.Enabled)
+            //        {
+            //            foreach (TileType tileData in _tileData.getList())
+            //            {
+            //                if (tileData._name == tileTypeCombo.Text)
+            //                {
+            //                    gfxTile.setTypeID(tileData._id);
+            //                    foreach (TileDataOne tileDataOne in tileData.getList())
+            //                    {
+            //                        if (tileDataOne._name == tileData1Combo.Text)
+            //                        {
+            //                            gfxTile.setDataOne(tileDataOne._id);
+            //                            gfxTile.setDataTwo(Int32.Parse(tileData2ValueTextBox.Text));
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+            //            foreach (TileType tileData in _tileData.getList())
+            //            {
+            //                if (tileData._name == tileTypeCombo.Text)
+            //                {
+            //                    gfxTile.setTypeID(tileData._id);
 
-                                if (String.IsNullOrEmpty(tileData.getList()[0].getSecondData()._name))
-                                {
-                                    gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
-                                }
-                                else
-                                {
-                                    gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
-                                    gfxTile.setDataTwo(Int32.Parse(dataTwoTextBox.Text));
-                                }
-                            }
-                        }
-                    }
-                    return;
-                }
+            //                    if (String.IsNullOrEmpty(tileData.getList()[0].getSecondData()._name))
+            //                    {
+            //                        gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
+            //                    }
+            //                    else
+            //                    {
+            //                        gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
+            //                        gfxTile.setDataTwo(Int32.Parse(dataTwoTextBox.Text));
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        return;
+            //    }
 
-            }
+            //}
         }
 
         private void layerDataApplyChangesButton_Click(object sender, EventArgs e)
