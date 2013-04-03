@@ -196,6 +196,141 @@ namespace BlockEd
         }
     }
 
+    internal class CApplyLayerData : Command
+    {
+
+        GameData _loadedMap;
+        Form1 _hostForm;
+
+        MapData _beforeDo = null;
+        MapData _afterDo = null;
+
+        internal CApplyLayerData(GameData loadedMap, Form1 hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+
+            _undoName = "Remove layer data change";
+            _redoName = "Apply layer data change";
+        }
+
+        internal override bool Do()
+        {
+            if (_beforeDo != null)
+            {
+                foreach (GameLevel level in _loadedMap.getLevelList())
+                {
+                    foreach (MapData map in level.getLayerList())
+                    {
+                        if (map.getMapName() == _beforeDo.getMapName())
+                        {
+                            map.setWidth(_afterDo.getMapWidth());
+                            map.setHeight(_afterDo.getMapHeight());
+                            map.setLayerOffsetX(_afterDo.getLayerOffsetX());
+                            map.setLayerOffsetY(_afterDo.getLayerOffsetY());
+                            map.setMapName(_afterDo.getMapName());
+                            map.setMaxTileWidth(_afterDo.getMapWidth());
+                            map.setMaxTileHeight(_afterDo.getMapHeight());
+                            map.setDrawType(_afterDo.getDrawType());
+                            map.setZDepth(_afterDo.getZDepth());
+
+                            _hostForm.updateLayerList();
+                            _hostForm.layerSelectionBox.SelectedItem = map.getMapName();
+                            _hostForm.updateLayerSelectionBox();
+
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == _hostForm.layerSelectionBox.Text)
+                    {
+                        _beforeDo = new MapData(map.getMapWidth(), map.getMapHeight(), map.getDrawType(), map.getZDepth(), map.getMapName(), map.getMaxTileWidth(), map.getMaxTileHeight());
+
+                        map.setWidth(Int32.Parse(_hostForm.layerWidthTextBox.Text));
+                        map.setHeight(Int32.Parse(_hostForm.layerHeightTextBox.Text));
+                        map.setLayerOffsetX(Int32.Parse(_hostForm.layerOffsetXTextBox.Text));
+                        map.setLayerOffsetY(Int32.Parse(_hostForm.layerOffsetYTextBox.Text));
+                        map.setMapName(_hostForm.layerNameTextBox.Text);
+                        //map.setZDepth(Int32.Parse(layerZDepthTextBox.Text)); //!!!
+                        map.setMaxTileWidth(Int32.Parse(_hostForm.maxTileWidthTextBox.Text));
+                        map.setMaxTileHeight(Int32.Parse(_hostForm.maxTileHeightTextBox.Text));
+                        map.setDrawType(_hostForm.layerDrawTypeComboBox.SelectedIndex + 1); //!
+
+                        //Change Z Depth
+                        int destinationLayer = Int32.Parse(_hostForm.layerZDepthTextBox.Text);
+                        foreach (MapData mapCheck in level.getLayerList())
+                        {
+                            if (mapCheck.getZDepth() == destinationLayer && mapCheck.getMapName() != map.getMapName())
+                            {
+                                DialogResult shouldSwitch = MessageBox.Show("A layer clash has been found with the layer: " + map.getMapName().ToString() + ". Would you like to swap the layer positions?",
+                                                                            "Layer Clash", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                                if (shouldSwitch == DialogResult.Yes)
+                                {
+                                    mapCheck.setZDepth(map.getZDepth());
+                                    map.setZDepth(destinationLayer);
+                                    _hostForm.layerSelectionBox.Text = map.getMapName();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Okay, reverting to previous Z Depth.", "Reverting...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    _hostForm.layerZDepthTextBox.Text = map.getZDepth().ToString();
+                                }
+                                break;
+                            }
+                        }
+
+                        _afterDo = new MapData(map.getMapWidth(), map.getMapHeight(), map.getDrawType(), map.getZDepth(), map.getMapName(), map.getMaxTileWidth(), map.getMaxTileHeight());
+
+                        _hostForm.updateLayerList();
+                        _hostForm.layerSelectionBox.SelectedItem = map.getMapName();
+                        _hostForm.updateLayerSelectionBox();
+
+                        return true;
+
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal override bool Undo()
+        {
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == _afterDo.getMapName())
+                    {
+                        map.setWidth(_beforeDo.getMapWidth());
+                        map.setHeight(_beforeDo.getMapHeight());
+                        map.setLayerOffsetX(_beforeDo.getLayerOffsetX());
+                        map.setLayerOffsetY(_beforeDo.getLayerOffsetY());
+                        map.setMapName(_beforeDo.getMapName());
+                        map.setMaxTileWidth(_beforeDo.getMapWidth());
+                        map.setMaxTileHeight(_beforeDo.getMapHeight());
+                        map.setDrawType(_beforeDo.getDrawType());
+                        map.setZDepth(_beforeDo.getZDepth());
+
+                        _hostForm.updateLayerList();
+                        _hostForm.layerSelectionBox.SelectedItem = map.getMapName();
+                        _hostForm.updateLayerSelectionBox();
+
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+
     internal class CAddLayer : Command
     {
 

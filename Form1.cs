@@ -477,7 +477,7 @@ namespace BlockEd
             loadMap();
         }
 
-        private void updateLayerSelectionBox()
+        internal void updateLayerSelectionBox()
         {
             string layerSelectedName = (string)layerSelectionBox.SelectedItem;
 
@@ -979,54 +979,9 @@ namespace BlockEd
 
         private void layerDataApplyChangesButton_Click(object sender, EventArgs e)
         {
-            foreach (GameLevel level in loadedMap.getLevelList())
-            {
-                foreach (MapData map in level.getLayerList())
-                {
-                    if (map.getMapName() == layerSelectionBox.Text)
-                    {
-                        map.setWidth(Int32.Parse(layerWidthTextBox.Text));
-                        map.setHeight(Int32.Parse(layerHeightTextBox.Text));
-                        map.setLayerOffsetX(Int32.Parse(layerOffsetXTextBox.Text));
-                        map.setLayerOffsetY(Int32.Parse(layerOffsetYTextBox.Text));
-                        map.setMapName(layerNameTextBox.Text);
-                        //map.setZDepth(Int32.Parse(layerZDepthTextBox.Text)); //!!!
-                        map.setMaxTileWidth(Int32.Parse(maxTileWidthTextBox.Text));
-                        map.setMaxTileHeight(Int32.Parse(maxTileHeightTextBox.Text));
-                        map.setDrawType(layerDrawTypeComboBox.SelectedIndex + 1); //!
-
-                        //Change Z Depth
-                        int destinationLayer = Int32.Parse(layerZDepthTextBox.Text);
-                        foreach (MapData mapCheck in level.getLayerList())
-                        {
-                            if (mapCheck.getZDepth() == destinationLayer && mapCheck.getMapName() != map.getMapName())
-                            {
-                                DialogResult shouldSwitch = MessageBox.Show("A layer clash has been found with the layer: " + map.getMapName().ToString() + ". Would you like to swap the layer positions?", 
-                                                                            "Layer Clash", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                                if (shouldSwitch == DialogResult.Yes)
-                                {
-                                    mapCheck.setZDepth(map.getZDepth());
-                                    map.setZDepth(destinationLayer);
-                                    layerSelectionBox.Text = map.getMapName();
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Okay, reverting to previous Z Depth.", "Reverting...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    layerZDepthTextBox.Text = map.getZDepth().ToString();
-                                }
-                                break;
-                            }
-                        }
-
-                        updateLayerList();
-                        layerSelectionBox.SelectedItem = map.getMapName();                       
-                        updateLayerSelectionBox();
-                        
-
-                    }
-                }
-            }
+            CApplyLayerData applyLayerData = new CApplyLayerData(loadedMap, this);
+            addCommand(applyLayerData);
+            applyLayerData.Do();
         }
 
         private void button11_Click(object sender, EventArgs e)
