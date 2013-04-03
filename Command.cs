@@ -330,7 +330,6 @@ namespace BlockEd
         }
     }
 
-
     internal class CAddLayer : Command
     {
 
@@ -547,5 +546,105 @@ namespace BlockEd
         }
     }
 
+    internal class CMoveLayerZ : Command
+    {
+
+        GameData _loadedMap;
+        Form1 _hostForm;
+        bool _moveUp;
+
+        internal CMoveLayerZ(GameData loadedMap, Form1 hostForm, bool moveUp)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+            _moveUp = moveUp;
+
+            if (moveUp)
+            {
+                _undoName = "Move layer down";
+                _redoName = "Move layer up";
+            }
+            else
+            {
+                _undoName = "Move layer up";
+                _redoName = "Move layer down";
+            }
+        }
+
+        internal override bool Do()
+        {
+            int moveDirection = (_moveUp ? 1 : -1);
+
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == _hostForm.layerSelectionBox.Text)
+                    {
+                        int destinationLayer = map.getZDepth() + moveDirection;
+
+                        if (destinationLayer < 0 || destinationLayer > _hostForm.getMaxZDepth())
+                        {
+                            return false;
+                        }
+
+                        foreach (MapData mapCheck in level.getLayerList())
+                        {
+                            if (mapCheck.getZDepth() == destinationLayer)
+                            {
+                                mapCheck.setZDepth(map.getZDepth());
+                                break;
+                            }
+                        }
+
+                        map.setZDepth(destinationLayer);
+                        _hostForm.updateLayerSelectionBox();
+                        _hostForm.updateLayerList();
+                        _hostForm.layerSelectionBox.Text = map.getMapName();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal override bool Undo()
+        {
+            int moveDirection = (!_moveUp ? 1 : -1);
+
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    if (map.getMapName() == _hostForm.layerSelectionBox.Text)
+                    {
+                        int destinationLayer = map.getZDepth() + moveDirection;
+
+                        if (destinationLayer < 0 || destinationLayer > _hostForm.getMaxZDepth())
+                        {
+                            return false;
+                        }
+
+                        foreach (MapData mapCheck in level.getLayerList())
+                        {
+                            if (mapCheck.getZDepth() == destinationLayer)
+                            {
+                                mapCheck.setZDepth(map.getZDepth());
+                                break;
+                            }
+                        }
+
+                        map.setZDepth(destinationLayer);
+                        _hostForm.updateLayerSelectionBox();
+                        _hostForm.updateLayerList();
+                        _hostForm.layerSelectionBox.Text = map.getMapName();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+    }
 
 }

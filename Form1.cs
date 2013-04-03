@@ -793,38 +793,43 @@ namespace BlockEd
 
         private void moveLayerZ(bool moveUp)
         {
-            int moveDirection = (moveUp ? 1 : -1);
+            
+            CMoveLayerZ moveLayer = new CMoveLayerZ(loadedMap, this, moveUp);
+            addCommand(moveLayer);
+            moveLayer.Do();
 
-            foreach (GameLevel level in loadedMap.getLevelList())
-            {
-                foreach (MapData map in level.getLayerList())
-                {
-                    if (map.getMapName() == layerSelectionBox.Text)
-                    {
-                        int destinationLayer = map.getZDepth() + moveDirection;
+            //int moveDirection = (moveUp ? 1 : -1);
 
-                        if (destinationLayer < 0 || destinationLayer > maxZDepth)
-                        {
-                            return;
-                        }
+            //foreach (GameLevel level in loadedMap.getLevelList())
+            //{
+            //    foreach (MapData map in level.getLayerList())
+            //    {
+            //        if (map.getMapName() == layerSelectionBox.Text)
+            //        {
+            //            int destinationLayer = map.getZDepth() + moveDirection;
 
-                        foreach (MapData mapCheck in level.getLayerList())
-                        {
-                            if (mapCheck.getZDepth() == destinationLayer)
-                            {
-                                mapCheck.setZDepth(map.getZDepth());
-                                break;
-                            }
-                        }
+            //            if (destinationLayer < 0 || destinationLayer > maxZDepth)
+            //            {
+            //                return;
+            //            }
 
-                        map.setZDepth(destinationLayer);
-                        updateLayerSelectionBox();
-                        updateLayerList();
-                        layerSelectionBox.Text = map.getMapName();
-                        return;
-                    }
-                }
-            }
+            //            foreach (MapData mapCheck in level.getLayerList())
+            //            {
+            //                if (mapCheck.getZDepth() == destinationLayer)
+            //                {
+            //                    mapCheck.setZDepth(map.getZDepth());
+            //                    break;
+            //                }
+            //            }
+
+            //            map.setZDepth(destinationLayer);
+            //            updateLayerSelectionBox();
+            //            updateLayerList();
+            //            layerSelectionBox.Text = map.getMapName();
+            //            return;
+            //        }
+            //    }
+            //}
 
         }
 
