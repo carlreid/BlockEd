@@ -631,6 +631,12 @@ namespace BlockEd
                 return;
             }
 
+            if (e.X >= glMapMain.Left && e.X <= glMapMain.Right &&
+                e.Y >= glMapMain.Top  && e.Y <= glMapMain.Bottom )
+            {
+                
+            }
+
             if (e.Button == MouseButtons.Middle)
             {
                 if (e.X == lastMouseX && e.Y == lastMouseY)
@@ -647,9 +653,9 @@ namespace BlockEd
             }
 
             //Guard to stop removal/placement of tiles beyond the current view.
-            //if (e.X > glMapMain.Left && e.X < glMapMain.Right &&
-            //    e.Y > glMapMain.Top  && e.Y < glMapMain.Bottom )
-            //{
+            if (e.X >= 0 && e.X <= glMapMain.Width &&
+                e.Y >= 0  && e.Y <= glMapMain.Height )
+            {
                 if (e.Button == MouseButtons.Left)
                 {
                     placeTile(e.X, e.Y);
@@ -658,7 +664,7 @@ namespace BlockEd
                 {
                     removeTile(e.X, e.Y);
                 }
-           // }
+            }
         }
 
         private void buildStripButton_Click(object sender, EventArgs e)
@@ -1125,6 +1131,168 @@ namespace BlockEd
 
         private void newLayerPictureBox_Click(object sender, EventArgs e)
         {
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+
+                if (level.getName() == "typed in")
+                {
+
+                    int designatedZIndex = 0;
+
+                    //Since no layer is selected, we'll try add a new layer at the highest z index
+                    if (layerSelectionBox.Text == "Show All")
+                    {
+                        int highestZIndex = 0;
+                        foreach (MapData map in level.getLayerList())
+                        {
+                            if (highestZIndex < map.getZDepth())
+                            {
+                                highestZIndex = map.getZDepth();
+                            }
+                        }
+                        designatedZIndex = highestZIndex + 1;
+
+                        //Looks like we can't make a new layer on top as it's higher than max. Try find a free spot
+                        if (highestZIndex >= maxZDepth)
+                        {
+                            for (int zDepth = 9; zDepth > 0; --zDepth)
+                            {
+                                bool emptyLayer = true;
+
+                                foreach (MapData map in level.getLayerList())
+                                {
+                                    if (zDepth == map.getZDepth())
+                                    {
+                                        emptyLayer = false;
+                                        break;
+                                    }
+                                }
+                                if (emptyLayer)
+                                {
+                                    designatedZIndex = zDepth;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else //Try find a free layer above the selected layer.
+                    {
+
+                        //Find Z index to be higher than
+                        int selectedZIndex = 0;
+                        foreach (MapData map in level.getLayerList())
+                        {
+                            if (map.getMapName() == layerSelectionBox.Text)
+                            {
+                                selectedZIndex = map.getZDepth();
+                                break;
+                            }
+                        }
+
+                        //If the selected Z index is already the highest, find a free spot.
+                        if (selectedZIndex == maxZDepth)
+                        {
+                            for (int zDepth = 9; zDepth > 0; --zDepth)
+                            {
+                                bool emptyLayer = true;
+                                foreach (MapData map in level.getLayerList())
+                                {
+                                    if (zDepth == map.getZDepth())
+                                    {
+                                        emptyLayer = false;
+                                        break;
+                                    }
+                                }
+                                if (emptyLayer)
+                                {
+                                    designatedZIndex = zDepth;
+                                    break;
+                                }
+                            }
+                        }
+
+                        //Okay, looks like a decent selected layer, now see if a free spot is above it.
+                        for (int findZ = selectedZIndex + 1; findZ <= maxZDepth; ++findZ)
+                        {
+                            bool freeLayerFound = true;
+                            foreach (MapData map in level.getLayerList())
+                            {
+                                if (findZ == map.getZDepth())
+                                {
+                                    freeLayerFound = false;
+                                    break;
+                                }
+                            }
+                            if (freeLayerFound)
+                            {
+                                designatedZIndex = findZ;
+                                break;
+                            }
+                        }
+
+                        //Can't have found a Z index going up, try goign down.
+                        if (designatedZIndex == 0)
+                        {
+                            for (int findZ = selectedZIndex - 1; findZ > 0; --findZ)
+                            {
+                                bool freeLayerFound = true;
+                                foreach (MapData map in level.getLayerList())
+                                {
+                                    if (findZ == map.getZDepth())
+                                    {
+                                        freeLayerFound = false;
+                                        break;
+                                    }
+                                }
+                                if (freeLayerFound)
+                                {
+                                    designatedZIndex = findZ;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (designatedZIndex <= 0)
+                    {
+                        MessageBox.Show("Unable to add a layer, maybe there isn't any space?", "Unable to add layer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+
+                    //Find a name for the new layer
+                    bool nameNotFound = true;
+                    string mapName = "New Layer";
+                    int layerNameCount = 1;
+                    while (nameNotFound)
+                    {
+                        string nameBackup = mapName;
+                        foreach (MapData map in level.getLayerList())
+                        {
+                            if (map.getMapName() == mapName)
+                            {
+                                mapName = "New Layer " + layerNameCount.ToString();
+                                ++layerNameCount;
+                                break;
+                            }
+                        }
+                        if (nameBackup == mapName)
+                        {
+                            nameNotFound = false;
+                        }
+                    }
+
+                    //Add the layer and update things
+                    level.addLayer(32, 32, 3, designatedZIndex, mapName);
+                    updateLayerList();
+                    layerSelectionBox.SelectedItem = mapName;
+                    return;
+                }
+            }
+        }
+
+        private void removeLayerPictureBox_Click(object sender, EventArgs e)
+        {
 
         }
 
@@ -1204,6 +1372,7 @@ namespace BlockEd
             };
             list.Focus();
         }
+        //End from
 
         private void formResize(object sender, EventArgs e)
         {
@@ -1234,7 +1403,7 @@ namespace BlockEd
                 glFuncs.useLayerBounds(false);
             }
         }
-        //End from
+
 
     }
 }

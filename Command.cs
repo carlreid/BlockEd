@@ -36,8 +36,8 @@ namespace BlockEd
             _tile = new MapTile(tile.getID(), tile.getX(), tile.getY());
             _map = addToMap;
             _loadedMap = loadedMap;
-            _undoName = "Remove tile";
-            _redoName = "Place tile";
+            _undoName = "Remove tile [" + tile.getX() + ", " + tile.getY() + "]";
+            _redoName = "Place tile [" + tile.getX() + ", " + tile.getY() + "]";
         }
 
         internal override bool Do()
@@ -64,8 +64,8 @@ namespace BlockEd
             _tile = new MapTile(tile.getID(), tile.getX(), tile.getY());
             _map = removeFromMap;
             _loadedMap = loadedMap;
-            _undoName = "Place tile";
-            _redoName = "Remove tile";
+            _undoName = "Place tile [" + tile.getX() + ", " + tile.getY() + "]";
+            _redoName = "Remove tile [" + tile.getX() + ", " + tile.getY() + "]";
         }
 
         internal override bool Do()
