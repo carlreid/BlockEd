@@ -163,6 +163,9 @@
   <ItemGroup>
     <None Include="icons\ToggleGhosting.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="icons\ToggleBounding.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /E /Y "$(ProjectDir)data" "$(ProjectDir)bin\$(ConfigurationName)\data\"

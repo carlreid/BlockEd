@@ -228,6 +228,9 @@ namespace BlockEd
             var stopWatch = new System.Diagnostics.Stopwatch();
             stopWatch.Start();
 
+            glMiniMapControl.Visible = true;
+            glMapMain.Visible = true;
+
             if(!loadXML()) return;                                  //Load the Map, Graphics and TileData XML
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);  //Load the graphics into OpenGL
             findBiggestLayer();                                     //Setup variables to the max layer size
@@ -296,6 +299,8 @@ namespace BlockEd
 
         internal void updateGLComponents()
         {
+            glMapMain.Refresh();
+            glMiniMapControl.Refresh();
             updateGL(glMapMain);
             updateGL(glMiniMapControl, false);
         }
@@ -642,9 +647,9 @@ namespace BlockEd
             }
 
             //Guard to stop removal/placement of tiles beyond the current view.
-            if (e.X > glMapMain.Left && e.X < glMapMain.Right &&
-                e.Y > glMapMain.Top  && e.Y < glMapMain.Bottom )
-            {
+            //if (e.X > glMapMain.Left && e.X < glMapMain.Right &&
+            //    e.Y > glMapMain.Top  && e.Y < glMapMain.Bottom )
+            //{
                 if (e.Button == MouseButtons.Left)
                 {
                     placeTile(e.X, e.Y);
@@ -653,7 +658,7 @@ namespace BlockEd
                 {
                     removeTile(e.X, e.Y);
                 }
-            }
+           // }
         }
 
         private void buildStripButton_Click(object sender, EventArgs e)
@@ -736,6 +741,13 @@ namespace BlockEd
 
                             int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
                             int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
+
+                            //If the tile placement is not within the map bounds, don't do anything.
+                            if (tileX < 0 || tileY < 0 || tileX > map.getMapWidth() - 1 || tileY > map.getMapHeight() - 1)
+                            {
+                                return;
+                            }
+
                             currentTile.setPosition(tileX, tileY);
                             CPlaceTile placeTile = new CPlaceTile(currentTile, map, loadedMap);
 
@@ -1191,6 +1203,36 @@ namespace BlockEd
                 }
             };
             list.Focus();
+        }
+
+        private void formResize(object sender, EventArgs e)
+        {
+            if (glMapMain.Visible)
+            {
+                //Setup the main viewport
+                glMapMain.MakeCurrent();
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadIdentity();
+                GL.Ortho(0, glMapMain.Width, glMapMain.Height, 0, -1, 1);
+                GL.Viewport(0, 0, glMapMain.Width, glMapMain.Height);
+                GL.ClearColor(Color.Black);
+
+                updateGLComponents();
+            }
+        }
+
+        private void boundsStripButton_Click(object sender, EventArgs e)
+        {
+            if (boundsStripButton.Checked)
+            {
+                boundsStripButton.Checked = false;
+                glFuncs.useLayerBounds(true);
+            }
+            else
+            {
+                boundsStripButton.Checked = true;
+                glFuncs.useLayerBounds(false);
+            }
         }
         //End from
 

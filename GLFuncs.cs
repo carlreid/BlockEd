@@ -36,11 +36,16 @@ namespace BlockEd
 
         private Form1 callerForm;
         private bool applyLayerGhosting = true;
+        private bool applyLayerBounds = true;
 
         public GLFuncs(Form1 callerForm)
         {
             this.callerForm = callerForm;
+        }
 
+        public void useLayerBounds(bool value)
+        {
+            applyLayerBounds = value;
         }
 
         public void useLayerGhosting(bool value)
@@ -86,6 +91,25 @@ namespace BlockEd
             {
                 foreach (MapData layer in level.getLayerList())
                 {
+                    if (applyLayerBounds && layer.getMapName() == layerSelected)
+                    {
+                        float z_depth = (float)layer.getZDepth() / (float)callerForm.getMaxZDepth(); //Z depth is currently an int (0, 1, 5 etc) but we want it between -1 .. 1
+                        z_depth -= 0.01f;
+
+                        GL.LineWidth(5f);
+                        GL.Enable(EnableCap.Blend);
+                        //GL.Disable(EnableCap.Blend);
+
+                        GL.Begin(BeginMode.LineLoop);
+                        GL.Color4(0.5f, 0.5f, 0.1f, 0.2f);
+                        GL.Vertex3(tileOffsetX, tileOffsetY + 1, z_depth);
+                        GL.Vertex3(tileOffsetX + layer.getMapWidth() * layer.getMaxTileWidth(), tileOffsetY, z_depth);
+                        GL.Vertex3(tileOffsetX + layer.getMapWidth() * layer.getMaxTileWidth(), tileOffsetY + layer.getMapHeight() * layer.getMaxTileHeight(), z_depth);
+                        GL.Vertex3(tileOffsetX, tileOffsetY + layer.getMapHeight() * layer.getMaxTileHeight(), z_depth);
+                        GL.End();
+                        GL.Disable(EnableCap.Blend);
+                    }
+
                     if (layer.getDrawType() == 1)
                     {
                         continue;
@@ -188,6 +212,9 @@ namespace BlockEd
 
                         debugTilesRendered += 1;
                     }
+
+
+
                 }
                 //Debug.WriteLine("Counted: " + debugTilesRendered);
             }

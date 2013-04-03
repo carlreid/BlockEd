@@ -183,6 +183,16 @@ namespace BlockEd.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ToggleBounding {
+            get {
+                object obj = ResourceManager.GetObject("ToggleBounding", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ToggleGhosting {
             get {
                 object obj = ResourceManager.GetObject("ToggleGhosting", resourceCulture);
