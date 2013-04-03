@@ -49,7 +49,7 @@ namespace BlockEd
 
         public void removeLayer(MapData map)
         {
-            _mapLayers.Remove(map);
+            //_mapLayers.Remove(map);
             _mapLayers.RemoveAll(delegate(MapData checkMap)
             {
                 return checkMap.getMapName() == map.getMapName() && checkMap.getZDepth() == map.getZDepth();

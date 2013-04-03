@@ -1003,7 +1003,9 @@ namespace BlockEd
 
         private void removeLayerPictureBox_Click(object sender, EventArgs e)
         {
-
+            CRemoveLayer removeLayer = new CRemoveLayer(loadedMap, this);
+            addCommand(removeLayer);
+            removeLayer.Do();
         }
 
         //From: http://stackoverflow.com/questions/8075040/visual-studio-style-undo-drop-down-button-custom-toolstripsplitbutton

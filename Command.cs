@@ -546,6 +546,80 @@ namespace BlockEd
         }
     }
 
+    internal class CRemoveLayer : Command
+    {
+
+        GameData _loadedMap;
+        Form1 _hostForm;
+
+        MapData _backupMap = null;
+        List<MapDataTile> _backupTiles;
+
+        internal CRemoveLayer(GameData loadedMap, Form1 hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+
+            _undoName = "Remove Layer";
+            _redoName = "Add Layer";
+        }
+
+        internal override bool Do()
+        {
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                if (level.getName() == "typed in") //TODO: Apply selected level here
+                {
+
+                    MapData mapToRemove = null;
+
+                    foreach (MapData map in level.getLayerList())
+                    {
+                        if (map.getMapName() == _hostForm.layerSelectionBox.Text)
+                        {
+                            mapToRemove = map;
+                            _backupTiles = map.getTileList();
+                            _backupMap = new MapData(map.getMapWidth(), map.getMapHeight(), map.getDrawType(), map.getZDepth(), map.getMapName(), map.getMaxTileWidth(), map.getMaxTileHeight());
+                            break;
+                        }
+                    }
+
+                    level.removeLayer(mapToRemove);
+
+                    //Update layer GUI items
+                    _hostForm.updateLayerList();
+                    _hostForm.layerSelectionBox.SelectedIndex = 0;
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal override bool Undo()
+        {
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                if (level.getName() == "typed in") //TODO: Apply selected level here
+                {
+                    level.addLayer(_backupMap.getMapWidth(), _backupMap.getMapHeight(), _backupMap.getDrawType(), _backupMap.getZDepth(), _backupMap.getMapName(), _backupMap.getMaxTileWidth(), _backupMap.getMaxTileHeight());
+                    foreach (MapDataTile tile in _backupTiles)
+                    {
+                        level.getLastAddedLayer().addTile(new MapTile(tile._spriteID, tile._xPos, tile._yPos));
+                    }
+
+                    //Update layer GUI items
+                    _hostForm.updateLayerList();
+                    _hostForm.layerSelectionBox.SelectedItem = _backupMap.getMapName();
+
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
     internal class CMoveLayerZ : Command
     {
 
