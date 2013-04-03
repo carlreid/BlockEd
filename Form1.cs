@@ -32,8 +32,8 @@ namespace BlockEd
         string mapFilePath = null;
         string layerSelected = null;
         MapTile currentTile = null;
-        const int maxAmountTiles = 1000;
-        const int maxZDepth = 10;
+        internal const int maxAmountTiles = 1000;
+        internal const int maxZDepth = 10;
 
         internal Color alphaColorKey;
 
@@ -45,7 +45,6 @@ namespace BlockEd
 
         internal Stack<Command> undoStack = new Stack<Command>();
         internal Stack<Command> redoStack = new Stack<Command>();
-        //internal ToolStripDropDown undoDropDown = new ToolStripDropDown();
 
         DataFuncs data;
 
@@ -54,9 +53,6 @@ namespace BlockEd
         int maxLayerX = 0;
         int maxLayerY = 0;
 
-        //bool isMousePanning = false;
-        //bool isLeftDown = false;
-        //bool isRightDown = false;
         int lastMouseX;
         int lastMouseY;
 
@@ -272,7 +268,7 @@ namespace BlockEd
             tileTypeLabel.Text = "Tile Types: " + graphicTiles.Count;
         }
 
-        private void updateLayerList()
+        internal void updateLayerList()
         {
             layerSelectionBox.Items.Clear();
             layerSelectionBox.Items.Add("Show All");
@@ -289,10 +285,6 @@ namespace BlockEd
                     {
                         layerSelectionBox.Items.Add(currentLayer.getMapName());
                     }
-                    //foreach (MapData map in level.getLayerList())
-                    //{
-                    //    layerSelectionBox.Items.Add(map.getMapName());
-                    //}
                 }
             }
         }
@@ -398,32 +390,6 @@ namespace BlockEd
             }
         }
 
-        private void glControl1_Load(object sender, EventArgs e)
-        {
-
-            //int width = glMapMain.Width;
-            //int height = glMapMain.Height;
-
-            //GraphicsContext.ShareContexts = true;
-
-            //glMiniMapControl.MakeCurrent();
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, width, height, 0, -1, 1);
-            //GL.Viewport(0, 0, glMiniMapControl.Width, glMiniMapControl.Height);
-            //GL.ClearColor(Color.Black);
-
-            //glMapMain.MakeCurrent();
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, width, height, 0, -1, 1);
-            //GL.Viewport(0, 0, width, height);
-            //GL.ClearColor(Color.Black);
-
-            //alphaColorKey = Color.Black;
-           
-        }
-
         public void updateGlLoadSpeedLabel(string loadTime)
         {
             glLoadSpeedLabel.Text = "Rendered in: " + loadTime;
@@ -446,7 +412,6 @@ namespace BlockEd
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //loadedMap = data.loadMap(loadedMap);
             loadXML();
         }
 
@@ -581,20 +546,6 @@ namespace BlockEd
                 //Debug.WriteLine("Mouse Middle Down");
                 return;
             }
-
-            
-
-            //if (String.IsNullOrEmpty(layerSelectionBox.Text) || layerSelectionBox.Text == "Show All")
-            //{
-            //    MessageBox.Show("Please select a layer to edit.", "Select Layer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    return;
-            //}
-
-            //if (currentTile.getID() == -1 && e.Button != MouseButtons.Right)
-            //{
-            //    MessageBox.Show("You need to select a tile first.");
-            //    return;
-            //}
 
             if (!String.IsNullOrEmpty(layerSelectionBox.Text) && layerSelectionBox.Text != "Show All")
             {
@@ -1024,52 +975,6 @@ namespace BlockEd
             CApplyTileData applyChange = new CApplyTileData(currentTile, ref graphicTiles, ref _tileData, this);
             addCommand(applyChange);
             applyChange.Do();
-            //foreach (GraphicTile gfxTile in graphicTiles)
-            //{
-            //    if (gfxTile.getTileID() == currentTile.getID())
-            //    {
-            //        if (tileData1Combo.Enabled)
-            //        {
-            //            foreach (TileType tileData in _tileData.getList())
-            //            {
-            //                if (tileData._name == tileTypeCombo.Text)
-            //                {
-            //                    gfxTile.setTypeID(tileData._id);
-            //                    foreach (TileDataOne tileDataOne in tileData.getList())
-            //                    {
-            //                        if (tileDataOne._name == tileData1Combo.Text)
-            //                        {
-            //                            gfxTile.setDataOne(tileDataOne._id);
-            //                            gfxTile.setDataTwo(Int32.Parse(tileData2ValueTextBox.Text));
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        else
-            //        {
-            //            foreach (TileType tileData in _tileData.getList())
-            //            {
-            //                if (tileData._name == tileTypeCombo.Text)
-            //                {
-            //                    gfxTile.setTypeID(tileData._id);
-
-            //                    if (String.IsNullOrEmpty(tileData.getList()[0].getSecondData()._name))
-            //                    {
-            //                        gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
-            //                    }
-            //                    else
-            //                    {
-            //                        gfxTile.setDataOne(Int32.Parse(dataOneTextBox.Text));
-            //                        gfxTile.setDataTwo(Int32.Parse(dataTwoTextBox.Text));
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        return;
-            //    }
-
-            //}
         }
 
         private void layerDataApplyChangesButton_Click(object sender, EventArgs e)
@@ -1131,164 +1036,9 @@ namespace BlockEd
 
         private void newLayerPictureBox_Click(object sender, EventArgs e)
         {
-            foreach (GameLevel level in loadedMap.getLevelList())
-            {
-
-                if (level.getName() == "typed in")
-                {
-
-                    int designatedZIndex = 0;
-
-                    //Since no layer is selected, we'll try add a new layer at the highest z index
-                    if (layerSelectionBox.Text == "Show All")
-                    {
-                        int highestZIndex = 0;
-                        foreach (MapData map in level.getLayerList())
-                        {
-                            if (highestZIndex < map.getZDepth())
-                            {
-                                highestZIndex = map.getZDepth();
-                            }
-                        }
-                        designatedZIndex = highestZIndex + 1;
-
-                        //Looks like we can't make a new layer on top as it's higher than max. Try find a free spot
-                        if (highestZIndex >= maxZDepth)
-                        {
-                            for (int zDepth = 9; zDepth > 0; --zDepth)
-                            {
-                                bool emptyLayer = true;
-
-                                foreach (MapData map in level.getLayerList())
-                                {
-                                    if (zDepth == map.getZDepth())
-                                    {
-                                        emptyLayer = false;
-                                        break;
-                                    }
-                                }
-                                if (emptyLayer)
-                                {
-                                    designatedZIndex = zDepth;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else //Try find a free layer above the selected layer.
-                    {
-
-                        //Find Z index to be higher than
-                        int selectedZIndex = 0;
-                        foreach (MapData map in level.getLayerList())
-                        {
-                            if (map.getMapName() == layerSelectionBox.Text)
-                            {
-                                selectedZIndex = map.getZDepth();
-                                break;
-                            }
-                        }
-
-                        //If the selected Z index is already the highest, find a free spot.
-                        if (selectedZIndex == maxZDepth)
-                        {
-                            for (int zDepth = 9; zDepth > 0; --zDepth)
-                            {
-                                bool emptyLayer = true;
-                                foreach (MapData map in level.getLayerList())
-                                {
-                                    if (zDepth == map.getZDepth())
-                                    {
-                                        emptyLayer = false;
-                                        break;
-                                    }
-                                }
-                                if (emptyLayer)
-                                {
-                                    designatedZIndex = zDepth;
-                                    break;
-                                }
-                            }
-                        }
-
-                        //Okay, looks like a decent selected layer, now see if a free spot is above it.
-                        for (int findZ = selectedZIndex + 1; findZ <= maxZDepth; ++findZ)
-                        {
-                            bool freeLayerFound = true;
-                            foreach (MapData map in level.getLayerList())
-                            {
-                                if (findZ == map.getZDepth())
-                                {
-                                    freeLayerFound = false;
-                                    break;
-                                }
-                            }
-                            if (freeLayerFound)
-                            {
-                                designatedZIndex = findZ;
-                                break;
-                            }
-                        }
-
-                        //Can't have found a Z index going up, try goign down.
-                        if (designatedZIndex == 0)
-                        {
-                            for (int findZ = selectedZIndex - 1; findZ > 0; --findZ)
-                            {
-                                bool freeLayerFound = true;
-                                foreach (MapData map in level.getLayerList())
-                                {
-                                    if (findZ == map.getZDepth())
-                                    {
-                                        freeLayerFound = false;
-                                        break;
-                                    }
-                                }
-                                if (freeLayerFound)
-                                {
-                                    designatedZIndex = findZ;
-                                    break;
-                                }
-                            }
-                        }
-
-                    }
-
-                    if (designatedZIndex <= 0)
-                    {
-                        MessageBox.Show("Unable to add a layer, maybe there isn't any space?", "Unable to add layer", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
-                    }
-
-                    //Find a name for the new layer
-                    bool nameNotFound = true;
-                    string mapName = "New Layer";
-                    int layerNameCount = 1;
-                    while (nameNotFound)
-                    {
-                        string nameBackup = mapName;
-                        foreach (MapData map in level.getLayerList())
-                        {
-                            if (map.getMapName() == mapName)
-                            {
-                                mapName = "New Layer " + layerNameCount.ToString();
-                                ++layerNameCount;
-                                break;
-                            }
-                        }
-                        if (nameBackup == mapName)
-                        {
-                            nameNotFound = false;
-                        }
-                    }
-
-                    //Add the layer and update things
-                    level.addLayer(32, 32, 3, designatedZIndex, mapName);
-                    updateLayerList();
-                    layerSelectionBox.SelectedItem = mapName;
-                    return;
-                }
-            }
+            CAddLayer addLayer = new CAddLayer(loadedMap, this);
+            addCommand(addLayer);
+            addLayer.Do();
         }
 
         private void removeLayerPictureBox_Click(object sender, EventArgs e)

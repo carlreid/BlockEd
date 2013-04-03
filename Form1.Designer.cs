@@ -170,7 +170,6 @@
             this.glMapMain.TabIndex = 1;
             this.glMapMain.Visible = false;
             this.glMapMain.VSync = false;
-            this.glMapMain.Load += new System.EventHandler(this.glControl1_Load);
             this.glMapMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDownGL);
             this.glMapMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mousePanGL);
             this.glMapMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUpGL);
