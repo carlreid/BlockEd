@@ -120,6 +120,7 @@ namespace BlockEd
                         gfxTile.setTypeID(_redoData.getTypeID());
                         gfxTile.setDataOne(_redoData.getDataOne());
                         gfxTile.setDataTwo(_redoData.getDataTwo());
+                        _hostForm.updateTileUI(_tile.getID());
                         return true;
                     }
                 }
@@ -171,7 +172,6 @@ namespace BlockEd
                         }
                     }
                     _redoData = new GraphicTile(gfxTile);
-                    
                     return true;
                 }
             }
@@ -187,6 +187,7 @@ namespace BlockEd
                     gfxTile.setTypeID(_undoData.getTypeID());
                     gfxTile.setDataOne(_undoData.getDataOne());
                     gfxTile.setDataTwo(_undoData.getDataTwo());
+                    _hostForm.updateTileUI(_tile.getID());
                     return true;
                 }
             }
