@@ -31,6 +31,7 @@ namespace BlockEd
         bool mapLoaded = false;
         string mapFilePath = null;
         string layerSelected = null;
+        string levelSelected = null;
         MapTile currentTile = null;
         internal const int maxAmountTiles = 1000;
         internal const int maxZDepth = 10;
@@ -48,13 +49,21 @@ namespace BlockEd
 
         DataFuncs data;
 
-        float tileOffsetX = 0;
-        float tileOffsetY = 0;
-        int maxLayerX = 0;
-        int maxLayerY = 0;
+        internal float tileOffsetX = 0;
+        internal float tileOffsetY = 0;
+        internal int maxLayerX = 0;
+        internal int maxLayerY = 0;
 
         int lastMouseX;
         int lastMouseY;
+
+        internal void toggleTabPageEnable(TabPage page, bool areControlsEnabled)
+        {
+            foreach (Control control in page.Controls)
+            {
+                control.Enabled = areControlsEnabled;
+            }
+        }
 
         internal void addCommand(Command cmd){
             undoStack.Push(cmd);
@@ -249,15 +258,17 @@ namespace BlockEd
 
             alphaColorKey = Color.Black;
 
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl);
+            updateGLComponents();
 
             stopWatch.Stop();
             var executionTime = stopWatch.Elapsed;
             glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
 
-            //Add the list of layers to the layer selection box
-            updateLayerList();
+            //Add the list of levels to the level selection box
+            updateLevelList();
+
+            ////Add the list of layers to the layer selection box
+            //updateLayerList();
 
             //Add the various loaded in graphics to the tile picker.
             data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
@@ -276,16 +287,28 @@ namespace BlockEd
             {
                 foreach (GameLevel level in loadedMap.getLevelList())
                 {
-                    MapData currentLayer = level.getLayerList().Find(delegate(MapData map)
+                    if (level.getName() == levelSelectionBox.Text)
                     {
-                        return map.getZDepth() == curZDepth;
-                    });
+                        MapData currentLayer = level.getLayerList().Find(delegate(MapData map)
+                        {
+                            return map.getZDepth() == curZDepth;
+                        });
 
-                    if (currentLayer != null)
-                    {
-                        layerSelectionBox.Items.Add(currentLayer.getMapName());
+                        if (currentLayer != null)
+                        {
+                            layerSelectionBox.Items.Add(currentLayer.getMapName());
+                        }
                     }
                 }
+            }
+        }
+
+        internal void updateLevelList()
+        {
+            levelSelectionBox.Items.Clear();
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                levelSelectionBox.Items.Add(level.getName());
             }
         }
 
@@ -307,8 +330,11 @@ namespace BlockEd
             InitializeComponent();
             glFuncs = new GLFuncs(this);
             currentTile = new MapTile(-1, -1, -1);
-            tileDataGroupBox.Enabled = false;
-            layerDataGroupBox.Enabled = false;
+            toggleTabPageEnable(tileDataPage, false);
+            toggleTabPageEnable(layerDataPage, false);
+            //tileDataGroupBox.Enabled = false;
+            //layerDataGroupBox.Enabled = false;
+
             editControlsGroupBox.Enabled = false;
             //glMiniMapControl.Enabled = true;
             data = new DataFuncs(currentTile, _tileData, this);
@@ -370,8 +396,7 @@ namespace BlockEd
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl, false);
+            updateGLComponents();
             base.OnPaint(e);
         }
 
@@ -381,11 +406,11 @@ namespace BlockEd
             {
                 if (doOffset)
                 {
-                    glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles, layerSelected);
+                    glFuncs.updateGL(glControl, tileOffsetX, tileOffsetY, loadedMap, graphicTiles, graphicFiles, layerSelected, levelSelected);
                 }
                 else
                 {
-                    glFuncs.updateGL(glControl, 0, 0, loadedMap, graphicTiles, graphicFiles, layerSelected);
+                    glFuncs.updateGL(glControl, 0, 0, loadedMap, graphicTiles, graphicFiles, layerSelected, levelSelected);
                 }
             }
         }
@@ -449,7 +474,7 @@ namespace BlockEd
                 }
                 if (handled)
                 {
-                    updateGL(glMapMain);
+                    updateGLComponents();
                 }
             }
 
@@ -483,32 +508,36 @@ namespace BlockEd
 
             layerSelected = layerSelectedName;
 
-            updateGL(glMapMain);
-            updateGL(glMiniMapControl, false);
+            updateGLComponents();
 
             foreach (GameLevel level in loadedMap.getLevelList())
             {
-                foreach (MapData layer in level.getLayerList())
+                if (level.getName() == levelSelectionBox.Text)
                 {
-                    if (layer.getMapName() == layerSelected)
+                    foreach (MapData layer in level.getLayerList())
                     {
-                        layerDataGroupBox.Enabled = true;
-                        layerOffsetXTextBox.Text = layer.getLayerOffsetX().ToString();
-                        layerOffsetYTextBox.Text = layer.getLayerOffsetY().ToString();
-                        layerWidthTextBox.Text = layer.getMapWidth().ToString();
-                        layerHeightTextBox.Text = layer.getMapHeight().ToString();
-                        layerNameTextBox.Text = layer.getMapName();
-                        layerZDepthTextBox.Text = layer.getZDepth().ToString();
-                        maxTileWidthTextBox.Text = layer.getMaxTileWidth().ToString();
-                        maxTileHeightTextBox.Text = layer.getMaxTileHeight().ToString();
-                        layerDrawTypeComboBox.SelectedIndex = layer.getDrawType() - 1; //Map to zero index
-                        return;
+                        if (layer.getMapName() == layerSelected)
+                        {
+                            //layerDataGroupBox.Enabled = true;
+                            toggleTabPageEnable(layerDataPage, true);
+                            layerOffsetXTextBox.Text = layer.getLayerOffsetX().ToString();
+                            layerOffsetYTextBox.Text = layer.getLayerOffsetY().ToString();
+                            layerWidthTextBox.Text = layer.getMapWidth().ToString();
+                            layerHeightTextBox.Text = layer.getMapHeight().ToString();
+                            layerNameTextBox.Text = layer.getMapName();
+                            layerZDepthTextBox.Text = layer.getZDepth().ToString();
+                            maxTileWidthTextBox.Text = layer.getMaxTileWidth().ToString();
+                            maxTileHeightTextBox.Text = layer.getMaxTileHeight().ToString();
+                            layerDrawTypeComboBox.SelectedIndex = layer.getDrawType() - 1; //Map to zero index
+                            return;
+                        }
                     }
                 }
             }
 
-            //Above did not return sao unknown layer or Select All selected
-            layerDataGroupBox.Enabled = false;
+            //Above did not return so unknown layer or Select All selected
+            //layerDataGroupBox.Enabled = false;
+            toggleTabPageEnable(layerDataPage, false);
             layerWidthTextBox.Text = "";
             layerHeightTextBox.Text = "";
             layerZDepthTextBox.Text = "";
@@ -599,7 +628,7 @@ namespace BlockEd
                 setOffsetY(tileOffsetY - (lastMouseY - e.Y));
                 lastMouseX = e.X;
                 lastMouseY = e.Y;
-                updateGL(glMapMain);
+                updateGLComponents();
                 //Debug.WriteLine("Mouse Middle is down, performing move.");
             }
 
@@ -722,8 +751,7 @@ namespace BlockEd
                             addCommand(placeTile);
                             placeTile.Do();
 
-                            updateGL(glMapMain);
-                            updateGL(glMiniMapControl, false);
+                            updateGLComponents();
                             updateTileCount();
 
                             return;
@@ -755,8 +783,7 @@ namespace BlockEd
                                 addCommand(removeTile);
                                 removeTile.Do();
 
-                                updateGL(glMapMain);
-                                updateGL(glMiniMapControl, false);
+                                updateGLComponents();
                                 updateTileCount();
                                 return;
                             }
@@ -838,8 +865,7 @@ namespace BlockEd
             if (layerSelectionBox.Text != "Show All")
             {
                 moveLayerZ(false);
-                updateGL(glMapMain);
-                updateGL(glMiniMapControl, false);
+                updateGLComponents();
             }
         }
 
@@ -848,8 +874,7 @@ namespace BlockEd
             if (layerSelectionBox.Text != "Show All")
             {
                 moveLayerZ(true);
-                updateGL(glMapMain);
-                updateGL(glMiniMapControl, false);
+                updateGLComponents();
             }
         }
 
@@ -989,11 +1014,6 @@ namespace BlockEd
             applyLayerData.Do();
         }
 
-        private void button11_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Length: " + layerWidthTextBox.Text.Length);
-        }
-
         private void newLayerPictureBox_Click(object sender, EventArgs e)
         {
             CAddLayer addLayer = new CAddLayer(loadedMap, this);
@@ -1113,6 +1133,54 @@ namespace BlockEd
             {
                 boundsStripButton.Checked = true;
                 glFuncs.useLayerBounds(false);
+            }
+        }
+
+        private void levelSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string levelSelectedName = (string)levelSelectionBox.SelectedItem;
+            levelSelected = levelSelectedName;
+
+            updateLayerList();
+            layerSelectionBox.SelectedItem = "Show All";
+            currentLayerLabel.Enabled = true;
+            layerSelectionBox.Enabled = true;
+            newLayerPictureBox.Enabled = true;
+            removeLayerPictureBox.Enabled = true;
+            moveLayerDownPictureBox.Enabled = true;
+            moveLayerUpPictureBox.Enabled = true;
+            
+        }
+
+        private void glMiniMapClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            float xPercentage = (float)e.X / (float)glMiniMapControl.Width;
+            float yPercentage = (float)e.Y / (float)glMiniMapControl.Height;
+
+            float newOffsetX = ((float)maxLayerX * xPercentage) - (float)glMapMain.Width * 0.5f;
+            float newOffsetY = ((float)maxLayerY * yPercentage) - (float)glMapMain.Height * 0.5f;
+
+            setOffsetX(newOffsetX * -1);
+            setOffsetY(newOffsetY * -1);
+
+            updateGLComponents();
+
+        }
+
+        private void glMiniMapMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                float xPercentage = (float)e.X / (float)glMiniMapControl.Width;
+                float yPercentage = (float)e.Y / (float)glMiniMapControl.Height;
+
+                float newOffsetX = ((float)maxLayerX * xPercentage) - (float)glMapMain.Width * 0.5f;
+                float newOffsetY = ((float)maxLayerY * yPercentage) - (float)glMapMain.Height * 0.5f;
+
+                setOffsetX(newOffsetX * -1);
+                setOffsetY(newOffsetY * -1);
+
+                updateGLComponents();
             }
         }
 

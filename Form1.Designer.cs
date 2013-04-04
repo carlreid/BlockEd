@@ -45,7 +45,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.devPanel = new System.Windows.Forms.Panel();
-            this.button11 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -64,7 +63,6 @@
             this.ghostingStripButton = new System.Windows.Forms.ToolStripButton();
             this.boundsStripButton = new System.Windows.Forms.ToolStripButton();
             this.tileTypeCombo = new System.Windows.Forms.ComboBox();
-            this.tileDataGroupBox = new System.Windows.Forms.GroupBox();
             this.tileDataApplyChangesButton = new System.Windows.Forms.Button();
             this.typeLabel = new System.Windows.Forms.Label();
             this.dataTwoLabel = new System.Windows.Forms.Label();
@@ -79,7 +77,6 @@
             this.numTilesLoadedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.glLoadSpeedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.layerWidthLabel = new System.Windows.Forms.Label();
-            this.layerDataGroupBox = new System.Windows.Forms.GroupBox();
             this.layerNameTextBox = new System.Windows.Forms.MaskedTextBox();
             this.layerHeightTextBox = new System.Windows.Forms.MaskedTextBox();
             this.layerOffsetYTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -100,24 +97,38 @@
             this.layerZDepthLabel = new System.Windows.Forms.Label();
             this.layerHeightLabel = new System.Windows.Forms.Label();
             this.editControlsGroupBox = new System.Windows.Forms.GroupBox();
+            this.levelSelectionBox = new System.Windows.Forms.ComboBox();
+            this.removeLevelPictureBox = new System.Windows.Forms.PictureBox();
+            this.currentLevelLabel = new System.Windows.Forms.Label();
             this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
+            this.moveLevelDownPictureBox = new System.Windows.Forms.PictureBox();
+            this.newLevelPictureBox = new System.Windows.Forms.PictureBox();
             this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
+            this.moveLevelUpPictureBox = new System.Windows.Forms.PictureBox();
             this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.dataTabControl = new System.Windows.Forms.TabControl();
+            this.layerDataPage = new System.Windows.Forms.TabPage();
+            this.tileDataPage = new System.Windows.Forms.TabPage();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.tileDataGroupBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.layerDataGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.editControlsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLevelDownPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLevelUpPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).BeginInit();
+            this.dataTabControl.SuspendLayout();
+            this.layerDataPage.SuspendLayout();
+            this.tileDataPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // topMenu
@@ -221,12 +232,14 @@
             // 
             this.glMiniMapControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.glMiniMapControl.BackColor = System.Drawing.Color.Black;
-            this.glMiniMapControl.Location = new System.Drawing.Point(0, 60);
+            this.glMiniMapControl.Location = new System.Drawing.Point(6, 436);
             this.glMiniMapControl.Name = "glMiniMapControl";
-            this.glMiniMapControl.Size = new System.Drawing.Size(200, 200);
+            this.glMiniMapControl.Size = new System.Drawing.Size(180, 180);
             this.glMiniMapControl.TabIndex = 8;
             this.glMiniMapControl.Visible = false;
             this.glMiniMapControl.VSync = false;
+            this.glMiniMapControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.glMiniMapClick);
+            this.glMiniMapControl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.glMiniMapMouseMove);
             // 
             // button3
             // 
@@ -260,7 +273,6 @@
             // 
             // devPanel
             // 
-            this.devPanel.Controls.Add(this.button11);
             this.devPanel.Controls.Add(this.button9);
             this.devPanel.Controls.Add(this.button8);
             this.devPanel.Controls.Add(this.button7);
@@ -276,16 +288,6 @@
             this.devPanel.Size = new System.Drawing.Size(402, 250);
             this.devPanel.TabIndex = 10;
             this.devPanel.Visible = false;
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(142, 189);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(75, 23);
-            this.button11.TabIndex = 16;
-            this.button11.Text = "button11";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // button9
             // 
@@ -339,14 +341,15 @@
             // layerSelectionBox
             // 
             this.layerSelectionBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.layerSelectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.layerSelectionBox.Enabled = false;
             this.layerSelectionBox.FormattingEnabled = true;
             this.layerSelectionBox.Items.AddRange(new object[] {
             "Show All"});
-            this.layerSelectionBox.Location = new System.Drawing.Point(86, 332);
+            this.layerSelectionBox.Location = new System.Drawing.Point(86, 230);
             this.layerSelectionBox.Name = "layerSelectionBox";
             this.layerSelectionBox.Size = new System.Drawing.Size(124, 21);
             this.layerSelectionBox.TabIndex = 11;
-            this.layerSelectionBox.Text = "Show All";
             this.layerSelectionBox.SelectedIndexChanged += new System.EventHandler(this.layerSelectionBox_SelectedIndexChanged);
             // 
             // toolStrip1
@@ -465,35 +468,15 @@
             "Replace",
             "Exit",
             "Teleport"});
-            this.tileTypeCombo.Location = new System.Drawing.Point(78, 12);
+            this.tileTypeCombo.Location = new System.Drawing.Point(77, 4);
             this.tileTypeCombo.Name = "tileTypeCombo";
             this.tileTypeCombo.Size = new System.Drawing.Size(118, 21);
             this.tileTypeCombo.TabIndex = 11;
             this.tileTypeCombo.SelectedIndexChanged += new System.EventHandler(this.tileTypeCombo_SelectedIndexChanged);
             // 
-            // tileDataGroupBox
-            // 
-            this.tileDataGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tileDataGroupBox.Controls.Add(this.tileDataApplyChangesButton);
-            this.tileDataGroupBox.Controls.Add(this.typeLabel);
-            this.tileDataGroupBox.Controls.Add(this.dataTwoLabel);
-            this.tileDataGroupBox.Controls.Add(this.tileData2ValueTextBox);
-            this.tileDataGroupBox.Controls.Add(this.dataTwoTextBox);
-            this.tileDataGroupBox.Controls.Add(this.dataOneTextBox);
-            this.tileDataGroupBox.Controls.Add(this.dataOneLabel);
-            this.tileDataGroupBox.Controls.Add(this.tileData2ValueLabel);
-            this.tileDataGroupBox.Controls.Add(this.tileData1Combo);
-            this.tileDataGroupBox.Controls.Add(this.tileTypeCombo);
-            this.tileDataGroupBox.Location = new System.Drawing.Point(4, 203);
-            this.tileDataGroupBox.Name = "tileDataGroupBox";
-            this.tileDataGroupBox.Size = new System.Drawing.Size(326, 125);
-            this.tileDataGroupBox.TabIndex = 15;
-            this.tileDataGroupBox.TabStop = false;
-            this.tileDataGroupBox.Text = "Tile Data";
-            // 
             // tileDataApplyChangesButton
             // 
-            this.tileDataApplyChangesButton.Location = new System.Drawing.Point(12, 97);
+            this.tileDataApplyChangesButton.Location = new System.Drawing.Point(10, 117);
             this.tileDataApplyChangesButton.Name = "tileDataApplyChangesButton";
             this.tileDataApplyChangesButton.Size = new System.Drawing.Size(306, 25);
             this.tileDataApplyChangesButton.TabIndex = 16;
@@ -504,7 +487,7 @@
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(9, 15);
+            this.typeLabel.Location = new System.Drawing.Point(8, 7);
             this.typeLabel.Name = "typeLabel";
             this.typeLabel.Size = new System.Drawing.Size(34, 13);
             this.typeLabel.TabIndex = 15;
@@ -513,7 +496,7 @@
             // dataTwoLabel
             // 
             this.dataTwoLabel.AutoSize = true;
-            this.dataTwoLabel.Location = new System.Drawing.Point(171, 59);
+            this.dataTwoLabel.Location = new System.Drawing.Point(170, 51);
             this.dataTwoLabel.Name = "dataTwoLabel";
             this.dataTwoLabel.Size = new System.Drawing.Size(37, 13);
             this.dataTwoLabel.TabIndex = 13;
@@ -522,7 +505,7 @@
             // tileData2ValueTextBox
             // 
             this.tileData2ValueTextBox.AllowPromptAsInput = false;
-            this.tileData2ValueTextBox.Location = new System.Drawing.Point(78, 36);
+            this.tileData2ValueTextBox.Location = new System.Drawing.Point(77, 28);
             this.tileData2ValueTextBox.Mask = "00000";
             this.tileData2ValueTextBox.Name = "tileData2ValueTextBox";
             this.tileData2ValueTextBox.PromptChar = ' ';
@@ -533,7 +516,7 @@
             // dataTwoTextBox
             // 
             this.dataTwoTextBox.AllowPromptAsInput = false;
-            this.dataTwoTextBox.Location = new System.Drawing.Point(174, 75);
+            this.dataTwoTextBox.Location = new System.Drawing.Point(173, 67);
             this.dataTwoTextBox.Mask = "00000";
             this.dataTwoTextBox.Name = "dataTwoTextBox";
             this.dataTwoTextBox.PromptChar = ' ';
@@ -544,7 +527,7 @@
             // dataOneTextBox
             // 
             this.dataOneTextBox.AllowPromptAsInput = false;
-            this.dataOneTextBox.Location = new System.Drawing.Point(12, 75);
+            this.dataOneTextBox.Location = new System.Drawing.Point(11, 67);
             this.dataOneTextBox.Mask = "00000";
             this.dataOneTextBox.Name = "dataOneTextBox";
             this.dataOneTextBox.PromptChar = ' ';
@@ -555,7 +538,7 @@
             // dataOneLabel
             // 
             this.dataOneLabel.AutoSize = true;
-            this.dataOneLabel.Location = new System.Drawing.Point(9, 59);
+            this.dataOneLabel.Location = new System.Drawing.Point(8, 51);
             this.dataOneLabel.Name = "dataOneLabel";
             this.dataOneLabel.Size = new System.Drawing.Size(37, 13);
             this.dataOneLabel.TabIndex = 13;
@@ -564,7 +547,7 @@
             // tileData2ValueLabel
             // 
             this.tileData2ValueLabel.AutoSize = true;
-            this.tileData2ValueLabel.Location = new System.Drawing.Point(9, 39);
+            this.tileData2ValueLabel.Location = new System.Drawing.Point(8, 31);
             this.tileData2ValueLabel.Name = "tileData2ValueLabel";
             this.tileData2ValueLabel.Size = new System.Drawing.Size(37, 13);
             this.tileData2ValueLabel.TabIndex = 13;
@@ -573,7 +556,7 @@
             // tileData1Combo
             // 
             this.tileData1Combo.FormattingEnabled = true;
-            this.tileData1Combo.Location = new System.Drawing.Point(200, 12);
+            this.tileData1Combo.Location = new System.Drawing.Point(199, 4);
             this.tileData1Combo.Name = "tileData1Combo";
             this.tileData1Combo.Size = new System.Drawing.Size(118, 21);
             this.tileData1Combo.TabIndex = 11;
@@ -583,7 +566,8 @@
             // 
             this.currentLayerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.currentLayerLabel.AutoSize = true;
-            this.currentLayerLabel.Location = new System.Drawing.Point(9, 335);
+            this.currentLayerLabel.Enabled = false;
+            this.currentLayerLabel.Location = new System.Drawing.Point(9, 233);
             this.currentLayerLabel.Name = "currentLayerLabel";
             this.currentLayerLabel.Size = new System.Drawing.Size(73, 13);
             this.currentLayerLabel.TabIndex = 17;
@@ -616,42 +600,15 @@
             // layerWidthLabel
             // 
             this.layerWidthLabel.AutoSize = true;
-            this.layerWidthLabel.Location = new System.Drawing.Point(176, 19);
+            this.layerWidthLabel.Location = new System.Drawing.Point(177, 8);
             this.layerWidthLabel.Name = "layerWidthLabel";
             this.layerWidthLabel.Size = new System.Drawing.Size(67, 13);
             this.layerWidthLabel.TabIndex = 21;
             this.layerWidthLabel.Text = "Layer Width:";
             // 
-            // layerDataGroupBox
-            // 
-            this.layerDataGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.layerDataGroupBox.Controls.Add(this.layerNameTextBox);
-            this.layerDataGroupBox.Controls.Add(this.layerHeightTextBox);
-            this.layerDataGroupBox.Controls.Add(this.layerOffsetYTextBox);
-            this.layerDataGroupBox.Controls.Add(this.layerOffsetXTextBox);
-            this.layerDataGroupBox.Controls.Add(this.layerWidthTextBox);
-            this.layerDataGroupBox.Controls.Add(this.glMiniMapControl);
-            this.layerDataGroupBox.Controls.Add(this.layerNameLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerZDepthTextBox);
-            this.layerDataGroupBox.Controls.Add(this.layerOffsetYLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerOffsetXLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerDataApplyChangesButton);
-            this.layerDataGroupBox.Controls.Add(this.groupBox2);
-            this.layerDataGroupBox.Controls.Add(this.layerDrawTypeComboBox);
-            this.layerDataGroupBox.Controls.Add(this.layerDrawTypeLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerZDepthLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerHeightLabel);
-            this.layerDataGroupBox.Controls.Add(this.layerWidthLabel);
-            this.layerDataGroupBox.Location = new System.Drawing.Point(5, 356);
-            this.layerDataGroupBox.Name = "layerDataGroupBox";
-            this.layerDataGroupBox.Size = new System.Drawing.Size(325, 265);
-            this.layerDataGroupBox.TabIndex = 22;
-            this.layerDataGroupBox.TabStop = false;
-            this.layerDataGroupBox.Text = "Layer Data";
-            // 
             // layerNameTextBox
             // 
-            this.layerNameTextBox.Location = new System.Drawing.Point(251, 63);
+            this.layerNameTextBox.Location = new System.Drawing.Point(89, 47);
             this.layerNameTextBox.Name = "layerNameTextBox";
             this.layerNameTextBox.Size = new System.Drawing.Size(70, 20);
             this.layerNameTextBox.TabIndex = 25;
@@ -659,7 +616,7 @@
             // layerHeightTextBox
             // 
             this.layerHeightTextBox.AllowPromptAsInput = false;
-            this.layerHeightTextBox.Location = new System.Drawing.Point(243, 37);
+            this.layerHeightTextBox.Location = new System.Drawing.Point(244, 26);
             this.layerHeightTextBox.Mask = "00000";
             this.layerHeightTextBox.Name = "layerHeightTextBox";
             this.layerHeightTextBox.PromptChar = ' ';
@@ -670,7 +627,7 @@
             // layerOffsetYTextBox
             // 
             this.layerOffsetYTextBox.AllowPromptAsInput = false;
-            this.layerOffsetYTextBox.Location = new System.Drawing.Point(92, 37);
+            this.layerOffsetYTextBox.Location = new System.Drawing.Point(89, 26);
             this.layerOffsetYTextBox.Mask = "00000";
             this.layerOffsetYTextBox.Name = "layerOffsetYTextBox";
             this.layerOffsetYTextBox.PromptChar = ' ';
@@ -681,7 +638,7 @@
             // layerOffsetXTextBox
             // 
             this.layerOffsetXTextBox.AllowPromptAsInput = false;
-            this.layerOffsetXTextBox.Location = new System.Drawing.Point(92, 16);
+            this.layerOffsetXTextBox.Location = new System.Drawing.Point(89, 5);
             this.layerOffsetXTextBox.Mask = "00000";
             this.layerOffsetXTextBox.Name = "layerOffsetXTextBox";
             this.layerOffsetXTextBox.PromptChar = ' ';
@@ -692,7 +649,7 @@
             // layerWidthTextBox
             // 
             this.layerWidthTextBox.AllowPromptAsInput = false;
-            this.layerWidthTextBox.Location = new System.Drawing.Point(243, 16);
+            this.layerWidthTextBox.Location = new System.Drawing.Point(244, 5);
             this.layerWidthTextBox.Mask = "00000";
             this.layerWidthTextBox.Name = "layerWidthTextBox";
             this.layerWidthTextBox.PromptChar = ' ';
@@ -703,7 +660,7 @@
             // layerNameLabel
             // 
             this.layerNameLabel.AutoSize = true;
-            this.layerNameLabel.Location = new System.Drawing.Point(215, 66);
+            this.layerNameLabel.Location = new System.Drawing.Point(47, 50);
             this.layerNameLabel.Name = "layerNameLabel";
             this.layerNameLabel.Size = new System.Drawing.Size(38, 13);
             this.layerNameLabel.TabIndex = 31;
@@ -711,7 +668,7 @@
             // 
             // layerZDepthTextBox
             // 
-            this.layerZDepthTextBox.Location = new System.Drawing.Point(251, 89);
+            this.layerZDepthTextBox.Location = new System.Drawing.Point(244, 48);
             this.layerZDepthTextBox.Maximum = new decimal(new int[] {
             10,
             0,
@@ -734,7 +691,7 @@
             // layerOffsetYLabel
             // 
             this.layerOffsetYLabel.AutoSize = true;
-            this.layerOffsetYLabel.Location = new System.Drawing.Point(11, 40);
+            this.layerOffsetYLabel.Location = new System.Drawing.Point(8, 29);
             this.layerOffsetYLabel.Name = "layerOffsetYLabel";
             this.layerOffsetYLabel.Size = new System.Drawing.Size(77, 13);
             this.layerOffsetYLabel.TabIndex = 27;
@@ -743,7 +700,7 @@
             // layerOffsetXLabel
             // 
             this.layerOffsetXLabel.AutoSize = true;
-            this.layerOffsetXLabel.Location = new System.Drawing.Point(11, 19);
+            this.layerOffsetXLabel.Location = new System.Drawing.Point(8, 8);
             this.layerOffsetXLabel.Name = "layerOffsetXLabel";
             this.layerOffsetXLabel.Size = new System.Drawing.Size(77, 13);
             this.layerOffsetXLabel.TabIndex = 26;
@@ -751,9 +708,9 @@
             // 
             // layerDataApplyChangesButton
             // 
-            this.layerDataApplyChangesButton.Location = new System.Drawing.Point(205, 234);
+            this.layerDataApplyChangesButton.Location = new System.Drawing.Point(8, 117);
             this.layerDataApplyChangesButton.Name = "layerDataApplyChangesButton";
-            this.layerDataApplyChangesButton.Size = new System.Drawing.Size(117, 25);
+            this.layerDataApplyChangesButton.Size = new System.Drawing.Size(306, 25);
             this.layerDataApplyChangesButton.TabIndex = 17;
             this.layerDataApplyChangesButton.Text = "Apply Changes";
             this.layerDataApplyChangesButton.UseVisualStyleBackColor = true;
@@ -765,9 +722,9 @@
             this.groupBox2.Controls.Add(this.maxTileHeightTextBox);
             this.groupBox2.Controls.Add(this.maxTileWidthLabel);
             this.groupBox2.Controls.Add(this.maxTileHeightLabel);
-            this.groupBox2.Location = new System.Drawing.Point(204, 115);
+            this.groupBox2.Location = new System.Drawing.Point(8, 69);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(118, 66);
+            this.groupBox2.Size = new System.Drawing.Size(169, 44);
             this.groupBox2.TabIndex = 23;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tile Size";
@@ -779,18 +736,18 @@
             this.maxTileWidthTextBox.Mask = "00000";
             this.maxTileWidthTextBox.Name = "maxTileWidthTextBox";
             this.maxTileWidthTextBox.PromptChar = ' ';
-            this.maxTileWidthTextBox.Size = new System.Drawing.Size(70, 20);
+            this.maxTileWidthTextBox.Size = new System.Drawing.Size(35, 20);
             this.maxTileWidthTextBox.TabIndex = 25;
             this.maxTileWidthTextBox.ValidatingType = typeof(int);
             // 
             // maxTileHeightTextBox
             // 
             this.maxTileHeightTextBox.AllowPromptAsInput = false;
-            this.maxTileHeightTextBox.Location = new System.Drawing.Point(42, 38);
+            this.maxTileHeightTextBox.Location = new System.Drawing.Point(125, 15);
             this.maxTileHeightTextBox.Mask = "00000";
             this.maxTileHeightTextBox.Name = "maxTileHeightTextBox";
             this.maxTileHeightTextBox.PromptChar = ' ';
-            this.maxTileHeightTextBox.Size = new System.Drawing.Size(70, 20);
+            this.maxTileHeightTextBox.Size = new System.Drawing.Size(35, 20);
             this.maxTileHeightTextBox.TabIndex = 25;
             this.maxTileHeightTextBox.ValidatingType = typeof(int);
             // 
@@ -806,7 +763,7 @@
             // maxTileHeightLabel
             // 
             this.maxTileHeightLabel.AutoSize = true;
-            this.maxTileHeightLabel.Location = new System.Drawing.Point(1, 42);
+            this.maxTileHeightLabel.Location = new System.Drawing.Point(84, 18);
             this.maxTileHeightLabel.Name = "maxTileHeightLabel";
             this.maxTileHeightLabel.Size = new System.Drawing.Size(41, 13);
             this.maxTileHeightLabel.TabIndex = 21;
@@ -819,7 +776,7 @@
             "Empty",
             "Copy",
             "Transparent"});
-            this.layerDrawTypeComboBox.Location = new System.Drawing.Point(206, 207);
+            this.layerDrawTypeComboBox.Location = new System.Drawing.Point(195, 89);
             this.layerDrawTypeComboBox.Name = "layerDrawTypeComboBox";
             this.layerDrawTypeComboBox.Size = new System.Drawing.Size(115, 21);
             this.layerDrawTypeComboBox.TabIndex = 25;
@@ -827,7 +784,7 @@
             // layerDrawTypeLabel
             // 
             this.layerDrawTypeLabel.AutoSize = true;
-            this.layerDrawTypeLabel.Location = new System.Drawing.Point(206, 191);
+            this.layerDrawTypeLabel.Location = new System.Drawing.Point(195, 73);
             this.layerDrawTypeLabel.Name = "layerDrawTypeLabel";
             this.layerDrawTypeLabel.Size = new System.Drawing.Size(62, 13);
             this.layerDrawTypeLabel.TabIndex = 21;
@@ -836,7 +793,7 @@
             // layerZDepthLabel
             // 
             this.layerZDepthLabel.AutoSize = true;
-            this.layerZDepthLabel.Location = new System.Drawing.Point(204, 91);
+            this.layerZDepthLabel.Location = new System.Drawing.Point(195, 50);
             this.layerZDepthLabel.Name = "layerZDepthLabel";
             this.layerZDepthLabel.Size = new System.Drawing.Size(49, 13);
             this.layerZDepthLabel.TabIndex = 21;
@@ -845,7 +802,7 @@
             // layerHeightLabel
             // 
             this.layerHeightLabel.AutoSize = true;
-            this.layerHeightLabel.Location = new System.Drawing.Point(173, 40);
+            this.layerHeightLabel.Location = new System.Drawing.Point(174, 29);
             this.layerHeightLabel.Name = "layerHeightLabel";
             this.layerHeightLabel.Size = new System.Drawing.Size(70, 13);
             this.layerHeightLabel.TabIndex = 21;
@@ -855,13 +812,19 @@
             // 
             this.editControlsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.editControlsGroupBox.Controls.Add(this.dataTabControl);
+            this.editControlsGroupBox.Controls.Add(this.glMiniMapControl);
             this.editControlsGroupBox.Controls.Add(this.tilePicker);
-            this.editControlsGroupBox.Controls.Add(this.layerDataGroupBox);
-            this.editControlsGroupBox.Controls.Add(this.tileDataGroupBox);
+            this.editControlsGroupBox.Controls.Add(this.levelSelectionBox);
+            this.editControlsGroupBox.Controls.Add(this.removeLevelPictureBox);
             this.editControlsGroupBox.Controls.Add(this.layerSelectionBox);
+            this.editControlsGroupBox.Controls.Add(this.currentLevelLabel);
             this.editControlsGroupBox.Controls.Add(this.removeLayerPictureBox);
+            this.editControlsGroupBox.Controls.Add(this.moveLevelDownPictureBox);
             this.editControlsGroupBox.Controls.Add(this.currentLayerLabel);
+            this.editControlsGroupBox.Controls.Add(this.newLevelPictureBox);
             this.editControlsGroupBox.Controls.Add(this.moveLayerDownPictureBox);
+            this.editControlsGroupBox.Controls.Add(this.moveLevelUpPictureBox);
             this.editControlsGroupBox.Controls.Add(this.newLayerPictureBox);
             this.editControlsGroupBox.Controls.Add(this.moveLayerUpPictureBox);
             this.editControlsGroupBox.Location = new System.Drawing.Point(926, 40);
@@ -870,36 +833,110 @@
             this.editControlsGroupBox.TabIndex = 23;
             this.editControlsGroupBox.TabStop = false;
             // 
+            // levelSelectionBox
+            // 
+            this.levelSelectionBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.levelSelectionBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.levelSelectionBox.FormattingEnabled = true;
+            this.levelSelectionBox.Items.AddRange(new object[] {
+            "Show All"});
+            this.levelSelectionBox.Location = new System.Drawing.Point(86, 205);
+            this.levelSelectionBox.Name = "levelSelectionBox";
+            this.levelSelectionBox.Size = new System.Drawing.Size(124, 21);
+            this.levelSelectionBox.TabIndex = 11;
+            this.levelSelectionBox.SelectedIndexChanged += new System.EventHandler(this.levelSelectionBox_SelectedIndexChanged);
+            // 
+            // removeLevelPictureBox
+            // 
+            this.removeLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
+            this.removeLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.removeLevelPictureBox.Location = new System.Drawing.Point(244, 205);
+            this.removeLevelPictureBox.Name = "removeLevelPictureBox";
+            this.removeLevelPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.removeLevelPictureBox.TabIndex = 19;
+            this.removeLevelPictureBox.TabStop = false;
+            this.removeLevelPictureBox.Click += new System.EventHandler(this.removeLayerPictureBox_Click);
+            // 
+            // currentLevelLabel
+            // 
+            this.currentLevelLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentLevelLabel.AutoSize = true;
+            this.currentLevelLabel.Location = new System.Drawing.Point(9, 208);
+            this.currentLevelLabel.Name = "currentLevelLabel";
+            this.currentLevelLabel.Size = new System.Drawing.Size(73, 13);
+            this.currentLevelLabel.TabIndex = 17;
+            this.currentLevelLabel.Text = "Current Level:";
+            // 
             // removeLayerPictureBox
             // 
             this.removeLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.removeLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
             this.removeLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.removeLayerPictureBox.Location = new System.Drawing.Point(244, 332);
+            this.removeLayerPictureBox.Enabled = false;
+            this.removeLayerPictureBox.Location = new System.Drawing.Point(244, 230);
             this.removeLayerPictureBox.Name = "removeLayerPictureBox";
             this.removeLayerPictureBox.Size = new System.Drawing.Size(23, 22);
             this.removeLayerPictureBox.TabIndex = 19;
             this.removeLayerPictureBox.TabStop = false;
             this.removeLayerPictureBox.Click += new System.EventHandler(this.removeLayerPictureBox_Click);
             // 
+            // moveLevelDownPictureBox
+            // 
+            this.moveLevelDownPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveLevelDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
+            this.moveLevelDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLevelDownPictureBox.Location = new System.Drawing.Point(273, 205);
+            this.moveLevelDownPictureBox.Name = "moveLevelDownPictureBox";
+            this.moveLevelDownPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLevelDownPictureBox.TabIndex = 23;
+            this.moveLevelDownPictureBox.TabStop = false;
+            this.moveLevelDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
+            // 
+            // newLevelPictureBox
+            // 
+            this.newLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.newLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
+            this.newLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.newLevelPictureBox.Location = new System.Drawing.Point(215, 205);
+            this.newLevelPictureBox.Name = "newLevelPictureBox";
+            this.newLevelPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.newLevelPictureBox.TabIndex = 18;
+            this.newLevelPictureBox.TabStop = false;
+            this.newLevelPictureBox.Click += new System.EventHandler(this.newLayerPictureBox_Click);
+            // 
             // moveLayerDownPictureBox
             // 
             this.moveLayerDownPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.moveLayerDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
             this.moveLayerDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(273, 332);
+            this.moveLayerDownPictureBox.Enabled = false;
+            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(273, 230);
             this.moveLayerDownPictureBox.Name = "moveLayerDownPictureBox";
             this.moveLayerDownPictureBox.Size = new System.Drawing.Size(23, 22);
             this.moveLayerDownPictureBox.TabIndex = 23;
             this.moveLayerDownPictureBox.TabStop = false;
             this.moveLayerDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
             // 
+            // moveLevelUpPictureBox
+            // 
+            this.moveLevelUpPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveLevelUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
+            this.moveLevelUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLevelUpPictureBox.Location = new System.Drawing.Point(302, 205);
+            this.moveLevelUpPictureBox.Name = "moveLevelUpPictureBox";
+            this.moveLevelUpPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLevelUpPictureBox.TabIndex = 24;
+            this.moveLevelUpPictureBox.TabStop = false;
+            this.moveLevelUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
+            // 
             // newLayerPictureBox
             // 
             this.newLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
             this.newLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.newLayerPictureBox.Location = new System.Drawing.Point(215, 332);
+            this.newLayerPictureBox.Enabled = false;
+            this.newLayerPictureBox.Location = new System.Drawing.Point(215, 230);
             this.newLayerPictureBox.Name = "newLayerPictureBox";
             this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
             this.newLayerPictureBox.TabIndex = 18;
@@ -911,7 +948,8 @@
             this.moveLayerUpPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
             this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(302, 332);
+            this.moveLayerUpPictureBox.Enabled = false;
+            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(302, 230);
             this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
             this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
             this.moveLayerUpPictureBox.TabIndex = 24;
@@ -927,6 +965,62 @@
             this.button10.Text = "button10";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // dataTabControl
+            // 
+            this.dataTabControl.Controls.Add(this.tileDataPage);
+            this.dataTabControl.Controls.Add(this.layerDataPage);
+            this.dataTabControl.Location = new System.Drawing.Point(4, 257);
+            this.dataTabControl.Name = "dataTabControl";
+            this.dataTabControl.SelectedIndex = 0;
+            this.dataTabControl.Size = new System.Drawing.Size(330, 173);
+            this.dataTabControl.TabIndex = 25;
+            // 
+            // layerDataPage
+            // 
+            this.layerDataPage.Controls.Add(this.layerNameTextBox);
+            this.layerDataPage.Controls.Add(this.layerOffsetXTextBox);
+            this.layerDataPage.Controls.Add(this.layerZDepthLabel);
+            this.layerDataPage.Controls.Add(this.layerDrawTypeLabel);
+            this.layerDataPage.Controls.Add(this.layerOffsetXLabel);
+            this.layerDataPage.Controls.Add(this.layerDrawTypeComboBox);
+            this.layerDataPage.Controls.Add(this.layerOffsetYLabel);
+            this.layerDataPage.Controls.Add(this.layerWidthTextBox);
+            this.layerDataPage.Controls.Add(this.layerNameLabel);
+            this.layerDataPage.Controls.Add(this.layerHeightTextBox);
+            this.layerDataPage.Controls.Add(this.layerHeightLabel);
+            this.layerDataPage.Controls.Add(this.groupBox2);
+            this.layerDataPage.Controls.Add(this.layerDataApplyChangesButton);
+            this.layerDataPage.Controls.Add(this.layerOffsetYTextBox);
+            this.layerDataPage.Controls.Add(this.layerZDepthTextBox);
+            this.layerDataPage.Controls.Add(this.layerWidthLabel);
+            this.layerDataPage.Location = new System.Drawing.Point(4, 22);
+            this.layerDataPage.Name = "layerDataPage";
+            this.layerDataPage.Padding = new System.Windows.Forms.Padding(3);
+            this.layerDataPage.Size = new System.Drawing.Size(322, 147);
+            this.layerDataPage.TabIndex = 0;
+            this.layerDataPage.Text = "Layer Data";
+            this.layerDataPage.UseVisualStyleBackColor = true;
+            // 
+            // tileDataPage
+            // 
+            this.tileDataPage.Controls.Add(this.tileDataApplyChangesButton);
+            this.tileDataPage.Controls.Add(this.typeLabel);
+            this.tileDataPage.Controls.Add(this.tileTypeCombo);
+            this.tileDataPage.Controls.Add(this.tileData2ValueLabel);
+            this.tileDataPage.Controls.Add(this.dataOneTextBox);
+            this.tileDataPage.Controls.Add(this.tileData2ValueTextBox);
+            this.tileDataPage.Controls.Add(this.dataTwoLabel);
+            this.tileDataPage.Controls.Add(this.dataTwoTextBox);
+            this.tileDataPage.Controls.Add(this.dataOneLabel);
+            this.tileDataPage.Controls.Add(this.tileData1Combo);
+            this.tileDataPage.Location = new System.Drawing.Point(4, 22);
+            this.tileDataPage.Name = "tileDataPage";
+            this.tileDataPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tileDataPage.Size = new System.Drawing.Size(322, 147);
+            this.tileDataPage.TabIndex = 1;
+            this.tileDataPage.Text = "Tile Data";
+            this.tileDataPage.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -953,21 +1047,26 @@
             this.devPanel.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.tileDataGroupBox.ResumeLayout(false);
-            this.tileDataGroupBox.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.layerDataGroupBox.ResumeLayout(false);
-            this.layerDataGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.layerZDepthTextBox)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.editControlsGroupBox.ResumeLayout(false);
             this.editControlsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLevelDownPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLevelUpPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).EndInit();
+            this.dataTabControl.ResumeLayout(false);
+            this.layerDataPage.ResumeLayout(false);
+            this.layerDataPage.PerformLayout();
+            this.tileDataPage.ResumeLayout(false);
+            this.tileDataPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -978,7 +1077,6 @@
         private System.Windows.Forms.MenuStrip topMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private OpenTK.GLControl glMapMain;
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -1002,7 +1100,6 @@
         internal System.Windows.Forms.ComboBox tileTypeCombo;
         internal System.Windows.Forms.ComboBox tileData1Combo;
         internal System.Windows.Forms.Label tileData2ValueLabel;
-        internal System.Windows.Forms.GroupBox tileDataGroupBox;
         internal System.Windows.Forms.Label dataOneLabel;
         internal System.Windows.Forms.Label dataTwoLabel;
         private System.Windows.Forms.Button button8;
@@ -1014,7 +1111,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel glLoadSpeedLabel;
         private System.Windows.Forms.Label layerWidthLabel;
-        private System.Windows.Forms.GroupBox layerDataGroupBox;
         private System.Windows.Forms.Label layerHeightLabel;
         private System.Windows.Forms.Label maxTileHeightLabel;
         private System.Windows.Forms.Label maxTileWidthLabel;
@@ -1032,7 +1128,6 @@
         private System.Windows.Forms.Button layerDataApplyChangesButton;
         private System.Windows.Forms.Label layerOffsetYLabel;
         private System.Windows.Forms.Label layerOffsetXLabel;
-        private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Label layerNameLabel;
         private System.Windows.Forms.ToolStripSplitButton undoStripButton;
         private System.Windows.Forms.ToolStripSplitButton redoStripButton;
@@ -1050,6 +1145,16 @@
         internal System.Windows.Forms.MaskedTextBox dataTwoTextBox;
         internal System.Windows.Forms.MaskedTextBox dataOneTextBox;
         private System.Windows.Forms.ToolStripButton boundsStripButton;
+        internal System.Windows.Forms.ComboBox levelSelectionBox;
+        private System.Windows.Forms.PictureBox removeLevelPictureBox;
+        private System.Windows.Forms.Label currentLevelLabel;
+        private System.Windows.Forms.PictureBox moveLevelDownPictureBox;
+        private System.Windows.Forms.PictureBox newLevelPictureBox;
+        private System.Windows.Forms.PictureBox moveLevelUpPictureBox;
+        internal OpenTK.GLControl glMapMain;
+        private System.Windows.Forms.TabControl dataTabControl;
+        private System.Windows.Forms.TabPage layerDataPage;
+        private System.Windows.Forms.TabPage tileDataPage;
     }
 }
 

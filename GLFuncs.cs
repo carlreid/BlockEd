@@ -53,7 +53,7 @@ namespace BlockEd
             applyLayerGhosting = value;
         }
 
-        public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, string layerSelected = null)
+        public void updateGL(GLControl glControl, float tileOffsetX, float tileOffsetY, GameData loadedMap, List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, string layerSelected = null, string levelSelected = null)
         {
             
             if (loadedMap == null)
@@ -89,11 +89,19 @@ namespace BlockEd
             //Draw all the tiles
             foreach (GameLevel level in loadedMap.getLevelList())
             {
+                //Check to see if the selected level matches the current one, else continue.
+                if (level.getName() != levelSelected)
+                {
+                    continue;
+                }
+
                 foreach (MapData layer in level.getLayerList())
                 {
+
+                    //If apply layerbounds, draw a line loop of the max area
                     if (applyLayerBounds && layer.getMapName() == layerSelected)
                     {
-                        float z_depth = (float)layer.getZDepth() / (float)callerForm.getMaxZDepth(); //Z depth is currently an int (0, 1, 5 etc) but we want it between -1 .. 1
+                        float z_depth = (float)layer.getZDepth() / (float)callerForm.getMaxZDepth();
                         z_depth -= 0.01f;
 
                         GL.LineWidth(5f);
@@ -110,6 +118,7 @@ namespace BlockEd
                         GL.Disable(EnableCap.Blend);
                     }
 
+                    //Toggle Blend and even skip depending on draw type
                     if (layer.getDrawType() == 1)
                     {
                         continue;
@@ -212,6 +221,21 @@ namespace BlockEd
 
                         debugTilesRendered += 1;
                     }
+
+                    //Draw the bounds that the glMain is looking at, make sure to offset larger so it's not drawn on the main.
+                    if (tileOffsetX == 0 && tileOffsetY == 0)
+                    {
+                        GL.LineWidth(5f);
+                        GL.Begin(BeginMode.LineLoop);
+                        GL.Color4(1f, 0f, 0f, 1f);
+                        GL.Vertex3(callerForm.tileOffsetX * -1 - 5, callerForm.tileOffsetY * -1 - 5, 1f);
+                        GL.Vertex3(callerForm.tileOffsetX * -1 + 5 + callerForm.glMapMain.Width, callerForm.tileOffsetY * -1 - 5, 1f);
+                        GL.Vertex3(callerForm.tileOffsetX * -1 + 5 + callerForm.glMapMain.Width, callerForm.tileOffsetY * -1 + callerForm.glMapMain.Height + 5, 1f);
+                        GL.Vertex3(callerForm.tileOffsetX * -1 - 5, callerForm.tileOffsetY * -1 + callerForm.glMapMain.Height + 5, 1f);
+                        GL.Color4(1f, 1f, 1f, 1f);
+                        GL.End();
+                    }
+
 
 
 

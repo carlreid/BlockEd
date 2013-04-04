@@ -29,6 +29,7 @@ namespace BlockEd
     internal class CPlaceTile : Command
     {
         MapTile _tile;
+        MapTile _previousTile = null;
         MapData _map;
         GameData _loadedMap;
 
@@ -43,13 +44,28 @@ namespace BlockEd
 
         internal override bool Do()
         {
+            foreach (MapDataTile tile in _map.getTileList())
+            {
+                if (tile._xPos == _tile.getX() && tile._yPos == _tile.getY())
+                {
+                    _previousTile = new MapTile(tile._spriteID, tile._xPos, tile._yPos);
+                    break;
+                }
+            }
             _loadedMap.incrementNumTiles(_map.addTile(_tile));
-            return false;
+            return true;
         }
 
         internal override bool Undo()
         {
-            _loadedMap.decrementNumTiles(_map.removeTile(_tile.getX(), _tile.getY()));
+            if (_previousTile != null)
+            {
+                _loadedMap.incrementNumTiles(_map.addTile(_previousTile));
+            }
+            else
+            {
+                _loadedMap.decrementNumTiles(_map.removeTile(_tile.getX(), _tile.getY()));
+            }
             return true;
         }
     }
@@ -352,7 +368,7 @@ namespace BlockEd
             foreach (GameLevel level in _loadedMap.getLevelList())
             {
 
-                if (level.getName() == "typed in") //TODO: Apply selected level here
+                if (level.getName() == _hostForm.levelSelectionBox.Text)
                 {
 
                     if (_backupMap != null)
@@ -533,7 +549,7 @@ namespace BlockEd
             foreach (GameLevel level in _loadedMap.getLevelList())
             {
 
-                if (level.getName() == "typed in") //TODO: Apply selected level here
+                if (level.getName() == _hostForm.levelSelectionBox.Text)
                 {
                     level.removeLayer(_backupMap);
                 }
@@ -568,7 +584,7 @@ namespace BlockEd
         {
             foreach (GameLevel level in _loadedMap.getLevelList())
             {
-                if (level.getName() == "typed in") //TODO: Apply selected level here
+                if (level.getName() == _hostForm.levelSelectionBox.Text)
                 {
 
                     MapData mapToRemove = null;
@@ -600,7 +616,7 @@ namespace BlockEd
         {
             foreach (GameLevel level in _loadedMap.getLevelList())
             {
-                if (level.getName() == "typed in") //TODO: Apply selected level here
+                if (level.getName() == _hostForm.levelSelectionBox.Text)
                 {
                     level.addLayer(_backupMap.getMapWidth(), _backupMap.getMapHeight(), _backupMap.getDrawType(), _backupMap.getZDepth(), _backupMap.getMapName(), _backupMap.getMaxTileWidth(), _backupMap.getMaxTileHeight());
                     foreach (MapDataTile tile in _backupTiles)
@@ -618,7 +634,6 @@ namespace BlockEd
             return false;
         }
     }
-
 
     internal class CMoveLayerZ : Command
     {
@@ -719,6 +734,34 @@ namespace BlockEd
             return false;
         }
         
+    }
+
+    internal class CAddLevel : Command
+    {
+        GameData _loadedMap;
+        Form1 _hostForm;
+
+        internal CAddLevel(GameData loadedMap, Form1 hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+            _undoName = "Remove level";
+            _redoName = "Add level";
+        }
+
+        internal override bool Do()
+        {
+
+            //_loadedMap.addLevel();
+
+            throw new NotImplementedException();
+        }
+
+        internal override bool Undo()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

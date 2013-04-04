@@ -38,7 +38,9 @@ namespace BlockEd
 
             if (typeID == 0)
             {
-                tileDataGroupBox.Enabled = false;
+                toggleTabPageEnable(tileDataPage, false);
+                //tileDataGroupBox.Enabled = false;
+                //dataTabControl.Enabled = false;
 
                 tileTypeCombo.Text = "";
                 tileData1Combo.Text = "";
@@ -52,7 +54,9 @@ namespace BlockEd
                 return;
             }
 
-            tileDataGroupBox.Enabled = true;
+            //tileDataGroupBox.Enabled = true;
+            //dataTabControl.Enabled = true;
+            toggleTabPageEnable(tileDataPage, true);
             tileTypeCombo.Text = "";
             tileData1Combo.Text = "";
 
