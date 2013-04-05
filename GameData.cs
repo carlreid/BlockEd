@@ -50,6 +50,18 @@ namespace BlockEd
             return _numberOfTiles;
         }
 
+        public void recalculateNumTiles()
+        {
+            _numberOfTiles = 0;
+            foreach (GameLevel level in _level)
+            {
+                foreach (MapData map in level.getLayerList())
+                {
+                    _numberOfTiles += map.getTileList().Count;
+                }
+            }
+        }
+
         public void setMaxScroll(int maxX, int maxY)
         {
             _maxScrollX = maxX;

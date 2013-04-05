@@ -608,6 +608,9 @@ namespace BlockEd
                     _hostForm.updateLayerList();
                     _hostForm.layerSelectionBox.SelectedIndex = 0;
 
+                    _loadedMap.recalculateNumTiles();
+                    _hostForm.updateTileCount();
+
                     return true;
                 }
             }
@@ -621,15 +624,24 @@ namespace BlockEd
                 if (level.getName() == _hostForm.levelSelectionBox.Text)
                 {
                     level.addLayer(_backupMap.getMapWidth(), _backupMap.getMapHeight(), _backupMap.getDrawType(), _backupMap.getZDepth(), _backupMap.getMapName(), _backupMap.getMaxTileWidth(), _backupMap.getMaxTileHeight());
-                    foreach (MapDataTile tile in _backupTiles)
+
+                    foreach (MapData layer in level.getLayerList())
                     {
-                        level.getLastAddedLayer().addTile(new MapTile(tile._spriteID, tile._xPos, tile._yPos));
+                        if (layer.getMapName() == _backupMap.getMapName())
+                        {
+                            foreach (MapDataTile tile in _backupTiles)
+                            {
+                                layer.addTile(new MapTile(tile._spriteID, tile._xPos, tile._yPos));
+                            }
+                        }
                     }
 
                     //Update layer GUI items
                     _hostForm.updateLayerList();
                     _hostForm.layerSelectionBox.SelectedItem = _backupMap.getMapName();
 
+                    _loadedMap.recalculateNumTiles();
+                    _hostForm.updateTileCount();
                     return true;
                 }
             }
@@ -849,7 +861,8 @@ namespace BlockEd
             _loadedMap.removeLevel(_backupLevel.getID());
 
             _hostForm.updateLevelList();
-
+            _loadedMap.recalculateNumTiles();
+            _hostForm.updateTileCount();
             return true;
         }
 
@@ -870,6 +883,8 @@ namespace BlockEd
 
             _hostForm.updateLevelList();
             _hostForm.levelSelectionBox.Text = _backupLevel.getName();
+            _loadedMap.recalculateNumTiles();
+            _hostForm.updateTileCount();
             return true;
         }
 

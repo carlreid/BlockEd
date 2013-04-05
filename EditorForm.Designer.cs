@@ -32,7 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorForm));
             this.topMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.glMapMain = new OpenTK.GLControl();
             this.updateButton = new System.Windows.Forms.Button();
@@ -51,9 +54,16 @@
             this.button6 = new System.Windows.Forms.Button();
             this.layerSelectionBox = new System.Windows.Forms.ComboBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.openStripButton = new System.Windows.Forms.ToolStripButton();
+            this.saveStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.undoStripButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.redoStripButton = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.buildStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.ghostingStripButton = new System.Windows.Forms.ToolStripButton();
+            this.boundsStripButton = new System.Windows.Forms.ToolStripButton();
             this.tileTypeCombo = new System.Windows.Forms.ComboBox();
             this.tileDataApplyChangesButton = new System.Windows.Forms.Button();
             this.typeLabel = new System.Windows.Forms.Label();
@@ -89,8 +99,14 @@
             this.layerHeightLabel = new System.Windows.Forms.Label();
             this.editControlsGroupBox = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
+            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
+            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
+            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.levelSelectionBox = new System.Windows.Forms.ComboBox();
+            this.removeLevelPictureBox = new System.Windows.Forms.PictureBox();
+            this.newLevelPictureBox = new System.Windows.Forms.PictureBox();
             this.dataTabControl = new System.Windows.Forms.TabControl();
             this.tileDataPage = new System.Windows.Forms.TabPage();
             this.layerDataPage = new System.Windows.Forms.TabPage();
@@ -110,28 +126,12 @@
             this.levelIDTextBox = new System.Windows.Forms.MaskedTextBox();
             this.levelIDLabel = new System.Windows.Forms.Label();
             this.levelApplyChangesButton = new System.Windows.Forms.Button();
+            this.gameDataPage = new System.Windows.Forms.TabPage();
+            this.gameDataApplyChangesButton = new System.Windows.Forms.Button();
+            this.gameNameTextBox = new System.Windows.Forms.TextBox();
+            this.gameNameLabel = new System.Windows.Forms.Label();
             this.button10 = new System.Windows.Forms.Button();
             this.saveTimer = new System.Windows.Forms.Timer(this.components);
-            this.gameDataPage = new System.Windows.Forms.TabPage();
-            this.gameNameLabel = new System.Windows.Forms.Label();
-            this.gameNameTextBox = new System.Windows.Forms.TextBox();
-            this.gameDataApplyChangesButton = new System.Windows.Forms.Button();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openStripButton = new System.Windows.Forms.ToolStripButton();
-            this.saveStripButton = new System.Windows.Forms.ToolStripButton();
-            this.undoStripButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.redoStripButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.buildStripButton = new System.Windows.Forms.ToolStripButton();
-            this.ghostingStripButton = new System.Windows.Forms.ToolStripButton();
-            this.boundsStripButton = new System.Windows.Forms.ToolStripButton();
-            this.moveLayerDownPictureBox = new System.Windows.Forms.PictureBox();
-            this.moveLayerUpPictureBox = new System.Windows.Forms.PictureBox();
-            this.newLayerPictureBox = new System.Windows.Forms.PictureBox();
-            this.removeLayerPictureBox = new System.Windows.Forms.PictureBox();
-            this.removeLevelPictureBox = new System.Windows.Forms.PictureBox();
-            this.newLevelPictureBox = new System.Windows.Forms.PictureBox();
             this.topMenu.SuspendLayout();
             this.devPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -140,7 +140,13 @@
             this.groupBox2.SuspendLayout();
             this.editControlsGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).BeginInit();
             this.dataTabControl.SuspendLayout();
             this.tileDataPage.SuspendLayout();
             this.layerDataPage.SuspendLayout();
@@ -148,12 +154,6 @@
             this.exitPositionGroupBox.SuspendLayout();
             this.startPositionGroupBox.SuspendLayout();
             this.gameDataPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // topMenu
@@ -177,17 +177,39 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mapToolStripMenuItem});
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Text = "New";
+            // 
+            // mapToolStripMenuItem
+            // 
+            this.mapToolStripMenuItem.Name = "mapToolStripMenuItem";
+            this.mapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mapToolStripMenuItem.Text = "Map";
+            this.mapToolStripMenuItem.Click += new System.EventHandler(this.mapToolStripMenuItem_Click);
+            // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -394,20 +416,93 @@
             this.toolStrip1.TabIndex = 12;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // openStripButton
+            // 
+            this.openStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openStripButton.Image = global::BlockEd.Properties.Resources.Open_6529;
+            this.openStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openStripButton.Name = "openStripButton";
+            this.openStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openStripButton.Text = "Open File (CTRL+O)";
+            this.openStripButton.Click += new System.EventHandler(this.openStripButton_Click);
+            // 
+            // saveStripButton
+            // 
+            this.saveStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveStripButton.Image = global::BlockEd.Properties.Resources.Save_6530;
+            this.saveStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveStripButton.Name = "saveStripButton";
+            this.saveStripButton.Size = new System.Drawing.Size(23, 22);
+            this.saveStripButton.Text = "Save (CTRL+S)";
+            this.saveStripButton.Click += new System.EventHandler(this.saveStripButton_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // undoStripButton
+            // 
+            this.undoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.undoStripButton.Enabled = false;
+            this.undoStripButton.Image = global::BlockEd.Properties.Resources.Undo_16x;
+            this.undoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.undoStripButton.Name = "undoStripButton";
+            this.undoStripButton.Size = new System.Drawing.Size(32, 22);
+            this.undoStripButton.Text = "Undo (CTRL+Z)";
+            this.undoStripButton.ButtonClick += new System.EventHandler(this.undoStripButton_ButtonClick);
+            // 
+            // redoStripButton
+            // 
+            this.redoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.redoStripButton.Enabled = false;
+            this.redoStripButton.Image = global::BlockEd.Properties.Resources.Redo_16x;
+            this.redoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.redoStripButton.Name = "redoStripButton";
+            this.redoStripButton.Size = new System.Drawing.Size(32, 22);
+            this.redoStripButton.Text = "toolStripSplitButton1";
+            this.redoStripButton.ToolTipText = "Redo (CTRL + Y)";
+            this.redoStripButton.ButtonClick += new System.EventHandler(this.redoStripButton_ButtonClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // buildStripButton
+            // 
+            this.buildStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buildStripButton.Image = global::BlockEd.Properties.Resources.StatusAnnotations_Play_32xLG_color;
+            this.buildStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buildStripButton.Name = "buildStripButton";
+            this.buildStripButton.Size = new System.Drawing.Size(23, 22);
+            this.buildStripButton.Text = "Test (F5)";
+            this.buildStripButton.Click += new System.EventHandler(this.buildStripButton_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ghostingStripButton
+            // 
+            this.ghostingStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ghostingStripButton.Image = global::BlockEd.Properties.Resources.ToggleGhosting;
+            this.ghostingStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ghostingStripButton.Name = "ghostingStripButton";
+            this.ghostingStripButton.Size = new System.Drawing.Size(23, 22);
+            this.ghostingStripButton.Text = "Toggle Layer Ghosting";
+            this.ghostingStripButton.Click += new System.EventHandler(this.ghostingStripButton_Click);
+            // 
+            // boundsStripButton
+            // 
+            this.boundsStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.boundsStripButton.Image = ((System.Drawing.Image)(resources.GetObject("boundsStripButton.Image")));
+            this.boundsStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.boundsStripButton.Name = "boundsStripButton";
+            this.boundsStripButton.Size = new System.Drawing.Size(23, 22);
+            this.boundsStripButton.Text = "Toggle Bounds Display";
+            this.boundsStripButton.Click += new System.EventHandler(this.boundsStripButton_Click);
             // 
             // tileTypeCombo
             // 
@@ -786,6 +881,58 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Layer";
             // 
+            // moveLayerDownPictureBox
+            // 
+            this.moveLayerDownPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveLayerDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
+            this.moveLayerDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLayerDownPictureBox.Enabled = false;
+            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(70, 48);
+            this.moveLayerDownPictureBox.Name = "moveLayerDownPictureBox";
+            this.moveLayerDownPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLayerDownPictureBox.TabIndex = 23;
+            this.moveLayerDownPictureBox.TabStop = false;
+            this.moveLayerDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
+            // 
+            // moveLayerUpPictureBox
+            // 
+            this.moveLayerUpPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
+            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.moveLayerUpPictureBox.Enabled = false;
+            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(99, 48);
+            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
+            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.moveLayerUpPictureBox.TabIndex = 24;
+            this.moveLayerUpPictureBox.TabStop = false;
+            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
+            // 
+            // newLayerPictureBox
+            // 
+            this.newLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
+            this.newLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.newLayerPictureBox.Enabled = false;
+            this.newLayerPictureBox.Location = new System.Drawing.Point(12, 48);
+            this.newLayerPictureBox.Name = "newLayerPictureBox";
+            this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.newLayerPictureBox.TabIndex = 18;
+            this.newLayerPictureBox.TabStop = false;
+            this.newLayerPictureBox.Click += new System.EventHandler(this.newLayerPictureBox_Click);
+            // 
+            // removeLayerPictureBox
+            // 
+            this.removeLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
+            this.removeLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.removeLayerPictureBox.Enabled = false;
+            this.removeLayerPictureBox.Location = new System.Drawing.Point(41, 48);
+            this.removeLayerPictureBox.Name = "removeLayerPictureBox";
+            this.removeLayerPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.removeLayerPictureBox.TabIndex = 19;
+            this.removeLayerPictureBox.TabStop = false;
+            this.removeLayerPictureBox.Click += new System.EventHandler(this.removeLayerPictureBox_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -811,6 +958,30 @@
             this.levelSelectionBox.Size = new System.Drawing.Size(124, 21);
             this.levelSelectionBox.TabIndex = 11;
             this.levelSelectionBox.SelectedIndexChanged += new System.EventHandler(this.levelSelectionBox_SelectedIndexChanged);
+            // 
+            // removeLevelPictureBox
+            // 
+            this.removeLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.removeLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
+            this.removeLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.removeLevelPictureBox.Location = new System.Drawing.Point(70, 46);
+            this.removeLevelPictureBox.Name = "removeLevelPictureBox";
+            this.removeLevelPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.removeLevelPictureBox.TabIndex = 19;
+            this.removeLevelPictureBox.TabStop = false;
+            this.removeLevelPictureBox.Click += new System.EventHandler(this.removeLevelPictureBox_Click);
+            // 
+            // newLevelPictureBox
+            // 
+            this.newLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.newLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
+            this.newLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.newLevelPictureBox.Location = new System.Drawing.Point(41, 46);
+            this.newLevelPictureBox.Name = "newLevelPictureBox";
+            this.newLevelPictureBox.Size = new System.Drawing.Size(23, 22);
+            this.newLevelPictureBox.TabIndex = 18;
+            this.newLevelPictureBox.TabStop = false;
+            this.newLevelPictureBox.Click += new System.EventHandler(this.newLevelPictureBox_Click);
             // 
             // dataTabControl
             // 
@@ -1039,6 +1210,44 @@
             this.levelApplyChangesButton.UseVisualStyleBackColor = true;
             this.levelApplyChangesButton.Click += new System.EventHandler(this.levelApplyChangesButton_Click);
             // 
+            // gameDataPage
+            // 
+            this.gameDataPage.Controls.Add(this.gameDataApplyChangesButton);
+            this.gameDataPage.Controls.Add(this.gameNameTextBox);
+            this.gameDataPage.Controls.Add(this.gameNameLabel);
+            this.gameDataPage.Location = new System.Drawing.Point(4, 22);
+            this.gameDataPage.Name = "gameDataPage";
+            this.gameDataPage.Size = new System.Drawing.Size(322, 199);
+            this.gameDataPage.TabIndex = 3;
+            this.gameDataPage.Text = "Game Data";
+            this.gameDataPage.UseVisualStyleBackColor = true;
+            // 
+            // gameDataApplyChangesButton
+            // 
+            this.gameDataApplyChangesButton.Location = new System.Drawing.Point(9, 167);
+            this.gameDataApplyChangesButton.Name = "gameDataApplyChangesButton";
+            this.gameDataApplyChangesButton.Size = new System.Drawing.Size(306, 25);
+            this.gameDataApplyChangesButton.TabIndex = 18;
+            this.gameDataApplyChangesButton.Text = "Apply Changes";
+            this.gameDataApplyChangesButton.UseVisualStyleBackColor = true;
+            this.gameDataApplyChangesButton.Click += new System.EventHandler(this.gameDataApplyChangesButton_Click);
+            // 
+            // gameNameTextBox
+            // 
+            this.gameNameTextBox.Location = new System.Drawing.Point(88, 11);
+            this.gameNameTextBox.Name = "gameNameTextBox";
+            this.gameNameTextBox.Size = new System.Drawing.Size(226, 20);
+            this.gameNameTextBox.TabIndex = 1;
+            // 
+            // gameNameLabel
+            // 
+            this.gameNameLabel.AutoSize = true;
+            this.gameNameLabel.Location = new System.Drawing.Point(13, 14);
+            this.gameNameLabel.Name = "gameNameLabel";
+            this.gameNameLabel.Size = new System.Drawing.Size(69, 13);
+            this.gameNameLabel.TabIndex = 0;
+            this.gameNameLabel.Text = "Game Name:";
+            // 
             // button10
             // 
             this.button10.Location = new System.Drawing.Point(760, 626);
@@ -1055,216 +1264,7 @@
             this.saveTimer.Interval = 60000;
             this.saveTimer.Tick += new System.EventHandler(this.saveTimer_Tick);
             // 
-            // gameDataPage
-            // 
-            this.gameDataPage.Controls.Add(this.gameDataApplyChangesButton);
-            this.gameDataPage.Controls.Add(this.gameNameTextBox);
-            this.gameDataPage.Controls.Add(this.gameNameLabel);
-            this.gameDataPage.Location = new System.Drawing.Point(4, 22);
-            this.gameDataPage.Name = "gameDataPage";
-            this.gameDataPage.Size = new System.Drawing.Size(322, 199);
-            this.gameDataPage.TabIndex = 3;
-            this.gameDataPage.Text = "Game Data";
-            this.gameDataPage.UseVisualStyleBackColor = true;
-            // 
-            // gameNameLabel
-            // 
-            this.gameNameLabel.AutoSize = true;
-            this.gameNameLabel.Location = new System.Drawing.Point(13, 14);
-            this.gameNameLabel.Name = "gameNameLabel";
-            this.gameNameLabel.Size = new System.Drawing.Size(69, 13);
-            this.gameNameLabel.TabIndex = 0;
-            this.gameNameLabel.Text = "Game Name:";
-            // 
-            // gameNameTextBox
-            // 
-            this.gameNameTextBox.Location = new System.Drawing.Point(88, 11);
-            this.gameNameTextBox.Name = "gameNameTextBox";
-            this.gameNameTextBox.Size = new System.Drawing.Size(226, 20);
-            this.gameNameTextBox.TabIndex = 1;
-            // 
-            // gameDataApplyChangesButton
-            // 
-            this.gameDataApplyChangesButton.Location = new System.Drawing.Point(9, 167);
-            this.gameDataApplyChangesButton.Name = "gameDataApplyChangesButton";
-            this.gameDataApplyChangesButton.Size = new System.Drawing.Size(306, 25);
-            this.gameDataApplyChangesButton.TabIndex = 18;
-            this.gameDataApplyChangesButton.Text = "Apply Changes";
-            this.gameDataApplyChangesButton.UseVisualStyleBackColor = true;
-            this.gameDataApplyChangesButton.Click += new System.EventHandler(this.gameDataApplyChangesButton_Click);
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mapToolStripMenuItem});
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.newToolStripMenuItem.Text = "New";
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // mapToolStripMenuItem
-            // 
-            this.mapToolStripMenuItem.Name = "mapToolStripMenuItem";
-            this.mapToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
-            this.mapToolStripMenuItem.Text = "Map";
-            this.mapToolStripMenuItem.Click += new System.EventHandler(this.mapToolStripMenuItem_Click);
-            // 
-            // openStripButton
-            // 
-            this.openStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openStripButton.Image = global::BlockEd.Properties.Resources.Open_6529;
-            this.openStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.openStripButton.Name = "openStripButton";
-            this.openStripButton.Size = new System.Drawing.Size(23, 22);
-            this.openStripButton.Text = "Open File (CTRL+O)";
-            this.openStripButton.Click += new System.EventHandler(this.openStripButton_Click);
-            // 
-            // saveStripButton
-            // 
-            this.saveStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveStripButton.Image = global::BlockEd.Properties.Resources.Save_6530;
-            this.saveStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveStripButton.Name = "saveStripButton";
-            this.saveStripButton.Size = new System.Drawing.Size(23, 22);
-            this.saveStripButton.Text = "Save (CTRL+S)";
-            this.saveStripButton.Click += new System.EventHandler(this.saveStripButton_Click);
-            // 
-            // undoStripButton
-            // 
-            this.undoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.undoStripButton.Enabled = false;
-            this.undoStripButton.Image = global::BlockEd.Properties.Resources.Undo_16x;
-            this.undoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.undoStripButton.Name = "undoStripButton";
-            this.undoStripButton.Size = new System.Drawing.Size(32, 22);
-            this.undoStripButton.Text = "Undo (CTRL+Z)";
-            this.undoStripButton.ButtonClick += new System.EventHandler(this.undoStripButton_ButtonClick);
-            // 
-            // redoStripButton
-            // 
-            this.redoStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.redoStripButton.Enabled = false;
-            this.redoStripButton.Image = global::BlockEd.Properties.Resources.Redo_16x;
-            this.redoStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.redoStripButton.Name = "redoStripButton";
-            this.redoStripButton.Size = new System.Drawing.Size(32, 22);
-            this.redoStripButton.Text = "toolStripSplitButton1";
-            this.redoStripButton.ToolTipText = "Redo (CTRL + Y)";
-            this.redoStripButton.ButtonClick += new System.EventHandler(this.redoStripButton_ButtonClick);
-            // 
-            // buildStripButton
-            // 
-            this.buildStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buildStripButton.Image = global::BlockEd.Properties.Resources.StatusAnnotations_Play_32xLG_color;
-            this.buildStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buildStripButton.Name = "buildStripButton";
-            this.buildStripButton.Size = new System.Drawing.Size(23, 22);
-            this.buildStripButton.Text = "Test (F5)";
-            this.buildStripButton.Click += new System.EventHandler(this.buildStripButton_Click);
-            // 
-            // ghostingStripButton
-            // 
-            this.ghostingStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ghostingStripButton.Image = global::BlockEd.Properties.Resources.ToggleGhosting;
-            this.ghostingStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ghostingStripButton.Name = "ghostingStripButton";
-            this.ghostingStripButton.Size = new System.Drawing.Size(23, 22);
-            this.ghostingStripButton.Text = "Toggle Layer Ghosting";
-            this.ghostingStripButton.Click += new System.EventHandler(this.ghostingStripButton_Click);
-            // 
-            // boundsStripButton
-            // 
-            this.boundsStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.boundsStripButton.Image = ((System.Drawing.Image)(resources.GetObject("boundsStripButton.Image")));
-            this.boundsStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.boundsStripButton.Name = "boundsStripButton";
-            this.boundsStripButton.Size = new System.Drawing.Size(23, 22);
-            this.boundsStripButton.Text = "Toggle Bounds Display";
-            this.boundsStripButton.Click += new System.EventHandler(this.boundsStripButton_Click);
-            // 
-            // moveLayerDownPictureBox
-            // 
-            this.moveLayerDownPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.moveLayerDownPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerDown;
-            this.moveLayerDownPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerDownPictureBox.Enabled = false;
-            this.moveLayerDownPictureBox.Location = new System.Drawing.Point(70, 48);
-            this.moveLayerDownPictureBox.Name = "moveLayerDownPictureBox";
-            this.moveLayerDownPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.moveLayerDownPictureBox.TabIndex = 23;
-            this.moveLayerDownPictureBox.TabStop = false;
-            this.moveLayerDownPictureBox.Click += new System.EventHandler(this.moveLayerDownPictureBox_Click);
-            // 
-            // moveLayerUpPictureBox
-            // 
-            this.moveLayerUpPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.moveLayerUpPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.MoveLayerUp;
-            this.moveLayerUpPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.moveLayerUpPictureBox.Enabled = false;
-            this.moveLayerUpPictureBox.Location = new System.Drawing.Point(99, 48);
-            this.moveLayerUpPictureBox.Name = "moveLayerUpPictureBox";
-            this.moveLayerUpPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.moveLayerUpPictureBox.TabIndex = 24;
-            this.moveLayerUpPictureBox.TabStop = false;
-            this.moveLayerUpPictureBox.Click += new System.EventHandler(this.moveLayerUpPictureBox_Click);
-            // 
-            // newLayerPictureBox
-            // 
-            this.newLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.newLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
-            this.newLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.newLayerPictureBox.Enabled = false;
-            this.newLayerPictureBox.Location = new System.Drawing.Point(12, 48);
-            this.newLayerPictureBox.Name = "newLayerPictureBox";
-            this.newLayerPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.newLayerPictureBox.TabIndex = 18;
-            this.newLayerPictureBox.TabStop = false;
-            this.newLayerPictureBox.Click += new System.EventHandler(this.newLayerPictureBox_Click);
-            // 
-            // removeLayerPictureBox
-            // 
-            this.removeLayerPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeLayerPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
-            this.removeLayerPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.removeLayerPictureBox.Enabled = false;
-            this.removeLayerPictureBox.Location = new System.Drawing.Point(41, 48);
-            this.removeLayerPictureBox.Name = "removeLayerPictureBox";
-            this.removeLayerPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.removeLayerPictureBox.TabIndex = 19;
-            this.removeLayerPictureBox.TabStop = false;
-            this.removeLayerPictureBox.Click += new System.EventHandler(this.removeLayerPictureBox_Click);
-            // 
-            // removeLevelPictureBox
-            // 
-            this.removeLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.RemoveLayer;
-            this.removeLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.removeLevelPictureBox.Location = new System.Drawing.Point(70, 46);
-            this.removeLevelPictureBox.Name = "removeLevelPictureBox";
-            this.removeLevelPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.removeLevelPictureBox.TabIndex = 19;
-            this.removeLevelPictureBox.TabStop = false;
-            this.removeLevelPictureBox.Click += new System.EventHandler(this.removeLevelPictureBox_Click);
-            // 
-            // newLevelPictureBox
-            // 
-            this.newLevelPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.newLevelPictureBox.BackgroundImage = global::BlockEd.Properties.Resources.AddLayer;
-            this.newLevelPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.newLevelPictureBox.Location = new System.Drawing.Point(41, 46);
-            this.newLevelPictureBox.Name = "newLevelPictureBox";
-            this.newLevelPictureBox.Size = new System.Drawing.Size(23, 22);
-            this.newLevelPictureBox.TabIndex = 18;
-            this.newLevelPictureBox.TabStop = false;
-            this.newLevelPictureBox.Click += new System.EventHandler(this.newLevelPictureBox_Click);
-            // 
-            // Form1
+            // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1279,7 +1279,7 @@
             this.Controls.Add(this.glMapMain);
             this.KeyPreview = true;
             this.MainMenuStrip = this.topMenu;
-            this.Name = "Form1";
+            this.Name = "EditorForm";
             this.Text = "BlockEd";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.editorClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1297,7 +1297,13 @@
             this.groupBox2.PerformLayout();
             this.editControlsGroupBox.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).EndInit();
             this.dataTabControl.ResumeLayout(false);
             this.tileDataPage.ResumeLayout(false);
             this.tileDataPage.PerformLayout();
@@ -1311,12 +1317,6 @@
             this.startPositionGroupBox.PerformLayout();
             this.gameDataPage.ResumeLayout(false);
             this.gameDataPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.moveLayerDownPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.moveLayerUpPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.newLayerPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.removeLayerPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.removeLevelPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.newLevelPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -6,7 +6,7 @@
   <!ENTITY gener "4">
   <!ENTITY replace "5">
 ]>-->
-<!DOCTYPE GraphicsList SYSTEM "GraphicsDTD.xml">
+<!DOCTYPE GraphicsList SYSTEM "GraphicsDTD.dtd">
 <GraphicsList name="Gauntlet">
   <transparentcolour red="0" green="0" blue="0" />
   <FileList>

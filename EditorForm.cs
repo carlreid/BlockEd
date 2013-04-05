@@ -718,7 +718,7 @@ namespace BlockEd
 
         }
 
-        private void updateTileCount()
+        internal void updateTileCount()
         {
             int currentTileAmount = loadedMap.getNumTiles();
             float greenAmount = (1f - ((float)currentTileAmount / (float)maxAmountTiles)) * 100f;
@@ -1388,6 +1388,7 @@ namespace BlockEd
 
         private void mapToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mapFilePath = null;
             loadedMap = new GameData();
 
             glMiniMapControl.Visible = true;

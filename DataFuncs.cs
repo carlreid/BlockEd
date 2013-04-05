@@ -471,10 +471,10 @@ namespace BlockEd
             document.AppendChild(docDecleration);// Create the root element
 
             //<!DOCTYPE Game SYSTEM "MapDTD.xml">
-            File.Copy("map/MapDTD.xml", "MapDTD.xml", true);
-            XmlDocumentType doctype = document.CreateDocumentType("Game", null, "MapDTD.xml", null);
+            File.Copy("map/MapDTD.dtd", "MapDTD.dtd", true);
+            XmlDocumentType doctype = document.CreateDocumentType("Game", null, "MapDTD.dtd", null);
             document.AppendChild(doctype); //Add doctype reference
-            File.Delete("MapDTD.xml");
+            File.Delete("MapDTD.dtd");
 
             XmlElement root = document.CreateElement("Game");
             root.SetAttribute("name", mapData.getName());
