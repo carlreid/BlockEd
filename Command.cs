@@ -111,12 +111,12 @@ namespace BlockEd
         MapTile _tile;
         List<GraphicTile> _graphicTiles;
         TileData _tileData;
-        Form1 _hostForm;
+        EditorForm _hostForm;
 
         GraphicTile _undoData = null;
         GraphicTile _redoData = null;
 
-        internal CApplyTileData(MapTile selectedTile, ref List<GraphicTile> graphicTiles, ref TileData tileData, Form1 hostForm)
+        internal CApplyTileData(MapTile selectedTile, ref List<GraphicTile> graphicTiles, ref TileData tileData, EditorForm hostForm)
         {
             _tile = selectedTile;
             _graphicTiles = graphicTiles;
@@ -216,12 +216,12 @@ namespace BlockEd
     {
 
         GameData _loadedMap;
-        Form1 _hostForm;
+        EditorForm _hostForm;
 
         MapData _beforeDo = null;
         MapData _afterDo = null;
 
-        internal CApplyLayerData(GameData loadedMap, Form1 hostForm)
+        internal CApplyLayerData(GameData loadedMap, EditorForm hostForm)
         {
             _loadedMap = loadedMap;
             _hostForm = hostForm;
@@ -350,11 +350,12 @@ namespace BlockEd
     {
 
         GameData _loadedMap;
-        Form1 _hostForm;
+        EditorForm _hostForm;
 
         MapData _backupMap = null;
+        string _targetedLevel = "";
 
-        internal CAddLayer(GameData loadedMap, Form1 hostForm)
+        internal CAddLayer(GameData loadedMap, EditorForm hostForm)
         {
             _loadedMap = loadedMap;
             _hostForm = hostForm;
@@ -368,7 +369,7 @@ namespace BlockEd
             foreach (GameLevel level in _loadedMap.getLevelList())
             {
 
-                if (level.getName() == _hostForm.levelSelectionBox.Text)
+                if (level.getName() == _hostForm.levelSelectionBox.Text || level.getName() == _targetedLevel)
                 {
 
                     if (_backupMap != null)
@@ -534,6 +535,7 @@ namespace BlockEd
 
                     //Make a duplicate for undo/redo
                     _backupMap = new MapData(32, 32, 3, designatedZIndex, mapName);
+                    _targetedLevel = level.getName();
 
                     //Update layer GUI items
                     _hostForm.updateLayerList();
@@ -566,12 +568,12 @@ namespace BlockEd
     {
 
         GameData _loadedMap;
-        Form1 _hostForm;
+        EditorForm _hostForm;
 
         MapData _backupMap = null;
         List<MapDataTile> _backupTiles;
 
-        internal CRemoveLayer(GameData loadedMap, Form1 hostForm)
+        internal CRemoveLayer(GameData loadedMap, EditorForm hostForm)
         {
             _loadedMap = loadedMap;
             _hostForm = hostForm;
@@ -639,10 +641,10 @@ namespace BlockEd
     {
 
         GameData _loadedMap;
-        Form1 _hostForm;
+        EditorForm _hostForm;
         bool _moveUp;
 
-        internal CMoveLayerZ(GameData loadedMap, Form1 hostForm, bool moveUp)
+        internal CMoveLayerZ(GameData loadedMap, EditorForm hostForm, bool moveUp)
         {
             _loadedMap = loadedMap;
             _hostForm = hostForm;
@@ -739,9 +741,11 @@ namespace BlockEd
     internal class CAddLevel : Command
     {
         GameData _loadedMap;
-        Form1 _hostForm;
+        EditorForm _hostForm;
+        GameLevel _backupLevel = null;
+        List<MapData> _backupLayers = null;
 
-        internal CAddLevel(GameData loadedMap, Form1 hostForm)
+        internal CAddLevel(GameData loadedMap, EditorForm hostForm)
         {
             _loadedMap = loadedMap;
             _hostForm = hostForm;
@@ -752,16 +756,339 @@ namespace BlockEd
         internal override bool Do()
         {
 
-            //_loadedMap.addLevel();
+            if (_backupLevel != null)
+            {
+                _loadedMap.addLevel(_backupLevel.getID(), _backupLevel.getStartX(), _backupLevel.getStartY(), _backupLevel.getName());
+                _loadedMap.getLastLoadedLevel().setExit(_backupLevel.getExitX(), _backupLevel.getExitY());
 
-            throw new NotImplementedException();
+                foreach (MapData layer in _backupLayers)
+                {
+                    _loadedMap.getLastLoadedLevel().addLayer(layer.getMapWidth(), layer.getMapHeight(), layer.getDrawType(), layer.getZDepth(),
+                                                             layer.getMapName(), layer.getMaxTileWidth(), layer.getMaxTileHeight());
+                    foreach (MapDataTile tile in layer.getTileList())
+                    {
+                        MapTile mapTile = new MapTile(tile._spriteID, tile._xPos, tile._yPos);
+                        _loadedMap.getLastLoadedLevel().getLastAddedLayer().addTile(mapTile);
+                    }
+                }
+
+                _hostForm.updateLevelList();
+                _hostForm.levelSelectionBox.Text = _backupLevel.getName();
+                return true;
+            }
+
+            int targetID = _loadedMap.getLevelList().Count + 1;
+            bool uniqueIDNotFound = true;
+            while (uniqueIDNotFound)
+            {
+                int checkedLevels = 0;
+                foreach (GameLevel level in _loadedMap.getLevelList())
+                {
+                    if (level.getID() == targetID)
+                    {
+                        targetID++;
+                        break;
+                    }
+                    checkedLevels++;
+                }
+                if (checkedLevels == _loadedMap.getLevelList().Count)
+                {
+                    uniqueIDNotFound = false;
+                }
+            }
+
+            _loadedMap.addLevel(targetID, 0, 0);
+            _backupLevel = _loadedMap.getLastLoadedLevel();
+            _backupLayers = _backupLevel.getLayerList();
+            _hostForm.updateLevelList();
+            _hostForm.levelSelectionBox.Text = _backupLevel.getName();
+            return true;
         }
 
         internal override bool Undo()
         {
-            throw new NotImplementedException();
+            _loadedMap.removeLevel(_backupLevel.getID());
+            _hostForm.updateLevelList();
+            return true;
         }
 
+    }
+
+    internal class CRemoveLevel : Command
+    {
+        GameData _loadedMap;
+        EditorForm _hostForm;
+        GameLevel _backupLevel = null;
+        List<MapData> _backupLayers = null;
+
+        internal CRemoveLevel(GameData loadedMap, EditorForm hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+            _undoName = "Add level";
+            _redoName = "Remove level";
+        }
+
+        internal override bool Do()
+        {
+
+            if (_backupLevel == null)
+            {
+                foreach (GameLevel level in _loadedMap.getLevelList())
+                {
+                    if (level.getName() == _hostForm.levelSelectionBox.Text)
+                    {
+                        _backupLevel = level;
+                        _backupLayers = level.getLayerList();
+                        break;
+                    }
+                }
+            }
+
+
+            _loadedMap.removeLevel(_backupLevel.getID());
+
+            _hostForm.updateLevelList();
+
+            return true;
+        }
+
+        internal override bool Undo()
+        {
+            _loadedMap.addLevel(_backupLevel.getID(), _backupLevel.getStartX(), _backupLevel.getStartY(), _backupLevel.getName());
+            _loadedMap.getLastLoadedLevel().setExit(_backupLevel.getExitX(), _backupLevel.getExitY());
+
+            foreach(MapData layer in _backupLayers){
+                _loadedMap.getLastLoadedLevel().addLayer(layer.getMapWidth(), layer.getMapHeight(), layer.getDrawType(), layer.getZDepth(),
+                                                         layer.getMapName(), layer.getMaxTileWidth(), layer.getMaxTileHeight());
+                foreach (MapDataTile tile in layer.getTileList())
+                {
+                    MapTile mapTile = new MapTile(tile._spriteID, tile._xPos, tile._yPos);
+                    _loadedMap.getLastLoadedLevel().getLastAddedLayer().addTile(mapTile);
+                }
+            }
+
+            _hostForm.updateLevelList();
+            _hostForm.levelSelectionBox.Text = _backupLevel.getName();
+            return true;
+        }
+
+    }
+
+    internal class CApplyLevelData : Command
+    {
+
+        GameData _loadedMap;
+        EditorForm _hostForm;
+
+        GameLevel _undoData = null;
+        GameLevel _redoData = null;
+
+        bool _wasIdSwapDone = false;
+        int _doID = -1;
+        int _undoID = -1;
+
+        internal CApplyLevelData(GameData loadedMap, EditorForm hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+            _undoName = "Remove level data change";
+            _redoName = "Apply level data change";
+        }
+
+        internal override bool Do()
+        {
+            if (_redoData != null)
+            {
+                foreach (GameLevel level in _loadedMap.getLevelList())
+                {
+                    if (level.getName() == _undoData.getName())
+                    {
+                        level.setName(_redoData.getName());
+                        level.setID(_redoData.getID());
+                        level.setStartX(_redoData.getStartX());
+                        level.setStartY(_redoData.getStartY());
+                        level.setExit(_redoData.getExitX(), _redoData.getExitY());
+                        _hostForm.updateLevelList();
+                        _hostForm.levelSelectionBox.Text = level.getName();
+                        _hostForm.updateLevelSelectionBox();
+                        return true;
+                    }
+                }
+            }
+
+
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                if (level.getName() == _hostForm.levelSelectionBox.Text)
+                {
+                    //Dont do the below check if the doID was already set
+                    if (_doID != -1)
+                    {
+                        //Just do a check to make sure the new level id isn't clashing with some other level
+                        int idToCheck = Int32.Parse(_hostForm.levelIDTextBox.Text);
+                        foreach (GameLevel levelChecking in _loadedMap.getLevelList())
+                        {
+                            if (levelChecking.getID() == idToCheck)
+                            {
+                                DialogResult result = MessageBox.Show("Woah! The ID you chose is already in use. Would you like to swap IDs from " + idToCheck + " to " + levelChecking.getID() + @"?\n\n" +
+                                                                      "If you do press Yes (swap ids), if you press No, a new ID will be found for you.", "Clash Found", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+
+                                if (result == DialogResult.Yes)
+                                {
+                                    idToCheck = levelChecking.getID();
+                                    _wasIdSwapDone = true;
+                                    _doID = Int32.Parse(_hostForm.levelIDTextBox.Text);
+                                    _undoID = idToCheck;
+                                }
+                                else
+                                {
+                                    int targetID = _loadedMap.getLevelList().Count + 1;
+                                    bool uniqueIDNotFound = true;
+                                    while (uniqueIDNotFound)
+                                    {
+                                        int checkedLevels = 0;
+                                        foreach (GameLevel levelIDChecking in _loadedMap.getLevelList())
+                                        {
+                                            if (levelIDChecking.getID() == targetID)
+                                            {
+                                                targetID++;
+                                                break;
+                                            }
+                                            checkedLevels++;
+                                        }
+                                        if (checkedLevels == _loadedMap.getLevelList().Count)
+                                        {
+                                            uniqueIDNotFound = false;
+                                        }
+                                    }
+                                    _doID = targetID;
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (_wasIdSwapDone)
+                    {
+                        foreach (GameLevel levelIDSwap in _loadedMap.getLevelList())
+                        {
+                            if (levelIDSwap.getID() == _undoID)
+                            {
+                                _undoData = new GameLevel(level.getID(), level.getStartX(), level.getStartY(), level.getName());
+                                _undoData.setExit(level.getExitX(), level.getExitY());
+
+                                level.setName(_hostForm.levelNameTextBox.Text);
+                                level.setID(_undoID);
+                                levelIDSwap.setID(_doID);
+                                level.setStartX(Int32.Parse(_hostForm.levelStartXTextBox.Text));
+                                level.setStartY(Int32.Parse(_hostForm.levelStartYTextBox.Text));
+                                level.setExit(Int32.Parse(_hostForm.levelExitXTextBox.Text), Int32.Parse(_hostForm.levelExitYTextBox.Text));
+
+                                _redoData = new GameLevel(level.getID(), level.getStartX(), level.getStartY(), level.getName());
+                                _redoData.setExit(level.getExitX(), level.getExitY());
+                                _hostForm.updateLevelList();
+                                _hostForm.levelSelectionBox.Text = level.getName();
+                                _hostForm.updateLevelSelectionBox();
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _undoData = new GameLevel(level.getID(), level.getStartX(), level.getStartY(), level.getName());
+                        _undoData.setExit(level.getExitX(), level.getExitY());
+
+                        level.setName(_hostForm.levelNameTextBox.Text);
+                        level.setID(_doID);
+                        level.setStartX(Int32.Parse(_hostForm.levelStartXTextBox.Text));
+                        level.setStartY(Int32.Parse(_hostForm.levelStartYTextBox.Text));
+                        level.setExit(Int32.Parse(_hostForm.levelExitXTextBox.Text), Int32.Parse(_hostForm.levelExitYTextBox.Text));
+
+                        _redoData = new GameLevel(level.getID(), level.getStartX(), level.getStartY(), level.getName());
+                        _redoData.setExit(level.getExitX(), level.getExitY());
+                        _hostForm.updateLevelList();
+                        _hostForm.levelSelectionBox.Text = level.getName();
+                        _hostForm.updateLevelSelectionBox();
+                    }
+
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal override bool Undo()
+        {
+
+            if (_wasIdSwapDone)
+            {
+                foreach (GameLevel level in _loadedMap.getLevelList())
+                {
+                    if (level.getID() == _doID)
+                    {
+                        level.setID(_undoID);
+                        return true;
+                    }
+                }
+            }
+
+            foreach (GameLevel level in _loadedMap.getLevelList())
+            {
+                if (level.getName() == _redoData.getName())
+                {
+                    level.setName(_undoData.getName());
+                    level.setID(_undoData.getID());
+                    level.setStartX(_undoData.getStartX());
+                    level.setStartY(_undoData.getStartY());
+                    level.setExit(_undoData.getExitX(), _undoData.getExitY());
+                    _hostForm.updateLevelList();
+                    _hostForm.levelSelectionBox.Text = level.getName();
+                    _hostForm.updateLevelSelectionBox();
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    internal class CApplyGameData : Command
+    {
+        GameData _loadedMap;
+        EditorForm _hostForm;
+
+        string _redoGameName = null;
+        string _undoGameName = null;
+
+        internal CApplyGameData(GameData loadedMap, EditorForm hostForm)
+        {
+            _loadedMap = loadedMap;
+            _hostForm = hostForm;
+            _undoName = "Revert game name change";
+            _redoName = "Apply game name change";
+        }
+
+        internal override bool Do()
+        {
+            if (_redoGameName != null)
+            {
+                _loadedMap.setName(_redoGameName);
+                _hostForm.gameNameTextBox.Text = _redoGameName;
+                return true;
+            }
+            _undoGameName = _loadedMap.getName();
+            _loadedMap.setName(_hostForm.gameNameTextBox.Text);
+            _redoGameName = _hostForm.gameNameTextBox.Text;
+            return true;
+        }
+
+        internal override bool Undo()
+        {
+            _loadedMap.setName(_undoGameName);
+            _hostForm.gameNameTextBox.Text = _undoGameName;
+            return true;
+        }
     }
 
 }

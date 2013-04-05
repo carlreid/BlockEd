@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlockEd
 {
-    partial class Form1
+    partial class EditorForm
     {
         //From: http://stackoverflow.com/questions/5010191/using-datacontractserializer-to-serialize-but-cant-deserialize-back
 

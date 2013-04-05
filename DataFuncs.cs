@@ -23,9 +23,9 @@ namespace BlockEd
         private Image _lastModifiedTileImage = null;
         private MapTile _selectedTile = null;
         private TileData _tileData = null;
-        private Form1 _mainForm = null;
+        private EditorForm _mainForm = null;
 
-        public DataFuncs(MapTile currentTile, TileData tileData, Form1 mainForm)
+        public DataFuncs(MapTile currentTile, TileData tileData, EditorForm mainForm)
         {
             _selectedTile = currentTile;
             _tileData = tileData;

@@ -7,7 +7,7 @@ using System;
 namespace BlockEd
 {
 
-    public partial class Form1
+    public partial class EditorForm
     {
         Process gameTestApplication = null;
         bool isTestAppRunning = false;

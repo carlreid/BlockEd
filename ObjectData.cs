@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace BlockEd
 {
-    partial class Form1 
+    partial class EditorForm 
     {
 
         TileData _tileData = new TileData();

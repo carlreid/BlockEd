@@ -34,11 +34,11 @@ namespace BlockEd
     {
         //Useful source on loading in shaders/setting them up: http://www.opentk.com/node/92
 
-        private Form1 callerForm;
+        private EditorForm callerForm;
         private bool applyLayerGhosting = true;
         private bool applyLayerBounds = true;
 
-        public GLFuncs(Form1 callerForm)
+        public GLFuncs(EditorForm callerForm)
         {
             this.callerForm = callerForm;
         }

@@ -79,6 +79,13 @@ namespace BlockEd
             _level.Add(new GameLevel(id, startX, startY, levelName));
         }
 
+        public void removeLevel(int id)
+        {
+            _level.RemoveAll(delegate(GameLevel level){
+                return level.getID() == id;
+            });
+        }
+
         public string getName()
         {
             return _name;

@@ -101,6 +101,26 @@ namespace BlockEd
             return _exitPosY;
         }
 
+        public void setName(string name)
+        {
+            _name = name;
+        }
+
+        public void setStartX(int startX)
+        {
+            _startPosX = startX;
+        }
+
+        public void setStartY(int startY)
+        {
+            _startPosY = startY;
+        }
+
+        public void setID(int id)
+        {
+            _id = id;
+        }
+
         [DataMember]
         private int _id; //Rq
         [DataMember]

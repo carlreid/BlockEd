@@ -20,9 +20,9 @@ namespace BlockEd
         List<GraphicTile> _tiles;
         GraphicTile _curTileData;
         bool _changesMade = false;
-        Form1 _hostForm;
+        EditorForm _hostForm;
 
-        internal tileGraphicEditor(int tileID, ref List<SpriteSheet> spriteSheets, ref List<GraphicTile> tiles, Form1 myHost)
+        internal tileGraphicEditor(int tileID, ref List<SpriteSheet> spriteSheets, ref List<GraphicTile> tiles, EditorForm myHost)
         {
             InitializeComponent();
 

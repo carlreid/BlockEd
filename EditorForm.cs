@@ -23,7 +23,7 @@ using System.Threading;
 namespace BlockEd
 {
 
-    public partial class Form1 : Form
+    public partial class EditorForm : Form
     {
 
         bool DEVMODE = false;
@@ -35,6 +35,7 @@ namespace BlockEd
         MapTile currentTile = null;
         internal const int maxAmountTiles = 1000;
         internal const int maxZDepth = 10;
+        string periodicFileName = "backup";
 
         internal Color alphaColorKey;
 
@@ -66,6 +67,9 @@ namespace BlockEd
         }
 
         internal void addCommand(Command cmd){
+            changeMade = true;
+            saveTimer.Enabled = true;
+
             undoStack.Push(cmd);
             undoStripButton.Enabled = true;
             if (redoStack.Count > 0)
@@ -160,15 +164,18 @@ namespace BlockEd
         {
             foreach (GameLevel level in loadedMap.getLevelList())
             {
-                foreach (MapData map in level.getLayerList())
+                if (level.getName() == levelSelectionBox.Text)
                 {
-                    if (maxLayerX < map.getMapWidth() * map.getMaxTileWidth())
+                    foreach (MapData map in level.getLayerList())
                     {
-                        maxLayerX = map.getMapWidth() * map.getMaxTileWidth();
-                    }
-                    if (maxLayerY < map.getMapHeight() * map.getMaxTileHeight())
-                    {
-                        maxLayerY = map.getMapHeight() * map.getMaxTileHeight();
+                        if (maxLayerX < map.getMapWidth() * map.getMaxTileWidth())
+                        {
+                            maxLayerX = map.getMapWidth() * map.getMaxTileWidth();
+                        }
+                        if (maxLayerY < map.getMapHeight() * map.getMaxTileHeight())
+                        {
+                            maxLayerY = map.getMapHeight() * map.getMaxTileHeight();
+                        }
                     }
                 }
             }
@@ -230,8 +237,6 @@ namespace BlockEd
         }
 
         private void loadMap(){
-            var stopWatch = new System.Diagnostics.Stopwatch();
-            stopWatch.Start();
 
             glMiniMapControl.Visible = true;
             glMapMain.Visible = true;
@@ -260,10 +265,6 @@ namespace BlockEd
 
             updateGLComponents();
 
-            stopWatch.Stop();
-            var executionTime = stopWatch.Elapsed;
-            glLoadSpeedLabel.Text = "Loaded in: " + executionTime.ToString();
-
             //Add the list of levels to the level selection box
             updateLevelList();
 
@@ -275,6 +276,10 @@ namespace BlockEd
 
             editControlsGroupBox.Enabled = true;
             updateTileCount();
+            saveTimer.Enabled = true;
+
+            gameNameTextBox.Text = loadedMap.getName();
+            toggleTabPageEnable(gameDataPage, true);
 
             tileTypeLabel.Text = "Tile Types: " + graphicTiles.Count;
         }
@@ -325,13 +330,15 @@ namespace BlockEd
             data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
         }
 
-        public Form1()
+        public EditorForm()
         {
             InitializeComponent();
             glFuncs = new GLFuncs(this);
             currentTile = new MapTile(-1, -1, -1);
             toggleTabPageEnable(tileDataPage, false);
             toggleTabPageEnable(layerDataPage, false);
+            toggleTabPageEnable(levelDataPage, false);
+            toggleTabPageEnable(gameDataPage, false);
             //tileDataGroupBox.Enabled = false;
             //layerDataGroupBox.Enabled = false;
 
@@ -362,11 +369,20 @@ namespace BlockEd
 
             //End From
 
+            //Setup tooltops for picture buttons
             ToolTip newLayerToolTop = new ToolTip();
             newLayerToolTop.SetToolTip(this.newLayerPictureBox, "Add a layer");
-
             ToolTip removeLayerToolTop = new ToolTip();
-            removeLayerToolTop.SetToolTip(this.removeLayerPictureBox, "Remove a layer");
+            removeLayerToolTop.SetToolTip(this.removeLayerPictureBox, "Remove layer");
+            ToolTip moveLayerDownToolTip = new ToolTip();
+            moveLayerDownToolTip.SetToolTip(this.moveLayerDownPictureBox, "Move layer down");
+            ToolTip moveLayerUpToolTip = new ToolTip();
+            moveLayerUpToolTip.SetToolTip(this.moveLayerUpPictureBox, "Move layer down");
+
+            ToolTip newLevelToolTip = new ToolTip();
+            newLevelToolTip.SetToolTip(this.newLevelPictureBox, "Add a new level");
+            ToolTip removeLevelToolTip = new ToolTip();
+            removeLevelToolTip.SetToolTip(this.removeLevelPictureBox, "Remove level");
         }
 
         //From: http://stackoverflow.com/questions/8075040/visual-studio-style-undo-drop-down-button-custom-toolstripsplitbutton
@@ -670,11 +686,28 @@ namespace BlockEd
         {
             if (changeMade)
             {
-                DialogResult shouldQuit = MessageBox.Show("You have unsaved changes. Are you sure you want to quit?", "Unsaved Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult shouldQuit = MessageBox.Show("Save changes to " + loadedMap.getName() + " before quitting?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-                if (shouldQuit == DialogResult.No)
+                if (shouldQuit == DialogResult.Cancel)
                 {
                     e.Cancel = true;
+                }
+                else if (shouldQuit == DialogResult.Yes)
+                {
+                    if (!saveXML())
+                    {
+                        e.Cancel = true;
+                    }
+                }
+                else
+                {
+                    //Delete the periodic save file.
+                    string backupFileSavePath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + @"\" + periodicFileName + ".xml";
+                    if (System.IO.File.Exists(backupFileSavePath))
+                    {
+                        System.IO.File.Delete(backupFileSavePath);
+                    }
+                    e.Cancel = false;
                 }
 
             }
@@ -711,50 +744,54 @@ namespace BlockEd
                 Console.Beep(1000, 50);
                 return;
             }
-            changeMade = true;
             foreach (GameLevel level in loadedMap.getLevelList())
             {
-                foreach (MapData map in level.getLayerList())
+
+                if (level.getName() == levelSelectionBox.Text)
                 {
-                    if (map.getMapName() == layerSelectionBox.Text)
+
+                    foreach (MapData map in level.getLayerList())
                     {
-                        foreach (GraphicTile graphic in graphicTiles)
+                        if (map.getMapName() == layerSelectionBox.Text)
                         {
-                            if (graphic.getTileID() != currentTile.getID())
+                            foreach (GraphicTile graphic in graphicTiles)
                             {
-                                continue;
-                            }
-
-                            int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
-                            int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
-
-                            //If the tile placement is not within the map bounds, don't do anything.
-                            if (tileX < 0 || tileY < 0 || tileX > map.getMapWidth() - 1 || tileY > map.getMapHeight() - 1)
-                            {
-                                return;
-                            }
-
-                            currentTile.setPosition(tileX, tileY);
-                            CPlaceTile placeTile = new CPlaceTile(currentTile, map, loadedMap);
-
-                            foreach (MapDataTile checkTile in map.getTileList())
-                            {
-                                if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
+                                if (graphic.getTileID() != currentTile.getID())
                                 {
-                                    if (checkTile._spriteID == currentTile.getID())
+                                    continue;
+                                }
+
+                                int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
+                                int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
+
+                                //If the tile placement is not within the map bounds, don't do anything.
+                                if (tileX < 0 || tileY < 0 || tileX > map.getMapWidth() - 1 || tileY > map.getMapHeight() - 1)
+                                {
+                                    return;
+                                }
+
+                                currentTile.setPosition(tileX, tileY);
+                                CPlaceTile placeTile = new CPlaceTile(currentTile, map, loadedMap);
+
+                                foreach (MapDataTile checkTile in map.getTileList())
+                                {
+                                    if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
                                     {
-                                        return;
+                                        if (checkTile._spriteID == currentTile.getID())
+                                        {
+                                            return;
+                                        }
                                     }
                                 }
+
+                                addCommand(placeTile);
+                                placeTile.Do();
+
+                                updateGLComponents();
+                                updateTileCount();
+
+                                return;
                             }
-
-                            addCommand(placeTile);
-                            placeTile.Do();
-
-                            updateGLComponents();
-                            updateTileCount();
-
-                            return;
                         }
                     }
                 }
@@ -763,29 +800,32 @@ namespace BlockEd
 
         private void removeTile(int mouseX, int mouseY)
         {
-            changeMade = true;
             foreach (GameLevel level in loadedMap.getLevelList())
             {
-                foreach (MapData map in level.getLayerList())
+
+                if (level.getName() == levelSelectionBox.Text)
                 {
-                    if (map.getMapName() == layerSelectionBox.Text)
+                    foreach (MapData map in level.getLayerList())
                     {
-                        int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
-                        int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
-                        currentTile.setPosition(tileX, tileY);
-
-                        CRemoveTile removeTile = new CRemoveTile(currentTile, map, loadedMap);
-
-                        foreach (MapDataTile checkTile in map.getTileList())
+                        if (map.getMapName() == layerSelectionBox.Text)
                         {
-                            if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
-                            {
-                                addCommand(removeTile);
-                                removeTile.Do();
+                            int tileX = (int)((tileOffsetX * -1 + mouseX) / map.getMaxTileWidth());
+                            int tileY = (int)((tileOffsetY * -1 + mouseY) / map.getMaxTileHeight());
+                            currentTile.setPosition(tileX, tileY);
 
-                                updateGLComponents();
-                                updateTileCount();
-                                return;
+                            CRemoveTile removeTile = new CRemoveTile(currentTile, map, loadedMap);
+
+                            foreach (MapDataTile checkTile in map.getTileList())
+                            {
+                                if (checkTile._xPos == currentTile.getX() && checkTile._yPos == currentTile.getY())
+                                {
+                                    addCommand(removeTile);
+                                    removeTile.Do();
+
+                                    updateGLComponents();
+                                    updateTileCount();
+                                    return;
+                                }
                             }
                         }
                     }
@@ -1012,6 +1052,7 @@ namespace BlockEd
             CApplyLayerData applyLayerData = new CApplyLayerData(loadedMap, this);
             addCommand(applyLayerData);
             applyLayerData.Do();
+            findBiggestLayer();
         }
 
         private void newLayerPictureBox_Click(object sender, EventArgs e)
@@ -1141,9 +1182,11 @@ namespace BlockEd
             string levelSelectedName = (string)levelSelectionBox.SelectedItem;
             levelSelected = levelSelectedName;
 
+            updateLevelSelectionBox();
+
             updateLayerList();
             layerSelectionBox.SelectedItem = "Show All";
-            currentLayerLabel.Enabled = true;
+            //currentLayerLabel.Enabled = true;
             layerSelectionBox.Enabled = true;
             newLayerPictureBox.Enabled = true;
             removeLayerPictureBox.Enabled = true;
@@ -1183,6 +1226,215 @@ namespace BlockEd
                 updateGLComponents();
             }
         }
+
+        private void saveTimer_Tick(object sender, EventArgs e)
+        {
+            string serializedString = Serialize(loadedMap);
+
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.LoadXml(serializedString);
+
+            string outDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + @"\" + periodicFileName + ".xml";
+            xdoc.Save(outDir);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string checkBackupSave = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + @"\" + periodicFileName + ".xml";
+            if (System.IO.File.Exists(checkBackupSave))
+            {
+                DialogResult result = MessageBox.Show("A backup file has been detected, this may have been due to a crash before a save could be made. Would you like to recover from this backup?",
+                                                      "Backup Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    string text = System.IO.File.ReadAllText(checkBackupSave);
+                    loadedMap = new GameData();
+                    loadedMap = (GameData)Deserialize(text, loadedMap.GetType());
+
+                    glMiniMapControl.Visible = true;
+                    glMapMain.Visible = true;
+
+                    data.loadTileData(ref _tileData);
+                    data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+                    glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+                    updateGL(glMapMain);
+                    this.Text = "BlockEd - " + System.IO.Path.GetFileNameWithoutExtension(mapFilePath);
+
+                    glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);  //Load the graphics into OpenGL
+                    findBiggestLayer();                                     //Setup variables to the max layer size
+
+                    //Setup the mini map viewport
+                    glMiniMapControl.MakeCurrent();
+                    GL.MatrixMode(MatrixMode.Projection);
+                    GL.LoadIdentity();
+                    GL.Ortho(0, maxLayerX, maxLayerY, 0, -1, 1);
+                    GL.Viewport(0, 0, glMiniMapControl.Width, glMiniMapControl.Height);
+                    GL.ClearColor(Color.Black);
+
+                    //Setup the main viewport
+                    glMapMain.MakeCurrent();
+                    GL.MatrixMode(MatrixMode.Projection);
+                    GL.LoadIdentity();
+                    GL.Ortho(0, glMapMain.Width, glMapMain.Height, 0, -1, 1);
+                    GL.Viewport(0, 0, glMapMain.Width, glMapMain.Height);
+                    GL.ClearColor(Color.Black);
+
+                    alphaColorKey = Color.Black;
+
+                    updateGLComponents();
+
+                    //Add the list of levels to the level selection box
+                    updateLevelList();
+
+                    //Add the various loaded in graphics to the tile picker.
+                    data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
+
+                    editControlsGroupBox.Enabled = true;
+                    updateTileCount();
+                    changeMade = true;
+                    saveTimer.Enabled = true;
+
+                }
+                else
+                {
+                    System.IO.File.Delete(checkBackupSave);
+                }
+            }
+        }
+
+        internal void updateLevelSelectionBox()
+        {
+
+            foreach (GameLevel level in loadedMap.getLevelList())
+            {
+                if (level.getName() == levelSelectionBox.Text)
+                {
+                    levelIDTextBox.Text = level.getID().ToString();
+                    levelNameTextBox.Text = level.getName();
+                    levelStartXTextBox.Text = level.getStartX().ToString();
+                    levelStartYTextBox.Text = level.getStartY().ToString();
+                    levelExitXTextBox.Text = level.getExitX().ToString();
+                    levelExitYTextBox.Text = level.getExitY().ToString();
+                    toggleTabPageEnable(levelDataPage, true);
+                    return;
+                }
+            }
+
+            //Above did not return so unknown level or Select All selected
+            toggleTabPageEnable(levelDataPage, false);
+            levelIDTextBox.Text = "";
+            levelNameTextBox.Text = "";
+            levelStartXTextBox.Text = "";
+            levelStartYTextBox.Text = "";
+            levelExitXTextBox.Text = "";
+            levelExitYTextBox.Text = "";
+        }
+
+        private void newLevelPictureBox_Click(object sender, EventArgs e)
+        {
+            CAddLevel addLevel = new CAddLevel(loadedMap, this);
+            addCommand(addLevel);
+            addLevel.Do();
+        }
+
+        private void removeLevelPictureBox_Click(object sender, EventArgs e)
+        {
+            CRemoveLevel removeLevel = new CRemoveLevel(loadedMap, this);
+            addCommand(removeLevel);
+            removeLevel.Do();
+        }
+
+        private void levelApplyChangesButton_Click(object sender, EventArgs e)
+        {
+            CApplyLevelData applyLevelData = new CApplyLevelData(loadedMap, this);
+            addCommand(applyLevelData);
+            applyLevelData.Do();
+        }
+
+        private void layerWidthHeightValidate(object sender, CancelEventArgs e)
+        {
+            MaskedTextBox caller = (MaskedTextBox)sender;
+            if (Int32.Parse(caller.Text) > 256)
+            {
+                caller.Text = "256";
+            }
+            else if(Int32.Parse(caller.Text) < 1)
+            {
+                caller.Text = "1";
+            }
+        }
+
+        private void gameDataApplyChangesButton_Click(object sender, EventArgs e)
+        {
+            CApplyGameData applyGameData = new CApplyGameData(loadedMap, this);
+            addCommand(applyGameData);
+            applyGameData.Do();
+        }
+
+        private void undoStripButton_ButtonClick(object sender, EventArgs e)
+        {
+            performUndo(1);
+        }
+
+        private void redoStripButton_ButtonClick(object sender, EventArgs e)
+        {
+            performRedo(1);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveXML();
+        }
+
+        private void mapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            loadedMap = new GameData();
+
+            glMiniMapControl.Visible = true;
+            glMapMain.Visible = true;
+
+            data.loadTileData(ref _tileData);
+            data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
+            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
+            updateGL(glMapMain);
+            this.Text = "BlockEd - New Map";
+
+            glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);  //Load the graphics into OpenGL
+            findBiggestLayer();                                     //Setup variables to the max layer size
+
+            //Setup the mini map viewport
+            glMiniMapControl.MakeCurrent();
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, maxLayerX, maxLayerY, 0, -1, 1);
+            GL.Viewport(0, 0, glMiniMapControl.Width, glMiniMapControl.Height);
+            GL.ClearColor(Color.Black);
+
+            //Setup the main viewport
+            glMapMain.MakeCurrent();
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, glMapMain.Width, glMapMain.Height, 0, -1, 1);
+            GL.Viewport(0, 0, glMapMain.Width, glMapMain.Height);
+            GL.ClearColor(Color.Black);
+
+            alphaColorKey = Color.Black;
+
+            updateGLComponents();
+
+            //Add the list of levels to the level selection box
+            updateLevelList();
+
+            //Add the various loaded in graphics to the tile picker.
+            data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
+
+            editControlsGroupBox.Enabled = true;
+            updateTileCount();
+            changeMade = true;
+            saveTimer.Enabled = true;
+
+        }
+
 
 
     }

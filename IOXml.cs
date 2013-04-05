@@ -2,15 +2,15 @@
 
 namespace BlockEd
 {
-    partial class Form1
+    partial class EditorForm
     {
 
-        void saveXML()
+        bool saveXML()
         {
             if (loadedMap == null)
             {
                 MessageBox.Show("Please load a map first.", "No map open", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                return false;
             }
 
             //If a new map has been made which wasn't loaded using "Open"
@@ -31,6 +31,10 @@ namespace BlockEd
                     data.saveMapXml(loadedMap, saveDirectory, saveName);
                     mapFilePath = savePath;
                 }
+                else if (saveResult == DialogResult.Cancel)
+                {
+                    return false;
+                }
 
                 this.Text = "BlockEd - " + System.IO.Path.GetFileNameWithoutExtension(mapFilePath);
 
@@ -43,6 +47,16 @@ namespace BlockEd
             }
 
             changeMade = false;
+            saveTimer.Enabled = false;
+
+            //Delete the periodic save file.
+            string backupFileSavePath = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + @"\" + periodicFileName + ".xml";
+            if (System.IO.File.Exists(backupFileSavePath))
+            {
+                System.IO.File.Delete(backupFileSavePath);
+            }
+
+            return true;
 
         }
 
