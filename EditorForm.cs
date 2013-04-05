@@ -1416,6 +1416,10 @@ namespace BlockEd
         private void mapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             newMap();
+
+
+            
+
         }
 
 
@@ -1466,6 +1470,19 @@ namespace BlockEd
             updateTileCount();
             changeMade = true;
             saveTimer.Enabled = true;
+
+            CAddLevel addLevel = new CAddLevel(loadedMap, this);
+            CAddLayer addLayer = new CAddLayer(loadedMap, this);
+            addCommand(addLevel);
+            addCommand(addLayer);
+            addLevel.Do();
+            addLayer.Do();
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            newMap();
         }
 
 
