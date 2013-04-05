@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tileGraphicEditor));
             this.colourPickPanel = new System.Windows.Forms.Panel();
             this.giantTilePictureBox = new System.Windows.Forms.PictureBox();
             this.saveButton = new System.Windows.Forms.Button();
@@ -112,6 +113,7 @@
             this.Controls.Add(this.colourPickPanel);
             this.Controls.Add(this.giantTilePictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "tileGraphicEditor";
             this.Text = "Graphic Editor";

@@ -152,6 +152,33 @@ namespace BlockEd
                     performRedo(1);
                 }
             }
+            else if(keyData == (Keys.Control | Keys.G)){
+                if (ghostingStripButton.Checked)
+                {
+                    ghostingStripButton.Checked = false;
+                    glFuncs.useLayerGhosting(true);
+                }
+                else
+                {
+                    ghostingStripButton.Checked = true;
+                    glFuncs.useLayerGhosting(false);
+                }
+            }
+            else if(keyData == (Keys.Control | Keys.B)){
+                if (boundsStripButton.Checked)
+                {
+                    boundsStripButton.Checked = false;
+                    glFuncs.useLayerBounds(true);
+                }
+                else
+                {
+                    boundsStripButton.Checked = true;
+                    glFuncs.useLayerBounds(false);
+                }
+            }
+            else if(keyData == (Keys.Control | Keys.N)){
+                newMap();
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -1388,6 +1415,12 @@ namespace BlockEd
 
         private void mapToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            newMap();
+        }
+
+
+        internal void newMap()
+        {
             mapFilePath = null;
             loadedMap = new GameData();
 
@@ -1433,9 +1466,7 @@ namespace BlockEd
             updateTileCount();
             changeMade = true;
             saveTimer.Enabled = true;
-
         }
-
 
 
     }

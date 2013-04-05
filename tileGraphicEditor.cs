@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,12 +189,13 @@ namespace BlockEd
                         //spriteSheetImage.Save(sheet.getImagePath());
                         Bitmap newSpriteSheet = new Bitmap(spriteSheetImage);
 
+
                         //Clean up and dispose the bitmap to allow file to be overwritten
                         spriteSheetImage.Dispose();
                         g.Dispose();
 
                         string savePath = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "/" + sheet.getImagePath());
-                        newSpriteSheet.Save(savePath);
+                        newSpriteSheet.Save(savePath, ImageFormat.Bmp);
                         newSpriteSheet.Dispose();
 
                         _hostForm.glFuncs.loadSpriteSheets(_hostForm.graphicFiles, _hostForm.alphaColorKey);
