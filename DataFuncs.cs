@@ -214,8 +214,12 @@ namespace BlockEd
             if (mapReader == null)
             {
                 Debug.WriteLine("Failed to load map");
+                return null;
             }
             mapReader.Read();
+
+            //This will be true after checking the first element
+            bool isMapFile = false;
 
             while (mapReader.Read())
             {
@@ -223,6 +227,7 @@ namespace BlockEd
 
                 if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Game")
                 {
+                    isMapFile = true;
                     if (mapReader.MoveToAttribute("name"))
                     {
                         string mapName = mapReader.ReadContentAsString();
@@ -231,6 +236,12 @@ namespace BlockEd
                         loadedMap = new GameData();
                         loadedMap.setName(mapName);
                     }
+                }
+
+                if (!isMapFile)
+                {
+                    MessageBox.Show("It appears the XML file you opened is not a valid map.", "Invalid Map", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    return null;
                 }
 
                 if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "scroll_area")

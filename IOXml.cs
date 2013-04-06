@@ -74,6 +74,13 @@ namespace BlockEd
 
                 mapFilePath = fileBrowser.FileName;
                 loadedMap = data.loadMap(loadedMap, mapFilePath);
+
+                //Check if the map was loaded correctly
+                if (loadedMap == null)
+                {
+                    return false;
+                }
+
                 data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
                 glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
                 updateGL(glMapMain);
