@@ -74,14 +74,14 @@ namespace BlockEd
 
                 mapFilePath = fileBrowser.FileName;
                 loadedMap = data.loadMap(loadedMap, mapFilePath);
+                data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
 
-                //Check if the map was loaded correctly
-                if (loadedMap == null)
+                //Check if loaded correctly
+                if (loadedMap == null || graphicFiles.Count <= 0)
                 {
                     return false;
                 }
 
-                data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
                 glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
                 updateGL(glMapMain);
                 this.Text = "BlockEd - " + System.IO.Path.GetFileNameWithoutExtension(mapFilePath);

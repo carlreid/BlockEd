@@ -60,140 +60,158 @@ namespace BlockEd
             //Define a temp to store alpha in
             Color alphaColorKey;
 
+            XmlReader graphicsReader;
+
             //Load in the hard coded XML path
-            XmlReader graphicsReader = XmlReader.Create("data/Graphics.xml", settings);
+            try
+            {
+                graphicsReader = XmlReader.Create("data/Graphics.xml", settings);
+            }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show("Unable to locate the Graphics.xml file. Please make sure a copy exists in /data/", "No Graphics!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
             graphicsReader.Read();
 
-            while (graphicsReader.Read())
+            try
             {
-                if (graphicsReader.NodeType == XmlNodeType.Element)
+                while (graphicsReader.Read())
                 {
-                    if (graphicsReader.Name == "transparentcolour")
+                    if (graphicsReader.NodeType == XmlNodeType.Element)
                     {
-                        int r = 0;
-                        int g = 0;
-                        int b = 0;
-
-                        if (DEVMODE) Console.WriteLine("---- Element[transparentcolour] ----");
-
-                        graphicsReader.MoveToAttribute("red");
-                        if (DEVMODE) Console.WriteLine("Red: " + graphicsReader.ReadContentAsInt());
-                        r = graphicsReader.ReadContentAsInt();
-
-                        graphicsReader.MoveToAttribute("green");
-                        if (DEVMODE) Console.WriteLine("Green: " + graphicsReader.ReadContentAsInt());
-                        g = graphicsReader.ReadContentAsInt();
-
-                        graphicsReader.MoveToAttribute("blue");
-                        if (DEVMODE) Console.WriteLine("Blue: " + graphicsReader.ReadContentAsInt());
-                        b = graphicsReader.ReadContentAsInt();
-
-                        alphaColorKey = Color.FromArgb(0, r, g, b);
-
-                    }
-
-                    if (graphicsReader.Name == "FileList")
-                    {
-                        graphicsReader.ReadToDescendant("file");
-                        while (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "file")
+                        if (graphicsReader.Name == "transparentcolour")
                         {
-                            int fileID = 0;
-                            string fileName = "";
+                            int r = 0;
+                            int g = 0;
+                            int b = 0;
+
+                            if (DEVMODE) Console.WriteLine("---- Element[transparentcolour] ----");
+
+                            graphicsReader.MoveToAttribute("red");
+                            if (DEVMODE) Console.WriteLine("Red: " + graphicsReader.ReadContentAsInt());
+                            r = graphicsReader.ReadContentAsInt();
+
+                            graphicsReader.MoveToAttribute("green");
+                            if (DEVMODE) Console.WriteLine("Green: " + graphicsReader.ReadContentAsInt());
+                            g = graphicsReader.ReadContentAsInt();
+
+                            graphicsReader.MoveToAttribute("blue");
+                            if (DEVMODE) Console.WriteLine("Blue: " + graphicsReader.ReadContentAsInt());
+                            b = graphicsReader.ReadContentAsInt();
+
+                            alphaColorKey = Color.FromArgb(0, r, g, b);
+
+                        }
+
+                        if (graphicsReader.Name == "FileList")
+                        {
+                            graphicsReader.ReadToDescendant("file");
+                            while (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "file")
+                            {
+                                int fileID = 0;
+                                string fileName = "";
+
+                                graphicsReader.MoveToAttribute("id");
+                                fileID = graphicsReader.ReadContentAsInt();
+
+                                graphicsReader.MoveToElement();
+                                fileName = graphicsReader.ReadElementContentAsString();
+
+                                graphicFiles.Add(new SpriteSheet(fileID, fileName));
+
+                            }
+                        }
+
+                        if (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "sprite")
+                        {
+                            string name = "", set = "";
+                            int id, file, type = 0, data1 = 0, data2 = 0, width, height, xpos, ypos;
+                            bool block = false;
+
+                            if (DEVMODE) Console.WriteLine("-------------------------------------------");
 
                             graphicsReader.MoveToAttribute("id");
-                            fileID = graphicsReader.ReadContentAsInt();
-
-                            graphicsReader.MoveToElement();
-                            fileName = graphicsReader.ReadElementContentAsString();
-
-                            graphicFiles.Add(new SpriteSheet(fileID, fileName));
-
-                        }
-                    }
-
-                    if (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "sprite")
-                    {
-                        string name = "", set = "";
-                        int id, file, type = 0, data1 = 0, data2 = 0, width, height, xpos, ypos;
-                        bool block = false;
-
-                        if (DEVMODE) Console.WriteLine("-------------------------------------------");
-
-                        graphicsReader.MoveToAttribute("id");
-                        if (DEVMODE) Console.WriteLine("ID: " + graphicsReader.ReadContentAsInt().ToString());
-                        id = graphicsReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("ID: " + graphicsReader.ReadContentAsInt().ToString());
+                            id = graphicsReader.ReadContentAsInt();
 
 
-                        graphicsReader.MoveToAttribute("file");
-                        if (DEVMODE) Console.WriteLine("File: " + graphicsReader.ReadContentAsString().ToString());
-                        file = graphicsReader.ReadContentAsInt();
+                            graphicsReader.MoveToAttribute("file");
+                            if (DEVMODE) Console.WriteLine("File: " + graphicsReader.ReadContentAsString().ToString());
+                            file = graphicsReader.ReadContentAsInt();
 
-                        if (graphicsReader.MoveToAttribute("set"))
-                        {
-                            if (DEVMODE) Console.WriteLine("Set: " + graphicsReader.ReadContentAsString().ToString());
-                            set = graphicsReader.ReadContentAsString();
-                        }
-
-                        if (graphicsReader.MoveToAttribute("name"))
-                        {
-                            if (DEVMODE) Console.WriteLine("Name: " + graphicsReader.ReadContentAsString().ToString());
-                            name = graphicsReader.ReadContentAsString();
-                        }
-
-                        if (graphicsReader.MoveToAttribute("type"))
-                        {
-                            if (DEVMODE) Console.WriteLine("Type: " + graphicsReader.ReadContentAsInt().ToString());
-                            type = graphicsReader.ReadContentAsInt();
-                        }
-
-                        if (graphicsReader.MoveToAttribute("data1"))
-                        {
-                            if (!graphicsReader.Value.Equals(""))
+                            if (graphicsReader.MoveToAttribute("set"))
                             {
-                                if (DEVMODE) Console.WriteLine("Data1: " + graphicsReader.ReadContentAsInt().ToString());
-
-                                data1 = graphicsReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Set: " + graphicsReader.ReadContentAsString().ToString());
+                                set = graphicsReader.ReadContentAsString();
                             }
-                        }
 
-
-                        if (graphicsReader.MoveToAttribute("data2"))
-                        {
-                            if (!graphicsReader.Value.Equals(""))
+                            if (graphicsReader.MoveToAttribute("name"))
                             {
-                                if (DEVMODE) Console.WriteLine("Data2: " + graphicsReader.ReadContentAsInt().ToString());
-
-                                data2 = graphicsReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Name: " + graphicsReader.ReadContentAsString().ToString());
+                                name = graphicsReader.ReadContentAsString();
                             }
+
+                            if (graphicsReader.MoveToAttribute("type"))
+                            {
+                                if (DEVMODE) Console.WriteLine("Type: " + graphicsReader.ReadContentAsInt().ToString());
+                                type = graphicsReader.ReadContentAsInt();
+                            }
+
+                            if (graphicsReader.MoveToAttribute("data1"))
+                            {
+                                if (!graphicsReader.Value.Equals(""))
+                                {
+                                    if (DEVMODE) Console.WriteLine("Data1: " + graphicsReader.ReadContentAsInt().ToString());
+
+                                    data1 = graphicsReader.ReadContentAsInt();
+                                }
+                            }
+
+
+                            if (graphicsReader.MoveToAttribute("data2"))
+                            {
+                                if (!graphicsReader.Value.Equals(""))
+                                {
+                                    if (DEVMODE) Console.WriteLine("Data2: " + graphicsReader.ReadContentAsInt().ToString());
+
+                                    data2 = graphicsReader.ReadContentAsInt();
+                                }
+                            }
+
+
+                            if (graphicsReader.MoveToAttribute("block"))
+                            {
+                                if (DEVMODE) Console.WriteLine("Block: " + graphicsReader.ReadContentAsBoolean().ToString());
+                                block = graphicsReader.ReadContentAsBoolean();
+                            }
+
+                            graphicsReader.MoveToAttribute("x");
+                            if (DEVMODE) Console.WriteLine("X: " + graphicsReader.ReadContentAsInt().ToString());
+                            xpos = graphicsReader.ReadContentAsInt();
+
+                            graphicsReader.MoveToAttribute("y");
+                            if (DEVMODE) Console.WriteLine("Y: " + graphicsReader.ReadContentAsInt().ToString());
+                            ypos = graphicsReader.ReadContentAsInt();
+
+                            graphicsReader.MoveToAttribute("w");
+                            if (DEVMODE) Console.WriteLine("W: " + graphicsReader.ReadContentAsInt().ToString());
+                            width = graphicsReader.ReadContentAsInt();
+
+                            graphicsReader.MoveToAttribute("h");
+                            if (DEVMODE) Console.WriteLine("H: " + graphicsReader.ReadContentAsInt().ToString());
+                            height = graphicsReader.ReadContentAsInt();
+
+                            graphicTiles.Add(new GraphicTile(id, file, name, xpos, ypos, width, height, set, type, data1, data2, block));
+
                         }
-
-
-                        if (graphicsReader.MoveToAttribute("block"))
-                        {
-                            if (DEVMODE) Console.WriteLine("Block: " + graphicsReader.ReadContentAsBoolean().ToString());
-                            block = graphicsReader.ReadContentAsBoolean();
-                        }
-
-                        graphicsReader.MoveToAttribute("x");
-                        if (DEVMODE) Console.WriteLine("X: " + graphicsReader.ReadContentAsInt().ToString());
-                        xpos = graphicsReader.ReadContentAsInt();
-
-                        graphicsReader.MoveToAttribute("y");
-                        if (DEVMODE) Console.WriteLine("Y: " + graphicsReader.ReadContentAsInt().ToString());
-                        ypos = graphicsReader.ReadContentAsInt();
-
-                        graphicsReader.MoveToAttribute("w");
-                        if (DEVMODE) Console.WriteLine("W: " + graphicsReader.ReadContentAsInt().ToString());
-                        width = graphicsReader.ReadContentAsInt();
-
-                        graphicsReader.MoveToAttribute("h");
-                        if (DEVMODE) Console.WriteLine("H: " + graphicsReader.ReadContentAsInt().ToString());
-                        height = graphicsReader.ReadContentAsInt();
-
-                        graphicTiles.Add(new GraphicTile(id, file, name, xpos, ypos, width, height, set, type, data1, data2, block));
-
                     }
                 }
+            }
+            catch (XmlException ex)
+            {
+                MessageBox.Show("Unable to load XML. Usually this is due to the DTD file being missing.", "Problem Loading", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             mapLoaded = true;
         }
@@ -221,226 +239,235 @@ namespace BlockEd
             //This will be true after checking the first element
             bool isMapFile = false;
 
-            while (mapReader.Read())
+            try
             {
-                #region GameData
-
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Game")
+                while (mapReader.Read())
                 {
-                    isMapFile = true;
-                    if (mapReader.MoveToAttribute("name"))
-                    {
-                        string mapName = mapReader.ReadContentAsString();
-                        if (DEVMODE) Console.WriteLine("Map Name: " + mapName);
+                    #region GameData
 
-                        loadedMap = new GameData();
-                        loadedMap.setName(mapName);
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Game")
+                    {
+                        isMapFile = true;
+                        if (mapReader.MoveToAttribute("name"))
+                        {
+                            string mapName = mapReader.ReadContentAsString();
+                            if (DEVMODE) Console.WriteLine("Map Name: " + mapName);
+
+                            loadedMap = new GameData();
+                            loadedMap.setName(mapName);
+                        }
                     }
+
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "scroll_area")
+                    {
+                        int maxMapX = 0;
+                        int maxMapY = 0;
+                        if (mapReader.MoveToAttribute("TripWndX"))
+                        {
+                            maxMapX = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Max X: " + maxMapX);
+                        }
+
+                        if (mapReader.MoveToAttribute("TripWndY"))
+                        {
+                            maxMapY = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Max Y: " + maxMapY);
+                        }
+                        loadedMap.setMaxScroll(maxMapX, maxMapY);
+                    }
+                    #endregion
+
+                    #region GameLevel
+
+                    int levelID = 0;
+                    string levelName = null;
+                    int levelStartX = 0;
+                    int levelStartY = 0;
+
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Level")
+                    {
+                        if (mapReader.MoveToAttribute("id"))
+                        {
+                            levelID = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Level ID: " + levelID.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("name"))
+                        {
+                            levelName = mapReader.ReadContentAsString();
+                            if (DEVMODE) Console.WriteLine("Level Name: " + levelName);
+                        }
+
+                        mapReader.ReadToFollowing("startposition");
+                        if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
+                        {
+                            if (mapReader.MoveToAttribute("x"))
+                            {
+                                levelStartX = mapReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Level Start X: " + levelStartX.ToString());
+                            }
+                            if (mapReader.MoveToAttribute("y"))
+                            {
+                                levelStartY = mapReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Level Start Y: " + levelStartY.ToString());
+                            }
+                        }
+                        loadedMap.addLevel(levelID, levelStartX, levelStartY, levelName);
+
+                        if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
+                        {
+                            int exitX = 0;
+                            int exitY = 0;
+
+                            if (mapReader.MoveToAttribute("x"))
+                            {
+                                exitX = mapReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Level Exit X: " + exitX.ToString());
+                            }
+                            if (mapReader.MoveToAttribute("y"))
+                            {
+                                exitY = mapReader.ReadContentAsInt();
+                                if (DEVMODE) Console.WriteLine("Level Exit Y: " + exitY.ToString());
+                            }
+
+                            loadedMap.getLastLoadedLevel().setExit(exitX, exitY);
+                        }
+
+                    }
+
+
+
+
+
+                    #endregion
+
+                    #region MapData
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "map")
+                    {
+
+                        string layerName = null;
+                        int zDepth = 0;
+                        int width = 0;
+                        int height = 0;
+                        int maxTileWidth = 32;
+                        int maxTileHeight = 32;
+                        int drawType = 0;
+
+                        if (mapReader.MoveToAttribute("name"))
+                        {
+                            layerName = mapReader.ReadContentAsString();
+                            if (DEVMODE) Console.WriteLine("Layer Name: " + layerName);
+                        }
+
+                        if (mapReader.MoveToAttribute("z_depth"))
+                        {
+                            zDepth = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Z-Depth: " + zDepth.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("width"))
+                        {
+                            width = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Layer Width: " + width.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("height"))
+                        {
+                            height = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Layer Width: " + height.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("xsz"))
+                        {
+                            maxTileWidth = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Max Tile Width: " + maxTileWidth.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("ysz"))
+                        {
+                            maxTileHeight = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Max Tile Height: " + maxTileHeight.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("drawtype"))
+                        {
+                            drawType = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Draw Type: " + drawType.ToString());
+                        }
+
+                        loadedMap.getLastLoadedLevel().addLayer(width, height, drawType, zDepth, layerName, maxTileWidth, maxTileHeight);
+
+                    }
+
+                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "layer_offset")
+                    {
+
+                        int xOffset = 0;
+                        int yOffset = 0;
+
+                        if (mapReader.MoveToAttribute("x"))
+                        {
+                            xOffset = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Layer X Offset: " + xOffset.ToString());
+                        }
+
+                        if (mapReader.MoveToAttribute("y"))
+                        {
+                            yOffset = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Layer Y Offset: " + yOffset.ToString());
+                        }
+
+                        loadedMap.getLastLoadedLevel().getLastAddedLayer().setLayerOffset(xOffset, yOffset);
+
+                    }
+
+                    #region MapDataTile
+                    while (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "tile")
+                    {
+
+                        int spriteID = 0;
+                        int tileX = 0;
+                        int tileY = 0;
+
+                        if (mapReader.MoveToAttribute("sp"))
+                        {
+                            spriteID = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Sprite ID: " + spriteID.ToString());
+                        }
+                        if (mapReader.MoveToAttribute("x"))
+                        {
+                            tileX = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Sprite X: " + tileX.ToString());
+                        }
+                        if (mapReader.MoveToAttribute("y"))
+                        {
+                            tileY = mapReader.ReadContentAsInt();
+                            if (DEVMODE) Console.WriteLine("Sprite Y: " + tileY.ToString());
+                        }
+
+                        loadedMap.getLastLoadedLevel().getLastAddedLayer().addTile(spriteID, tileX, tileY);
+                        loadedMap.incrementNumTiles();
+
+                    }
+                    #endregion
+
+                    #endregion
+
                 }
+                mapReader.Close();
 
                 if (!isMapFile)
                 {
                     MessageBox.Show("It appears the XML file you opened is not a valid map.", "Invalid Map", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     return null;
                 }
-
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "scroll_area")
-                {
-                    int maxMapX = 0;
-                    int maxMapY = 0;
-                    if (mapReader.MoveToAttribute("TripWndX"))
-                    {
-                        maxMapX = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Max X: " + maxMapX);
-                    }
-
-                    if (mapReader.MoveToAttribute("TripWndY"))
-                    {
-                        maxMapY = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Max Y: " + maxMapY);
-                    }
-                    loadedMap.setMaxScroll(maxMapX, maxMapY);
-                }
-                #endregion
-
-                #region GameLevel
-
-                int levelID = 0;
-                string levelName = null;
-                int levelStartX = 0;
-                int levelStartY = 0;
-
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Level")
-                {
-                    if (mapReader.MoveToAttribute("id"))
-                    {
-                        levelID = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Level ID: " + levelID.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("name"))
-                    {
-                        levelName = mapReader.ReadContentAsString();
-                        if (DEVMODE) Console.WriteLine("Level Name: " + levelName);
-                    }
-
-                    mapReader.ReadToFollowing("startposition");
-                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
-                    {
-                        if (mapReader.MoveToAttribute("x"))
-                        {
-                            levelStartX = mapReader.ReadContentAsInt();
-                            if (DEVMODE) Console.WriteLine("Level Start X: " + levelStartX.ToString());
-                        }
-                        if (mapReader.MoveToAttribute("y"))
-                        {
-                            levelStartY = mapReader.ReadContentAsInt();
-                            if (DEVMODE) Console.WriteLine("Level Start Y: " + levelStartY.ToString());
-                        }
-                    }
-                    loadedMap.addLevel(levelID, levelStartX, levelStartY, levelName);
-
-                    if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "startposition")
-                    {
-                        int exitX = 0;
-                        int exitY = 0;
-
-                        if (mapReader.MoveToAttribute("x"))
-                        {
-                            exitX = mapReader.ReadContentAsInt();
-                            if (DEVMODE) Console.WriteLine("Level Exit X: " + exitX.ToString());
-                        }
-                        if (mapReader.MoveToAttribute("y"))
-                        {
-                            exitY = mapReader.ReadContentAsInt();
-                            if (DEVMODE) Console.WriteLine("Level Exit Y: " + exitY.ToString());
-                        }
-
-                        loadedMap.getLastLoadedLevel().setExit(exitX, exitY);
-                    }
-                    
-                }
-
-
-
-
-
-                #endregion
-
-                #region MapData
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "map")
-                {
-
-                    string layerName = null;
-                    int zDepth = 0;
-                    int width = 0;
-                    int height = 0;
-                    int maxTileWidth = 32;
-                    int maxTileHeight = 32;
-                    int drawType = 0;
-
-                    if (mapReader.MoveToAttribute("name"))
-                    {
-                        layerName = mapReader.ReadContentAsString();
-                        if (DEVMODE) Console.WriteLine("Layer Name: " + layerName);
-                    }
-
-                    if (mapReader.MoveToAttribute("z_depth"))
-                    {
-                        zDepth = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Z-Depth: " + zDepth.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("width"))
-                    {
-                        width = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Layer Width: " + width.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("height"))
-                    {
-                        height = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Layer Width: " + height.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("xsz"))
-                    {
-                        maxTileWidth = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Max Tile Width: " + maxTileWidth.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("ysz"))
-                    {
-                        maxTileHeight = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Max Tile Height: " + maxTileHeight.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("drawtype"))
-                    {
-                        drawType = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Draw Type: " + drawType.ToString());
-                    }
-
-                    loadedMap.getLastLoadedLevel().addLayer(width, height, drawType, zDepth, layerName, maxTileWidth, maxTileHeight);
-
-                }
-
-                if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "layer_offset")
-                {
-
-                    int xOffset = 0;
-                    int yOffset = 0;
-
-                    if (mapReader.MoveToAttribute("x"))
-                    {
-                        xOffset = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Layer X Offset: " + xOffset.ToString());
-                    }
-
-                    if (mapReader.MoveToAttribute("y"))
-                    {
-                        yOffset = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Layer Y Offset: " + yOffset.ToString());
-                    }
-
-                    loadedMap.getLastLoadedLevel().getLastAddedLayer().setLayerOffset(xOffset, yOffset);
-
-                }
-
-                #region MapDataTile
-                while (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "tile")
-                {
-
-                    int spriteID = 0;
-                    int tileX = 0;
-                    int tileY = 0;
-
-                    if (mapReader.MoveToAttribute("sp"))
-                    {
-                        spriteID = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Sprite ID: " + spriteID.ToString());
-                    }
-                    if (mapReader.MoveToAttribute("x"))
-                    {
-                        tileX = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Sprite X: " + tileX.ToString());
-                    }
-                    if (mapReader.MoveToAttribute("y"))
-                    {
-                        tileY = mapReader.ReadContentAsInt();
-                        if (DEVMODE) Console.WriteLine("Sprite Y: " + tileY.ToString());
-                    }
-
-                    loadedMap.getLastLoadedLevel().getLastAddedLayer().addTile(spriteID, tileX, tileY);
-                    loadedMap.incrementNumTiles();
-
-                }
-                #endregion
-
-                #endregion
-
             }
-            mapReader.Close();
+            catch (XmlException ex)
+            {
+                MessageBox.Show("Unable to load XML. Usually this is due to the DTD file being missing.", "Problem Loading", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+
             return loadedMap;
         }
 
@@ -568,7 +595,16 @@ namespace BlockEd
                 sheetPage.AutoScroll = true;
                 tabControl.TabPages.Add(sheetPage);
 
-                Bitmap spriteSheetImage = new Bitmap(sheet.getImagePath());
+                Bitmap spriteSheetImage;
+                try
+                {
+                    spriteSheetImage = new Bitmap(sheet.getImagePath());
+                }
+                catch (ArgumentException ex)
+                {
+                    //Ignore and continue - File is missing...
+                    continue;
+                }
 
                 int tileCurX = 0;
                 int tileCurY = 0;

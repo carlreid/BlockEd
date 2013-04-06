@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace BlockEd
 {
@@ -289,7 +290,14 @@ namespace BlockEd
                 int spriteWidth = 0;
                 int spriteHeight = 0;
 
-                sprite.setGLTexId(LoadTexture(sprite.getImagePath(), ref spriteWidth, ref spriteHeight, alphaColorKey));
+                try
+                {
+                    sprite.setGLTexId(LoadTexture(sprite.getImagePath(), ref spriteWidth, ref spriteHeight, alphaColorKey));
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show("Unable to load file " + sprite.getImagePath() + ". I'll do my best to continue loading!", "File Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 sprite.setWidth(spriteWidth);
                 sprite.setHeight(spriteHeight);
