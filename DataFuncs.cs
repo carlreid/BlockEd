@@ -32,20 +32,24 @@ namespace BlockEd
             _mainForm = mainForm;
         }
 
+        //Parses a hard coded xml file to load graphics into the given lists
+        //Note/TODO: This would be possible to pass in a custom graphics xml file
         public void loadGraphics(List<GraphicTile> graphicTiles, List<SpriteSheet> graphicFiles, ref bool mapLoaded)
         {
 
+            //If there's already tiles/files loaded, clear the list
             if (graphicTiles.Count > 0)
             {
                 graphicTiles.Clear();
-                Console.WriteLine("Cleared graphicTiles");
+                Debug.WriteLine("Cleared graphicTiles");
             }
             if (graphicFiles.Count > 0)
             {
                 graphicFiles.Clear();
-                Console.WriteLine("Cleared graphicFiles");
+                Debug.WriteLine("Cleared graphicFiles");
             }
 
+            //Setup the XML settings
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreWhitespace = true;
             settings.IgnoreComments = true;
@@ -53,18 +57,17 @@ namespace BlockEd
             settings.ValidationType = ValidationType.DTD;
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
-
+            //Define a temp to store alpha in
             Color alphaColorKey;
 
+            //Load in the hard coded XML path
             XmlReader graphicsReader = XmlReader.Create("data/Graphics.xml", settings);
             graphicsReader.Read();
 
             while (graphicsReader.Read())
             {
-                //  Here we check the type of the node, in this case we are looking for element
                 if (graphicsReader.NodeType == XmlNodeType.Element)
                 {
-                    //  If the element is "profile"
                     if (graphicsReader.Name == "transparentcolour")
                     {
                         int r = 0;
@@ -94,13 +97,10 @@ namespace BlockEd
                         graphicsReader.ReadToDescendant("file");
                         while (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "file")
                         {
-                            //graphicFiles.Add(new SpriteSheet(id, string);
-
                             int fileID = 0;
                             string fileName = "";
 
                             graphicsReader.MoveToAttribute("id");
-                            //Console.WriteLine("Attrib: " + graphicsReader.Value.ToString());
                             fileID = graphicsReader.ReadContentAsInt();
 
                             graphicsReader.MoveToElement();
@@ -109,15 +109,10 @@ namespace BlockEd
                             graphicFiles.Add(new SpriteSheet(fileID, fileName));
 
                         }
-                        //graphicsReader.ReadEndElement();
                     }
 
                     if (graphicsReader.NodeType == XmlNodeType.Element && graphicsReader.Name == "sprite")
                     {
-
-                        //graphicTiles.Add(new Tile());
-                        //Vector2 Position;
-                        //Vector2 TexCoord;
                         string name = "", set = "";
                         int id, file, type = 0, data1 = 0, data2 = 0, width, height, xpos, ypos;
                         bool block = false;
@@ -203,10 +198,10 @@ namespace BlockEd
             mapLoaded = true;
         }
 
+        //Load the map from the given file path
         public GameData loadMap(GameData loadedMap, string mapFilePath)
         {
-            //XmlSchema mapSchema = new XmlSchema();
-
+            //Setup the XML reader settings
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreWhitespace = true;
             settings.IgnoreComments = true;
@@ -214,10 +209,7 @@ namespace BlockEd
             settings.ValidationType = ValidationType.DTD;
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
-            //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
             XmlReader mapReader = XmlReader.Create(mapFilePath, settings);
-
-            //XmlValidatingReader myReader = new XmlValidatingReader(mapReader);
 
             if (mapReader == null)
             {
@@ -228,9 +220,6 @@ namespace BlockEd
             while (mapReader.Read())
             {
                 #region GameData
-                //string mapName = "Default";
-                //int maxMapX = 0;
-                //int maxMapY = 0;
 
                 if (mapReader.NodeType == XmlNodeType.Element && mapReader.Name == "Game")
                 {
@@ -447,33 +436,21 @@ namespace BlockEd
         // Display any validation errors.
         private static void ValidationCallBack(object sender, ValidationEventArgs e)
         {
-            Console.WriteLine("Validation Error: {0}", e.Message);
+            Debug.WriteLine("Validation Error: {0}", e.Message);
             MessageBox.Show("Error validating XML: " + e.Message + ". The map will still try to load.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        //public string ToXML(Object oObject)
-        //{
-        //    XmlDocument xmlDoc = new XmlDocument();
-        //    XmlSerializer xmlSerializer = new XmlSerializer(oObject.GetType());
-        //    using (MemoryStream xmlStream = new MemoryStream())
-        //    {
-        //        xmlSerializer.Serialize(xmlStream, oObject);
-        //        xmlStream.Position = 0;
-        //        xmlDoc.Load(xmlStream);
-        //        return xmlDoc.InnerXml;
-        //    }
-        //} 
-
+        //Creates an XML document whilst checking against a DTD and will save to the specified location
         public void saveMapXml(GameData mapData, string saveLocation, string fileName)
         {
             XmlDocument document = new XmlDocument();
             XmlDeclaration docDecleration = document.CreateXmlDeclaration("1.0", "UTF-8", null);
-            document.AppendChild(docDecleration);// Create the root element
+            document.AppendChild(docDecleration);
 
             //<!DOCTYPE Game SYSTEM "MapDTD.xml">
             File.Copy("map/MapDTD.dtd", "MapDTD.dtd", true);
             XmlDocumentType doctype = document.CreateDocumentType("Game", null, "MapDTD.dtd", null);
-            document.AppendChild(doctype); //Add doctype reference
+            document.AppendChild(doctype);
             File.Delete("MapDTD.dtd");
 
             XmlElement root = document.CreateElement("Game");
@@ -554,10 +531,9 @@ namespace BlockEd
 
             document.Save(saveLocation + "\\" + fileName + ".xml");
 
-            //return document.OuterXml;
-
         }
 
+        //Adds the tiles to the tab based control
         public void addTilesToTabControl(List<SpriteSheet> spriteSheets, List<GraphicTile> tiles, TabControl tabControl)
         {
             //Remove any previous graphics
@@ -576,6 +552,7 @@ namespace BlockEd
 
             foreach (SpriteSheet sheet in spriteSheets)
             {
+                //Create a new tab for this sprite sheet
                 TabPage sheetPage = new TabPage(sheet.getImageFileName());
                 sheetPage.AutoScroll = true;
                 tabControl.TabPages.Add(sheetPage);
@@ -589,6 +566,7 @@ namespace BlockEd
                 foreach (GraphicTile tile in tiles)
                 {
 
+                    //If the tile is not part of this sheet, just quickly continue
                     if (tile.getFileID() != sheet.getFileId())
                     {
                         continue;
@@ -604,6 +582,8 @@ namespace BlockEd
                     OpenTK.Vector2 tilePos = tile.getPosition();
                     Rectangle tileRect = new Rectangle((int)tilePos.X, (int)tilePos.Y, tile.getWidth(), tile.getHeight());
 
+                    //If a sprite sheet is 32*32 and there's a single 32*32 tile, it seems like C# just creates a reference rather than a copy.
+                    //So the following code just performs a check and does it manually
                     Bitmap cropped = null;
                     if (tileRect.X == 0 && tileRect.Y == 0 && tileRect.Width == spriteSheetImage.Width && tileRect.Height == spriteSheetImage.Height)
                     {
@@ -642,14 +622,19 @@ namespace BlockEd
             }
         }
 
+        //This function is used for when the tile is clicked
         public void pictureBoxClick(object sender, System.EventArgs e)
         {
+            //If a tile was selected  before, restore its original image
             if (_lastModifiedTile != null)
             {
                 _lastModifiedTile.Image = _lastModifiedTileImage;
             }
 
+            //Cast the event
             MouseEventArgs mouseEvent = (MouseEventArgs)e;
+
+            //If the tile was right clicked, launch the tile editor
             if (mouseEvent.Button == MouseButtons.Right)
             {
                 PictureBox invoker = (PictureBox)sender;
@@ -660,13 +645,14 @@ namespace BlockEd
                 return;
             }
 
-
+            //Cast the caller object to a PictureBox
             PictureBox invokePicture = (PictureBox)sender;
             _lastModifiedTile = invokePicture;
 
             Bitmap curImage = (Bitmap)invokePicture.Image;
             _lastModifiedTileImage = new Bitmap(curImage);
 
+            //Loop over every pixel and give the selected tile a green tint
             for (int curX = 0; curX < curImage.Width; ++curX)
             {
                 for (int curY = 0; curY < curImage.Height; ++curY)
@@ -684,23 +670,22 @@ namespace BlockEd
                 }
             }
 
+            //Set the new image
             invokePicture.Image = curImage;
 
+            //Split the tile ID fromt he name
             String[] tileData = invokePicture.Name.Split(':');
             int tileID;
             Int32.TryParse(tileData[1], out tileID);
 
-            
             _selectedTile.newData(tileID, 0, 0);
 
-
             _mainForm.updateTileUI(_selectedTile.getID());
-
-
 
             Debug.WriteLine("Clicked on tile id: " + tileID);
         }
 
+        //Load the custom tile data XML in
         public void loadTileData(ref TileData loadInto)
         {
             XmlSchema mapSchema = new XmlSchema();
@@ -712,10 +697,7 @@ namespace BlockEd
             settings.ValidationType = ValidationType.DTD;
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
-            //Good validating code: http://stackoverflow.com/questions/470313/net-how-to-validate-xml-file-with-dtd-without-doctype-declaration
             XmlReader dataReader = XmlReader.Create("data/TileData.xml", settings);
-
-            //XmlValidatingReader myReader = new XmlValidatingReader(mapReader);
 
             if (dataReader == null)
             {

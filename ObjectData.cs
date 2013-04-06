@@ -12,8 +12,6 @@ namespace BlockEd
 
         TileData _tileData = new TileData();
 
-        //public void updateTileUI(ComboBox tileTypeCombo, ComboBox tileData1Combo, Label tileData2Label, TextBox tileData2TextBox)
-        //public void updateTileUI(int typeID, int dataOne, int dataTwo)
         public void updateTileUI(int tileID)
         {
 

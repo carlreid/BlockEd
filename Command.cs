@@ -7,6 +7,8 @@ using System.Windows.Forms;
 
 namespace BlockEd
 {
+
+    //The abstract command class to inherit from
     internal abstract class Command
     {
         abstract internal bool Do();
@@ -25,7 +27,7 @@ namespace BlockEd
         protected string _redoName { get; set; }
     }
 
-
+    //Places a tile on a given map
     internal class CPlaceTile : Command
     {
         MapTile _tile;
@@ -70,6 +72,7 @@ namespace BlockEd
         }
     }
 
+    //Remove a tile from a given map
     internal class CRemoveTile : Command
     {
         MapTile _tile;
@@ -106,6 +109,7 @@ namespace BlockEd
         }
     }
 
+    //Updates the selected tile's data
     internal class CApplyTileData : Command
     {
         MapTile _tile;
@@ -212,6 +216,7 @@ namespace BlockEd
         }
     }
 
+    //Updates the selected layer's data
     internal class CApplyLayerData : Command
     {
 
@@ -346,6 +351,7 @@ namespace BlockEd
         }
     }
 
+    //Adds a layer to the game
     internal class CAddLayer : Command
     {
 
@@ -564,6 +570,7 @@ namespace BlockEd
         }
     }
 
+    //Removes the selected layer
     internal class CRemoveLayer : Command
     {
 
@@ -649,6 +656,7 @@ namespace BlockEd
         }
     }
 
+    //Moves the selected layer up/down dpending on moveUp
     internal class CMoveLayerZ : Command
     {
 
@@ -750,6 +758,7 @@ namespace BlockEd
         
     }
 
+    //Adds a level to the game
     internal class CAddLevel : Command
     {
         GameData _loadedMap;
@@ -826,6 +835,7 @@ namespace BlockEd
 
     }
 
+    //Removes the selected level from the game
     internal class CRemoveLevel : Command
     {
         GameData _loadedMap;
@@ -890,6 +900,7 @@ namespace BlockEd
 
     }
 
+    //Updates the level's data
     internal class CApplyLevelData : Command
     {
 
@@ -1068,6 +1079,7 @@ namespace BlockEd
         }
     }
 
+    //Updates the game's data
     internal class CApplyGameData : Command
     {
         GameData _loadedMap;

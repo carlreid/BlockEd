@@ -12,7 +12,7 @@ namespace BlockEd
         Process gameTestApplication = null;
         bool isTestAppRunning = false;
 
-        //Launches exe running TestMap.xml
+        //Launches the test client to test the current map
         public void launchTest()
         {
             if (!Directory.Exists("game/"))

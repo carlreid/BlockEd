@@ -13,18 +13,6 @@ namespace BlockEd
 
         public GameData()
         {
-            //_name = name;
-
-            //if (maxScrollX != 0)
-            //{
-            //    _maxScrollX = maxScrollX;
-            //}
-
-            //if (maxScrollY != 0)
-            //{
-            //    _maxScrollY = maxScrollY;
-            //}
-
             _numberOfTiles = 0;
 
             _level = new List<GameLevel>();

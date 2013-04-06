@@ -33,7 +33,7 @@ namespace BlockEd
         string layerSelected = null;
         string levelSelected = null;
         MapTile currentTile = null;
-        internal const int maxAmountTiles = 1000;
+        internal const int maxAmountTiles = 65536; //256 * 256 (1px per tile)
         internal const int maxZDepth = 10;
         string periodicFileName = "backup";
 
@@ -58,6 +58,14 @@ namespace BlockEd
         int lastMouseX;
         int lastMouseY;
 
+        //Load speed sting get/set
+        public string glLoadSpeed
+        {
+            get { return glLoadSpeedLabel.Text; }
+            set { glLoadSpeedLabel.Text = value; }
+        }
+
+        //Toggle all the controls within a tabpage to be enabled or not
         internal void toggleTabPageEnable(TabPage page, bool areControlsEnabled)
         {
             foreach (Control control in page.Controls)
@@ -66,6 +74,7 @@ namespace BlockEd
             }
         }
 
+        //Add a command to the undo stack
         internal void addCommand(Command cmd){
             changeMade = true;
             saveTimer.Enabled = true;
@@ -79,6 +88,7 @@ namespace BlockEd
             }
         }
 
+        //Go down the undo stack x amount and push to the redo stack
         internal void performUndo(int undoAmount)
         {
             for (int i = 0; i < undoAmount; ++i)
@@ -96,6 +106,7 @@ namespace BlockEd
             updateTileCount();
         }
 
+        //Go down the redo stack x amount and push to the undo stack
         internal void performRedo(int redoAmount)
         {
             for (int i = 0; i < redoAmount; ++i)
@@ -113,6 +124,7 @@ namespace BlockEd
             updateTileCount();
         }
 
+        //Override keys to allow specific shortcuts
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.O))
@@ -187,6 +199,7 @@ namespace BlockEd
             return maxZDepth;
         }
 
+        //Go through all the layers for the selected level and find the largest X and Y
         private void findBiggestLayer()
         {
             foreach (GameLevel level in loadedMap.getLevelList())
@@ -217,6 +230,7 @@ namespace BlockEd
 
         }
 
+        //Set offset X with validation
         private void setOffsetX(float value)
         {
 
@@ -240,6 +254,7 @@ namespace BlockEd
 
         }
 
+        //Set offset Y with validation
         private void setOffsetY(float value)
         {
 
@@ -263,6 +278,7 @@ namespace BlockEd
 
         }
 
+        //Called when loading a map; it will setup all the GL controls, graphics, tiles e.t.c.
         private void loadMap(){
 
             glMiniMapControl.Visible = true;
@@ -311,6 +327,7 @@ namespace BlockEd
             tileTypeLabel.Text = "Tile Types: " + graphicTiles.Count;
         }
 
+        //Update the list of layers. Should be called if changes to layer order is made
         internal void updateLayerList()
         {
             layerSelectionBox.Items.Clear();
@@ -335,6 +352,7 @@ namespace BlockEd
             }
         }
 
+        //Update the list of levels. Should be called if changes to a level is made
         internal void updateLevelList()
         {
             levelSelectionBox.Items.Clear();
@@ -344,6 +362,7 @@ namespace BlockEd
             }
         }
 
+        //Saves calling updates all both controls
         internal void updateGLComponents()
         {
             glMapMain.Refresh();
@@ -352,11 +371,13 @@ namespace BlockEd
             updateGL(glMiniMapControl, false);
         }
 
+        //Will add tiles to the tile tab control
         internal void updateTabControl()
         {
             data.addTilesToTabControl(graphicFiles, graphicTiles, tilePicker);
         }
 
+        //Main form init
         public EditorForm()
         {
             InitializeComponent();
@@ -423,6 +444,7 @@ namespace BlockEd
         }
         //End from
 
+        //Override dialog key and forward to the GL control if it's in focus
         protected override bool ProcessDialogKey(Keys keyData)
         {
 
@@ -437,12 +459,14 @@ namespace BlockEd
             }
         }
 
+        //Provides some more updates for the GL controls
         protected override void OnPaint(PaintEventArgs e)
         {
             updateGLComponents();
             base.OnPaint(e);
         }
 
+        //Updates the given glControl passing through offset or not (not for minimap)
         private void updateGL(GLControl glControl, bool doOffset = true)
         {
             if (mapLoaded)
@@ -458,36 +482,39 @@ namespace BlockEd
             }
         }
 
+        //Displays the current GL load time
         public void updateGlLoadSpeedLabel(string loadTime)
         {
             glLoadSpeedLabel.Text = "Rendered in: " + loadTime;
         }
 
+        //Debug
         private void button4_Click(object sender, EventArgs e)
         {
             glFuncs.loadSpriteSheets(graphicFiles, alphaColorKey);
         }
-
+        //Debug
         private void button1_Click(object sender, EventArgs e)
         {
             updateGL(glMapMain);
         }
-
+        //Debug
         private void button1_Click_1(object sender, EventArgs e)
         {
             data.loadGraphics(graphicTiles, graphicFiles, ref mapLoaded);
         }
-
+        //Debug
         private void button2_Click(object sender, EventArgs e)
         {
             loadXML();
         }
-
+        //Debug
         private void button3_Click(object sender, EventArgs e)
         {
             devPanel.Visible = !devPanel.Visible;
         }
 
+        //Pans the GL control depending on keyboard input
         private bool keyboardPanGLControl(KeyEventArgs e)
         {
             bool handled = false;
@@ -523,28 +550,25 @@ namespace BlockEd
 
             return handled;
         }
-
+        //Debug
         private void button5_Click(object sender, EventArgs e)
         {
             loadMap();
         }
 
-        public string glLoadSpeed
-        {
-            get { return glLoadSpeedLabel.Text; }
-            set { glLoadSpeedLabel.Text = value; }
-        }
-
+        //Toggle dev mode
         private void button6_Click(object sender, EventArgs e)
         {
             DEVMODE = !DEVMODE;
         }
 
+        //On open tool click
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             loadMap();
         }
 
+        //Updates the layer selection box to new values for the selected layer
         internal void updateLayerSelectionBox()
         {
             string layerSelectedName = (string)layerSelectionBox.SelectedItem;
@@ -591,18 +615,19 @@ namespace BlockEd
             //Debug.WriteLine(layerSelectedName);
         }
 
+        //Call the layer selection to be updated
         private void layerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateLayerSelectionBox();
-
         }
 
+        //Debug
         private void button7_Click(object sender, EventArgs e)
         {
-            //richTextBox1.Text = data.ToXML(loadedMap);
             data.saveMapXml(loadedMap, "map", "test");
         }
 
+        //If mouse down in GL, add tiles, remove tiles or begin panning
         private void mouseDownGL(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (loadedMap == null)
@@ -637,6 +662,7 @@ namespace BlockEd
 
         }
 
+        //Mouse up, do nothing really.
         private void mouseUpGL(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
@@ -647,6 +673,7 @@ namespace BlockEd
             }
         }
 
+        //On mouse move, continue placing tiles/removing or perform panning
         private void mousePanGL(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (loadedMap == null)
@@ -690,6 +717,7 @@ namespace BlockEd
             }
         }
 
+        //Run the test client
         private void buildStripButton_Click(object sender, EventArgs e)
         {
             if (!isTestAppRunning)
@@ -704,11 +732,13 @@ namespace BlockEd
             }
         }
 
+        //Export the XML for the map
         private void saveStripButton_Click(object sender, EventArgs e)
         {
             saveXML();
         }
 
+        //If the form is closing, check to see if any changes were made. If so, handle them accordingly
         private void editorClosing(object sender, FormClosingEventArgs e)
         {
             if (changeMade)
@@ -745,6 +775,7 @@ namespace BlockEd
 
         }
 
+        //Update tile count applying a colour changes as the max limit is being reached
         internal void updateTileCount()
         {
             int currentTileAmount = loadedMap.getNumTiles();
@@ -764,6 +795,7 @@ namespace BlockEd
 
         }
 
+        //Performs a tile placement and mouse X/Y
         private void placeTile(int mouseX, int mouseY)
         {
             if (loadedMap.getNumTiles() >= maxAmountTiles)
@@ -825,6 +857,7 @@ namespace BlockEd
             }
         }
 
+        //Removes a tile at the mouse X/T
         private void removeTile(int mouseX, int mouseY)
         {
             foreach (GameLevel level in loadedMap.getLevelList())
@@ -860,12 +893,14 @@ namespace BlockEd
             }
         }
 
+        //Performs a save as by setting the mapFilePath to null
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapFilePath = null;
             saveXML();
         }
 
+        //Debug
         private void button8_Click(object sender, EventArgs e)
         {
             string serializedString = Serialize(loadedMap);
@@ -877,6 +912,7 @@ namespace BlockEd
             xdoc.Save(outDir);
         }
 
+        //Debug
         private void button9_Click(object sender, EventArgs e)
         {
             string inDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + "test.xml";
@@ -885,48 +921,15 @@ namespace BlockEd
             loadedMap = (GameData)Deserialize(text, loadedMap.GetType());
         }
 
+        //Move the given layer
         private void moveLayerZ(bool moveUp)
         {
-            
             CMoveLayerZ moveLayer = new CMoveLayerZ(loadedMap, this, moveUp);
             addCommand(moveLayer);
             moveLayer.Do();
-
-            //int moveDirection = (moveUp ? 1 : -1);
-
-            //foreach (GameLevel level in loadedMap.getLevelList())
-            //{
-            //    foreach (MapData map in level.getLayerList())
-            //    {
-            //        if (map.getMapName() == layerSelectionBox.Text)
-            //        {
-            //            int destinationLayer = map.getZDepth() + moveDirection;
-
-            //            if (destinationLayer < 0 || destinationLayer > maxZDepth)
-            //            {
-            //                return;
-            //            }
-
-            //            foreach (MapData mapCheck in level.getLayerList())
-            //            {
-            //                if (mapCheck.getZDepth() == destinationLayer)
-            //                {
-            //                    mapCheck.setZDepth(map.getZDepth());
-            //                    break;
-            //                }
-            //            }
-
-            //            map.setZDepth(destinationLayer);
-            //            updateLayerSelectionBox();
-            //            updateLayerList();
-            //            layerSelectionBox.Text = map.getMapName();
-            //            return;
-            //        }
-            //    }
-            //}
-
         }
 
+        //Move the layer down
         private void moveLayerDownPictureBox_Click(object sender, EventArgs e)
         {
             if (layerSelectionBox.Text != "Show All")
@@ -936,6 +939,7 @@ namespace BlockEd
             }
         }
 
+        //Move the layer up
         private void moveLayerUpPictureBox_Click(object sender, EventArgs e)
         {
             if (layerSelectionBox.Text != "Show All")
@@ -945,6 +949,7 @@ namespace BlockEd
             }
         }
 
+        //Toggle the ghosting option
         private void ghostingStripButton_Click(object sender, EventArgs e)
         {
             if (ghostingStripButton.Checked)
@@ -959,23 +964,27 @@ namespace BlockEd
             }
         }
 
+        //Open/load a map
         private void openStripButton_Click(object sender, EventArgs e)
         {
             loadMap();
         }
 
+        //Debug
         private void button10_Click(object sender, EventArgs e)
         {
             tileGraphicEditor tileEditor = new tileGraphicEditor(22, ref graphicFiles, ref graphicTiles, this);
             tileEditor.Show();
         }
 
+        //Open the tile editor displaying the given tileID
         internal void displayTileEditor(int tileID)
         {
             tileGraphicEditor tileEditor = new tileGraphicEditor(tileID, ref graphicFiles, ref graphicTiles, this);
             tileEditor.Show();
         }
 
+        //Update the tile data if the tile type combo is changed
         private void tileTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -1049,6 +1058,7 @@ namespace BlockEd
 
         }
 
+        //Updat ethe tile data as tile data one combo changed
         private void tileData1Combo_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (TileType tileData in _tileData.getList())
@@ -1067,6 +1077,7 @@ namespace BlockEd
             }
         }
 
+        //Apply any tile modifications
         private void tileDataApplyChangesButton_Click(object sender, EventArgs e)
         {
             CApplyTileData applyChange = new CApplyTileData(currentTile, ref graphicTiles, ref _tileData, this);
@@ -1074,6 +1085,7 @@ namespace BlockEd
             applyChange.Do();
         }
 
+        //Apply any layer modifications
         private void layerDataApplyChangesButton_Click(object sender, EventArgs e)
         {
             CApplyLayerData applyLayerData = new CApplyLayerData(loadedMap, this);
@@ -1082,6 +1094,7 @@ namespace BlockEd
             findBiggestLayer();
         }
 
+        //Add a new layer
         private void newLayerPictureBox_Click(object sender, EventArgs e)
         {
             CAddLayer addLayer = new CAddLayer(loadedMap, this);
@@ -1089,6 +1102,7 @@ namespace BlockEd
             addLayer.Do();
         }
 
+        //Remove the selected layer
         private void removeLayerPictureBox_Click(object sender, EventArgs e)
         {
             CRemoveLayer removeLayer = new CRemoveLayer(loadedMap, this);
@@ -1174,6 +1188,7 @@ namespace BlockEd
         }
         //End from
 
+        //On form resize, update the GL control's viewport
         private void formResize(object sender, EventArgs e)
         {
             if (glMapMain.Visible)
@@ -1190,6 +1205,7 @@ namespace BlockEd
             }
         }
 
+        //Handle the toffle of the bounds area
         private void boundsStripButton_Click(object sender, EventArgs e)
         {
             if (boundsStripButton.Checked)
@@ -1204,6 +1220,7 @@ namespace BlockEd
             }
         }
 
+        //Enable other controls when the level selection is changed
         private void levelSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string levelSelectedName = (string)levelSelectionBox.SelectedItem;
@@ -1222,6 +1239,7 @@ namespace BlockEd
             
         }
 
+        //If the minimap is clicked, move the main window area
         private void glMiniMapClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             float xPercentage = (float)e.X / (float)glMiniMapControl.Width;
@@ -1237,6 +1255,7 @@ namespace BlockEd
 
         }
 
+        //If the mouse is moved on the minimap whilst left clicking, cause the large area to pan
         private void glMiniMapMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -1254,6 +1273,7 @@ namespace BlockEd
             }
         }
 
+        //On save timer tick, serialize the loaded map out.
         private void saveTimer_Tick(object sender, EventArgs e)
         {
             string serializedString = Serialize(loadedMap);
@@ -1265,6 +1285,7 @@ namespace BlockEd
             xdoc.Save(outDir);
         }
 
+        //On form load, check to see if a backup exists and ask if it should be restored
         private void Form1_Load(object sender, EventArgs e)
         {
             string checkBackupSave = System.IO.Path.GetDirectoryName(Application.ExecutablePath) + @"\" + periodicFileName + ".xml";
@@ -1329,6 +1350,7 @@ namespace BlockEd
             }
         }
 
+        //Update the level selection box data
         internal void updateLevelSelectionBox()
         {
 
@@ -1357,6 +1379,7 @@ namespace BlockEd
             levelExitYTextBox.Text = "";
         }
 
+        //Add a new level
         private void newLevelPictureBox_Click(object sender, EventArgs e)
         {
             CAddLevel addLevel = new CAddLevel(loadedMap, this);
@@ -1364,6 +1387,7 @@ namespace BlockEd
             addLevel.Do();
         }
 
+        //Remove the selected level
         private void removeLevelPictureBox_Click(object sender, EventArgs e)
         {
             CRemoveLevel removeLevel = new CRemoveLevel(loadedMap, this);
@@ -1371,6 +1395,7 @@ namespace BlockEd
             removeLevel.Do();
         }
 
+        //Apply any changes made to a level
         private void levelApplyChangesButton_Click(object sender, EventArgs e)
         {
             CApplyLevelData applyLevelData = new CApplyLevelData(loadedMap, this);
@@ -1378,6 +1403,7 @@ namespace BlockEd
             applyLevelData.Do();
         }
 
+        //On validation of the layer width/height, make sure they're within 1->256
         private void layerWidthHeightValidate(object sender, CancelEventArgs e)
         {
             MaskedTextBox caller = (MaskedTextBox)sender;
@@ -1391,6 +1417,7 @@ namespace BlockEd
             }
         }
 
+        //Apply any game data changes
         private void gameDataApplyChangesButton_Click(object sender, EventArgs e)
         {
             CApplyGameData applyGameData = new CApplyGameData(loadedMap, this);
@@ -1398,31 +1425,31 @@ namespace BlockEd
             applyGameData.Do();
         }
 
+        //Perform a single undo
         private void undoStripButton_ButtonClick(object sender, EventArgs e)
         {
             performUndo(1);
         }
 
+        //Perform a single redo
         private void redoStripButton_ButtonClick(object sender, EventArgs e)
         {
             performRedo(1);
         }
 
+        //Perform a map export
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveXML();
         }
 
+        //Create a new map
         private void mapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             newMap();
-
-
-            
-
         }
 
-
+        //Create a new blank map, also create a default level and layer
         internal void newMap()
         {
             mapFilePath = null;
@@ -1480,6 +1507,7 @@ namespace BlockEd
 
         }
 
+        //Add a new map
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             newMap();
